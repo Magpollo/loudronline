@@ -8,7 +8,7 @@ This is a webapp for Loudronline.
 
 ## TODO
 
-- [ ] Add a description
+- [x] Add a description
 - [x] Grab assets and fonts
 - [x] Setup tailwindcss
 - [ ] Setup `strapi` as CMS
