@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "posts",
+  "info": {
+    "singularName": "post",
+    "pluralName": "posts",
+    "displayName": "Post",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "dateCreated": {
+      "type": "datetime"
+    },
+    "lastUpdated": {
+      "type": "datetime"
+    },
+    "postContent": {
+      "type": "blocks"
+    }
+  }
+}
