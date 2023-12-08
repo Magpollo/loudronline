@@ -4,7 +4,52 @@ At its core, Loudr is more than just a platform—it's a revolutionary force des
 
 ## Project Details
 
-This is a webapp for Loudronline.
+This is the webapp for Loudronline.
+
+## Tech Stack
+
+- Typescript
+- Nextjs
+- Tailwindcss
+- Strapi
+- Sqlite
+- Stripe
+- Chakra UI
+
+## Getting Started
+
+### Prerequisites
+
+- Nodejs v20.0.0
+- npm v7.0.0
+
+### Installation
+
+1. Clone the repo
+
+```sh
+git clone
+```
+
+2. Install NPM packages
+
+```sh
+npm install
+```
+
+3. To run the frontend
+
+```sh
+cd frontend
+npm run dev
+```
+
+4. To run the backend
+
+```sh
+cd backend
+npm run dev
+```
 
 ## TODO
 
@@ -14,7 +59,7 @@ This is a webapp for Loudronline.
 - [x] Setup tailwindcss
 - [ ] Setup `strapi` as CMS
   - [x] Create `strapi` project
-  - [ ] Create collections and models
+  - [x] Create collections and models
   - [ ] Create dummy content
   - [ ] Fetch content from `strapi`
 - [] Design frontend pages
@@ -22,8 +67,6 @@ This is a webapp for Loudronline.
   - [ ] ...
 - [ ] Design shop pages
 - [ ] Setup `mongodb` for shop data`
-
   - [ ] Home
   - [ ] ...
-
 - [ ] Setup product checkout with `stripe`
