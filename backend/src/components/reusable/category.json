@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_reusable_categories",
+  "info": {
+    "displayName": "Category"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "categoryId": {
+      "type": "customField",
+      "customField": "plugin::field-uuid.uuid"
+    }
+  }
+}

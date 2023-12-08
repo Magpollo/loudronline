@@ -12,19 +12,50 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "slug": {
-      "type": "string",
-      "required": true,
-      "unique": true
-    },
-    "dateCreated": {
-      "type": "datetime"
-    },
-    "lastUpdated": {
-      "type": "datetime"
-    },
     "postContent": {
       "type": "blocks"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "postId": {
+      "type": "customField",
+      "customField": "plugin::field-uuid.uuid"
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": [
+        "arts & design",
+        "music",
+        "tech",
+        "gaming",
+        "afroculture"
+      ]
+    },
+    "tags": {
+      "type": "json"
+    },
+    "mediaURL": {
+      "type": "json"
+    },
+    "creator": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::creator.creator",
+      "inversedBy": "posts"
+    },
+    "post_categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::post-category.post-category",
+      "mappedBy": "posts"
     }
   }
 }

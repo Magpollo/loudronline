@@ -9,6 +9,7 @@ This is a webapp for Loudronline.
 ## TODO
 
 - [x] Add a description
+- [x] Setup `nextjs` project
 - [x] Grab assets and fonts
 - [x] Setup tailwindcss
 - [ ] Setup `strapi` as CMS
@@ -17,3 +18,12 @@ This is a webapp for Loudronline.
   - [ ] Create dummy content
   - [ ] Fetch content from `strapi`
 - [] Design frontend pages
+  - [ ] Home
+  - [ ] ...
+- [ ] Design shop pages
+- [ ] Setup `mongodb` for shop data`
+
+  - [ ] Home
+  - [ ] ...
+
+- [ ] Setup product checkout with `stripe`
