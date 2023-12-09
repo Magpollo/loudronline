@@ -17,20 +17,20 @@
       "customField": "plugin::field-uuid.uuid"
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "bio": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "profileImage": {
       "type": "media",
       "multiple": false,
-      "required": false,
+      "required": true,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ]
     },
     "socialLinks": {

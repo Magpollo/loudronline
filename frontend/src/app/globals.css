@@ -8,12 +8,10 @@
   --primary-color: #ff9d12;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background-color: #ffffff;
-    --text-color: #24272a;
-    --primary-color: #ff9d12;
-  }
+[data-theme='light'] {
+  --background-color: #ffffff;
+  --text-color: #24272a;
+  --primary-color: #ff9d12;
 }
 
 body {

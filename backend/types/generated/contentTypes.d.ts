@@ -690,9 +690,9 @@ export interface ApiCreatorCreator extends Schema.CollectionType {
   };
   attributes: {
     creatorId: Attribute.UID & Attribute.CustomField<'plugin::field-uuid.uuid'>;
-    name: Attribute.String;
-    bio: Attribute.Text;
-    profileImage: Attribute.Media;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    bio: Attribute.Text & Attribute.Required;
+    profileImage: Attribute.Media & Attribute.Required;
     socialLinks: Attribute.JSON;
     posts: Attribute.Relation<
       'api::creator.creator',
@@ -730,15 +730,13 @@ export interface ApiPostPost extends Schema.CollectionType {
   };
   attributes: {
     postContent: Attribute.Blocks;
-    title: Attribute.String;
+    title: Attribute.String & Attribute.Required & Attribute.Unique;
     description: Attribute.Text;
-    slug: Attribute.UID<'api::post.post', 'title'>;
+    slug: Attribute.UID<'api::post.post', 'title'> & Attribute.Required;
     postId: Attribute.UID & Attribute.CustomField<'plugin::field-uuid.uuid'>;
     contentType: Attribute.Enumeration<
       ['arts & design', 'music', 'tech', 'gaming', 'afroculture']
     >;
-    tags: Attribute.JSON;
-    mediaURL: Attribute.JSON;
     creator: Attribute.Relation<
       'api::post.post',
       'manyToOne',
@@ -749,6 +747,8 @@ export interface ApiPostPost extends Schema.CollectionType {
       'manyToMany',
       'api::post-category.post-category'
     >;
+    headerImage: Attribute.Media & Attribute.Required;
+    tags: Attribute.Text;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -771,10 +771,10 @@ export interface ApiPostCategoryPostCategory extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
     categoryId: Attribute.UID &
       Attribute.CustomField<'plugin::field-uuid.uuid'>;
-    description: Attribute.Text;
+    description: Attribute.Text & Attribute.Required;
     posts: Attribute.Relation<
       'api::post-category.post-category',
       'manyToMany',

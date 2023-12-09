@@ -13,14 +13,17 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "unique": true,
+      "required": true
     },
     "categoryId": {
       "type": "customField",
       "customField": "plugin::field-uuid.uuid"
     },
     "description": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "posts": {
       "type": "relation",

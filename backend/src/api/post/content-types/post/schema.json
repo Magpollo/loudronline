@@ -16,14 +16,17 @@
       "type": "blocks"
     },
     "title": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "description": {
       "type": "text"
     },
     "slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "title",
+      "required": true
     },
     "postId": {
       "type": "customField",
@@ -39,12 +42,6 @@
         "afroculture"
       ]
     },
-    "tags": {
-      "type": "json"
-    },
-    "mediaURL": {
-      "type": "json"
-    },
     "creator": {
       "type": "relation",
       "relation": "manyToOne",
@@ -56,6 +53,17 @@
       "relation": "manyToMany",
       "target": "api::post-category.post-category",
       "mappedBy": "posts"
+    },
+    "headerImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    },
+    "tags": {
+      "type": "text"
     }
   }
 }

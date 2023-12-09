@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { plusJakarta, larken } from '@/assets/fonts/fonts';
 import Providers from '@/app/providers';
+import Navbar from '@/components/Navbar';
 
 export const metadata: Metadata = {
   title: 'Loudronline',
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${plusJakarta.variable} ${larken.variable}`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
   );

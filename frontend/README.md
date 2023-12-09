@@ -48,7 +48,7 @@ npm run dev
 
 ```sh
 cd backend
-npm run dev
+npm run develop
 ```
 
 ## TODO
@@ -57,11 +57,10 @@ npm run dev
 - [x] Setup `nextjs` project
 - [x] Grab assets and fonts
 - [x] Setup tailwindcss
-- [ ] Setup `strapi` as CMS
+- [x] Setup `strapi` as CMS
   - [x] Create `strapi` project
   - [x] Create collections and models
-  - [ ] Create dummy content
-  - [ ] Fetch content from `strapi`
+  - [x] Create dummy content
 - [] Design frontend pages
   - [ ] Home
   - [ ] ...
