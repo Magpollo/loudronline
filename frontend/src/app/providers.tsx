@@ -17,8 +17,8 @@ export default function Providers({
     <NextThemeProvider
       {...props}
       attribute="class"
+      enableSystem={false}
       defaultTheme="system"
-      enableSystem={true}
     >
       <CacheProvider>
         <ChakraProvider>{children}</ChakraProvider>
