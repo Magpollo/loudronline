@@ -3,6 +3,7 @@ import './globals.css';
 import { plusJakarta, larken } from '@/assets/fonts/fonts';
 import Providers from '@/app/providers';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'Loudronline',
@@ -20,6 +21,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>
