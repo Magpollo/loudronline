@@ -13,7 +13,8 @@
   "pluginOptions": {},
   "attributes": {
     "postContent": {
-      "type": "blocks"
+      "type": "blocks",
+      "required": false
     },
     "title": {
       "type": "string",
@@ -39,8 +40,10 @@
         "music",
         "tech",
         "gaming",
-        "afroculture"
-      ]
+        "afroculture",
+        "events"
+      ],
+      "required": true
     },
     "creator": {
       "type": "relation",
@@ -55,15 +58,21 @@
       "mappedBy": "posts"
     },
     "headerImage": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "tags": {
       "type": "text"
+    },
+    "date": {
+      "type": "datetime"
+    },
+    "location": {
+      "type": "string"
     }
   }
 }

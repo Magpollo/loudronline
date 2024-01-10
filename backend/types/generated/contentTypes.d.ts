@@ -735,8 +735,9 @@ export interface ApiPostPost extends Schema.CollectionType {
     slug: Attribute.UID<'api::post.post', 'title'> & Attribute.Required;
     postId: Attribute.UID & Attribute.CustomField<'plugin::field-uuid.uuid'>;
     contentType: Attribute.Enumeration<
-      ['arts & design', 'music', 'tech', 'gaming', 'afroculture']
-    >;
+      ['arts & design', 'music', 'tech', 'gaming', 'afroculture', 'events']
+    > &
+      Attribute.Required;
     creator: Attribute.Relation<
       'api::post.post',
       'manyToOne',
@@ -749,6 +750,8 @@ export interface ApiPostPost extends Schema.CollectionType {
     >;
     headerImage: Attribute.Media & Attribute.Required;
     tags: Attribute.Text;
+    date: Attribute.DateTime;
+    location: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -780,6 +783,7 @@ export interface ApiPostCategoryPostCategory extends Schema.CollectionType {
       'manyToMany',
       'api::post.post'
     >;
+    slug: Attribute.UID<'api::post-category.post-category', 'name'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

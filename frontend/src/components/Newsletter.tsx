@@ -41,7 +41,7 @@ const Newsletter: React.FC<NewsletterProps> = ({
   return (
     <form
       onSubmit={handleSubscribe}
-      className="flex flex-col text-sm m-2 mb-2 lg:mb-0"
+      className="flex flex-col text-sm m-2 mb-2 lg:mb-0 max-w-[380px]"
     >
       <p className="mb-1">Subscribe to our newsletter</p>
       <input
@@ -50,7 +50,7 @@ const Newsletter: React.FC<NewsletterProps> = ({
         value={email}
         type="text"
         placeholder="example@email.com"
-        className="w-64 h-10 border-b-[3px] border-gray-400 p-2 bg-inherit placeholder:text-gray-400 outline-none focus:border-[#ffc843] mb-1 v"
+        className="w-full h-10 border-b-[3px] border-gray-400 p-2 bg-inherit placeholder:text-gray-400 outline-none focus:border-black dark:focus:border-white mb-2"
       />
       {error && <p className="text-red-500 mb-3 text-xs">{error}</p>}
       {status === 'sending' && (
@@ -61,8 +61,7 @@ const Newsletter: React.FC<NewsletterProps> = ({
       )}
       <button
         type="submit"
-        className="hover:bg-white transition-all duration-200 ease-in-out bg-[#ffc843] text-black
-                text-md font-bold uppercase py-4 px-10 rounded"
+        className="hover:bg-[#ffc843] dark:hover:bg-[#ffc843] transition-all duration-200 ease-in-out bg-black dark:bg-white dark:text-black text-md font-bold uppercase py-4 px-10 rounded-lg"
       >
         Subscribe
       </button>

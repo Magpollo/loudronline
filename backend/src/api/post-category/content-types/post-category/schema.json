@@ -30,6 +30,10 @@
       "relation": "manyToMany",
       "target": "api::post.post",
       "inversedBy": "post_categories"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

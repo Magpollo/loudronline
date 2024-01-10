@@ -10,7 +10,7 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
     'https://online.us14.list-manage.com/subscribe/post?u=2e88ff683941de4e0ea8a42ea&id=55fcc6e9af&f_id=00e68fe0f0';
   return (
     <footer className="w-full h-fit p-7 lg:p-14 bg-slate-100 dark:bg-[#141818] flex flex-col md:flex-row justify-around">
-      <div className="flex flex-col m-2 mb-2 lg:mb-0">
+      <div className="flex flex-col m-2 mb-4 lg:mb-0">
         <div className="flex flex-row items-center">
           <Image
             src="/logo.svg"
@@ -19,14 +19,16 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
             height={56}
             className="w-16 h-16 inline-block"
           />
+          <p className="text-2xl font-bold ml-8">loudronline</p>
         </div>
         <p className="text-sm text-gray-400 mt-2">&copy; loudronline 2022</p>
       </div>
-      <div className="flex flex-col text-sm m-2 mb-2 lg:mb-0">
+      <div className="flex flex-col text-sm m-2 mb-4 lg:mb-0">
         <p className="text-gray-400 mb-2">Find Us</p>
         <ul>
-          <li className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]">
+          <li className="py-1">
             <a
+              className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]"
               target="_blank"
               rel="noreferrer"
               href="https://twitter.com/loudronline?s=21&t=4VyljR8hroJAQQevVbRdFQ"
@@ -34,8 +36,9 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
               Twitter
             </a>
           </li>
-          <li className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]">
+          <li className="py-1">
             <a
+              className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]"
               target="_blank"
               rel="noreferrer"
               href="https://instagram.com/loudronline?igshid=YmMyMTA2M2Y="
@@ -43,8 +46,9 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
               Instagram
             </a>
           </li>
-          <li className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]">
+          <li className="py-1">
             <a
+              className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]"
               target="_blank"
               rel="noreferrer"
               href="https://open.spotify.com/playlist/2RyqK3ZGMn6gK8ob5rI42U?si=yWY4GN5vTHOk7xvmI4yuHQ"
@@ -52,8 +56,9 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
               Spotify
             </a>
           </li>
-          <li className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]">
+          <li className="py-1">
             <a
+              className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]"
               target="_blank"
               rel="noreferrer"
               href="https://youtube.com/channel/UC5RsaqmLUpwLvsW6xoJC1Bg?sub_confirmation=1"
@@ -63,19 +68,29 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
           </li>
         </ul>
       </div>
-      <div className="flex flex-col text-sm m-2 mb-2 lg:mb-0">
+      <div className="flex flex-col text-sm m-2 mb-4 lg:mb-0">
         <p className="text-gray-400 mb-2">Quick Links</p>
         <ul>
-          <li className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]">
-            <a href="mailto:salesteam@magpollo.com">Contact</a>
+          <li className="py-1">
+            <a
+              className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]"
+              href="mailto:salesteam@magpollo.com"
+            >
+              Contact
+            </a>
           </li>
         </ul>
       </div>
-      <div className="flex flex-col text-sm m-2 mb-2 lg:mb-0">
+      <div className="flex flex-col text-sm m-2 mb-4 lg:mb-0">
         <p className="text-gray-400 mb-2">Support</p>
         <ul>
-          <li className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]">
-            <a href="/">API Docs</a>
+          <li className="py-1">
+            <a
+              className="p-1 transition-all duration-150 ease-in-out hover:text-[#ffc843]"
+              href="/"
+            >
+              API Docs
+            </a>
           </li>
         </ul>
       </div>
