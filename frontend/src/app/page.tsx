@@ -1,5 +1,6 @@
 import EventsWidget from '@/components/EventsWidget';
 import Link from 'next/link';
+import ShopCTA from '@/components/ShopCallToAction';
 
 import { ReactElement } from 'react';
 
@@ -16,7 +17,7 @@ export default async function Home(): Promise<ReactElement> {
 
   return (
     <main className="flex flex-col px-4 overflow-hidden">
-      <div className="flex justify-center">
+      <div className="flex justify-start">
         <div className="h-fit w-fit no-scrollbar flex flex-row items-center p-2 overflow-x-scroll">
           {categories.data &&
             categories.data.map((category: Category) => (
@@ -32,6 +33,7 @@ export default async function Home(): Promise<ReactElement> {
         </div>
       </div>
       <EventsWidget props={{ className: 'mt-10' }} />
+      <ShopCTA />
     </main>
   );
 }

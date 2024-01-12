@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Event {
   id: number;
@@ -20,7 +21,14 @@ export default async function EventsWidget({ props }: { props: any }) {
       {...props}
       className="w-full h-fit mt-3 font-plus-jakarta"
     >
-      <h1 className="text-2xl ml-2 mb-4 font-larken">Upcoming Events</h1>
+      <h1 className="text-2xl ml-2 mb-4 font-larken">
+        <span>Upcoming Events</span>
+        <Link href="/events">
+          <span className="px-4 py-2 font-plus-jakarta text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer hover float-right">
+            View all
+          </span>
+        </Link>
+      </h1>
       <div className="flex flex-row p-2 overflow-x-scroll no-scrollbar">
         {events.data &&
           events.data.map((event: Event) => (

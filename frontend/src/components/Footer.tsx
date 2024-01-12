@@ -9,7 +9,10 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
   const url =
     'https://online.us14.list-manage.com/subscribe/post?u=2e88ff683941de4e0ea8a42ea&id=55fcc6e9af&f_id=00e68fe0f0';
   return (
-    <footer className="w-full h-fit p-7 lg:p-14 bg-slate-100 dark:bg-[#141818] flex flex-col md:flex-row justify-around">
+    <footer
+      id="footer"
+      className="w-full h-fit p-7 lg:p-14 bg-slate-100 dark:bg-[#141818] flex flex-col md:flex-row justify-around"
+    >
       <div className="flex flex-col m-2 mb-4 lg:mb-0">
         <div className="flex flex-row items-center">
           <Image

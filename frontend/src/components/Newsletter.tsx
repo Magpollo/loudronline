@@ -42,6 +42,7 @@ const Newsletter: React.FC<NewsletterProps> = ({
     <form
       onSubmit={handleSubscribe}
       className="flex flex-col text-sm m-2 mb-2 lg:mb-0 max-w-[380px]"
+      id="newsletter"
     >
       <p className="mb-1">Subscribe to our newsletter</p>
       <input

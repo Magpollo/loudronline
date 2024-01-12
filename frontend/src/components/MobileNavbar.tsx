@@ -14,6 +14,9 @@ export default function Navbar() {
 
   useEffect(() => {
     if (isOpen) {
+      // scroll to top of page
+      window.scrollTo(0, 0);
+      // disable scrolling
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';

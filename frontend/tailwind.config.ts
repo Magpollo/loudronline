@@ -18,6 +18,9 @@ const config: Config = {
         'plus-jakarta': 'var(--font-plus-jakarta)',
         larken: 'var(--font-larken)',
       },
+      colors: {
+        'loudr-yellow': '#FFC843',
+      },
     },
   },
   plugins: [],
