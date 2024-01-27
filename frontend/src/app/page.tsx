@@ -1,7 +1,8 @@
 import EventsWidget from '@/components/EventsWidget';
 import Link from 'next/link';
 import ShopCTA from '@/components/ShopCallToAction';
-
+import ReadsWidget from '@/components/ReadsWidget';
+import VideosWidget from '@/components/VideosWidget';
 import { ReactElement } from 'react';
 
 interface Category {
@@ -34,6 +35,8 @@ export default async function Home(): Promise<ReactElement> {
       </div>
       <EventsWidget props={{ className: 'mt-10' }} />
       <ShopCTA />
+      <ReadsWidget props={{ className: 'my-10' }} />
+      <VideosWidget props={{ className: 'my-5' }} />
     </main>
   );
 }

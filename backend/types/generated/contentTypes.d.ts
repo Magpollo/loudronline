@@ -735,7 +735,15 @@ export interface ApiPostPost extends Schema.CollectionType {
     slug: Attribute.UID<'api::post.post', 'title'> & Attribute.Required;
     postId: Attribute.UID & Attribute.CustomField<'plugin::field-uuid.uuid'>;
     contentType: Attribute.Enumeration<
-      ['arts & design', 'music', 'tech', 'gaming', 'afroculture', 'events']
+      [
+        'arts & design',
+        'music',
+        'tech',
+        'gaming',
+        'afroculture',
+        'events',
+        'videos'
+      ]
     > &
       Attribute.Required;
     creator: Attribute.Relation<
@@ -748,10 +756,11 @@ export interface ApiPostPost extends Schema.CollectionType {
       'manyToMany',
       'api::post-category.post-category'
     >;
-    headerImage: Attribute.Media & Attribute.Required;
+    headerImage: Attribute.Media;
     tags: Attribute.Text;
     date: Attribute.DateTime;
     location: Attribute.String;
+    youtubeUrl: Attribute.String & Attribute.Unique;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

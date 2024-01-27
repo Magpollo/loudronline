@@ -41,7 +41,8 @@
         "tech",
         "gaming",
         "afroculture",
-        "events"
+        "events",
+        "videos"
       ],
       "required": true
     },
@@ -60,7 +61,7 @@
     "headerImage": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images"
       ]
@@ -73,6 +74,11 @@
     },
     "location": {
       "type": "string"
+    },
+    "youtubeUrl": {
+      "type": "string",
+      "unique": true,
+      "regex": "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$"
     }
   }
 }

@@ -65,7 +65,7 @@ export default async function EventsWidget({ props }: { props: any }) {
 
 async function getEvents(): Promise<{ data: Event[] }> {
   const res = await fetch(
-    `http://localhost:1337/api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=postContent&fields[5]=date&fields[6]=location&publicationState=live&locale[0]=en`,
+    `http://localhost:1337/api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[start]=0&pagination[limit]=4&publicationState=live&locale[0]=en`,
     {
       method: 'GET',
       headers: {
