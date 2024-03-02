@@ -6,11 +6,14 @@ import MenuIcon from '@/assets/icons/menu';
 import Image from 'next/image';
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import SearchIcon from '@/assets/icons/search';
+import { useParams } from 'next/navigation';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [openExplore, setOpenExplore] = useState(false);
+  const [openShop, setOpenShop] = useState(false);
+  const { slug } = useParams();
 
   useEffect(() => {
     if (isOpen) {
@@ -47,6 +50,14 @@ export default function Navbar() {
             />
           </Link>
         </div>
+        {/* Show Category slug if there is a slug */}
+        {slug && (
+          <div className="w-full h-fit flex flex-row justify-center items-center">
+            <div className="capitalize font-semibold font-larken text-3xl text-white/50 dark:text-white">
+              {slug}
+            </div>
+          </div>
+        )}
         <div className="w-full h-fit flex flex-row justify-around items-center p-3 border-b border-slate-300 dark:border-[#24272A]">
           <InputGroup
             variant={'unstyled'}
@@ -87,7 +98,7 @@ export default function Navbar() {
           className={`fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 ${
             isOpen ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{ marginTop: '173px' }}
+          style={slug ? { marginTop: '210px' } : { marginTop: '173px' }}
         >
           <div className="flex flex-col">
             <div>
@@ -101,17 +112,26 @@ export default function Navbar() {
               </div>
               {openExplore && (
                 <div className="flex flex-col p-3 m-5 border-l border-l-white/50">
-                  <Link href="/events">
+                  <Link
+                    href="/events"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
                     <div className="capitalize text-xl text-white/50 font-bold mb-3 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                       events
                     </div>
                   </Link>
-                  <Link href="/reads">
+                  <Link
+                    href="/reads"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
                     <div className="capitalize text-xl text-white/50 font-bold mb-3 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                       reads
                     </div>
                   </Link>
-                  <Link href="/videos">
+                  <Link
+                    href="/videos"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
                     <div className="capitalize text-xl text-white/50 font-bold  hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                       videos
                     </div>
@@ -119,12 +139,28 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            <Link href="/shop">
-              <div className="text-xl font-bold mb-5 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
+            <div>
+              <div
+                className={`text-xl font-bold mb-5 hover:text-[#FF9D12] transition duration-300 ease-in-out ${
+                  openShop && 'text-[#FF9D12]'
+                }`}
+                onClick={() => setOpenShop(!openShop)}
+              >
                 Shop
               </div>
-            </Link>
-            <Link href="/about">
+              {openShop && (
+                <div className="flex flex-col p-3 m-5 border-l border-l-white/50">
+                  <div className="text-xl text-white/50 font-bold transition duration-300 ease-in-out">
+                    Coming soon
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/about"
+              onClick={() => setIsOpen(!isOpen)}
+            >
               <div className="text-xl font-bold mb-5 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                 About
               </div>

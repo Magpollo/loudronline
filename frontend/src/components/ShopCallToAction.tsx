@@ -10,7 +10,10 @@ export default function ShopCTA() {
   };
 
   return (
-    <section className="mt-10">
+    <section
+      className="mt-10"
+      id="shop"
+    >
       <h1 className="text-2xl font-larken mb-5">Shop our essentials</h1>
       <div className="bg-[#95426A] flex flex-col items-center justify-center p-5">
         <h1 className="text-loudr-yellow w-fit font-bold text-lg mb-5">

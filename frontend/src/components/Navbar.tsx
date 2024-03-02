@@ -31,30 +31,22 @@ export default function Navbar() {
             />
           </Link>
           <div className="flex flex-row">
-            <div>
-              <div
-                className={`cursor-pointer text-xl font-bold mr-10 hover:text-[#FF9D12] transition duration-300 ease-in-out`}
-              >
-                Explore
+            <Link href="/category/events">
+              <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
+                events
               </div>
-              <div className="hidden flex-col p-3 m-5 border-l border-l-white/50">
-                <Link href="/events">
-                  <div className="capitalize text-xl text-white/50 font-bold mb-3 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                    events
-                  </div>
-                </Link>
-                <Link href="/reads">
-                  <div className="capitalize text-xl text-white/50 font-bold mb-3 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                    reads
-                  </div>
-                </Link>
-                <Link href="/videos">
-                  <div className="capitalize text-xl text-white/50 font-bold  hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                    videos
-                  </div>
-                </Link>
+            </Link>
+            <Link href="/category/reads">
+              <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
+                reads
               </div>
-            </div>
+            </Link>
+            <Link href="/category/videos">
+              <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
+                videos
+              </div>
+            </Link>
+
             <Link href="/shop">
               <div className="text-xl font-bold mr-10 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                 Shop

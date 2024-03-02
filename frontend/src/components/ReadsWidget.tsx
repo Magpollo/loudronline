@@ -5,10 +5,13 @@ import { formatDate, getData } from '@/utils/helpers';
 export default async function EventsWidget({ props }: { props: any }) {
   const posts = await getLatestPosts();
   return (
-    <section {...props}>
-      <h1 className="text-2xl ml-2 mb-6 font-larken">
-        <span>Latest news</span>
-        <Link href="/events">
+    <section
+      {...props}
+      id="reads"
+    >
+      <h1 className="text-2xl ml-2 mb-6">
+        <span className="font-larken">Latest news</span>
+        <Link href="/reads">
           <span className="px-4 py-2 font-plus-jakarta text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer hover float-right">
             View all
           </span>
@@ -21,7 +24,7 @@ export default async function EventsWidget({ props }: { props: any }) {
               href={`/reads/${post.attributes.slug}`}
               key={post.id}
             >
-              <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5">
+              <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/10">
                 <div className="relative h-[200px] w-full">
                   <Image
                     src={`http://localhost:1337${post.attributes.headerImage.data.attributes.url}`}

@@ -1,28 +1,36 @@
-import { formatDate, getData, formatYoutubeUrl } from '@/utils/helpers';
-import Link from 'next/link';
+import {
+  getData,
+  formatDate,
+  getStrapiUrl,
+  formatYoutubeUrl,
+} from '@/utils/helpers';
 import Image from 'next/image';
 
-export default async function VideosWidget({ props }: { props: any }) {
+export default async function Videos({ slug }: { slug: string }) {
+  const tags = await getTags();
   const videos = await getLatestVideos();
   return (
-    <section
-      {...props}
-      id="videos"
-    >
-      <h1 className="text-2xl ml-2 mb-6">
-        <span className="font-larken">Watch Stuff</span>
-        <Link href="/videos">
-          <span className="px-4 py-2 font-plus-jakarta text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer hover float-right">
-            View all
-          </span>
-        </Link>
-      </h1>
-      <div className="h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-4 font-plus-jakarta">
+    <section className="py-3 px-7">
+      <h2 className="font-bold font-plus-jakarta">Filter by tag</h2>
+      <nav className="flex justify-start">
+        <div className="h-fit w-fit no-scrollbar flex flex-row items-center py-2 overflow-x-scroll">
+          {tags &&
+            tags.map((tag: Tag) => (
+              <div
+                key={tag.id}
+                className="px-4 py-2 text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer hover"
+              >
+                {tag.attributes.name}
+              </div>
+            ))}
+        </div>
+      </nav>
+      <div className="my-5 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-4 font-plus-jakarta">
         {videos &&
           videos.map((video: any) => (
             <div
               key={video.attributes.postId}
-              className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/10"
+              className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/50"
             >
               <div className="relative h-[200px] w-full">
                 <iframe
@@ -65,6 +73,13 @@ export default async function VideosWidget({ props }: { props: any }) {
       </div>
     </section>
   );
+}
+
+async function getTags(): Promise<Tag[]> {
+  const reads = await getData(
+    'api/post-categories?sort[0]=id:asc&filters[$and][0][slug][$ne]=events&filters[$and][1][slug][$ne]=videos&fields[0]=name&fields[1]=id&fields[2]=slug&publicationState=live&locale[0]=en'
+  );
+  return reads;
 }
 
 async function getLatestVideos(): Promise<any> {

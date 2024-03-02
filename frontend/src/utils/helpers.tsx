@@ -23,7 +23,7 @@ export function formatDate(date: string): string {
   })} ${postDate.getFullYear()}`;
 }
 
-export async function getData(url: string): Promise<{ data: any[] }> {
+export async function getData(url: string): Promise<any[]> {
   const urlWithHost = `http://localhost:1337/${url}`;
   const res = await fetch(urlWithHost, {
     method: 'GET',
@@ -40,4 +40,9 @@ export function formatYoutubeUrl(url: string): string {
   // get youtube video id and return embed url
   const videoId = url.split('v=')[1];
   return `https://www.youtube.com/embed/${videoId}`;
+}
+
+// chnage url if in development mode or production mode
+export function getStrapiUrl(): string {
+  return process.env.NODE_ENV === 'development' ? `http://localhost:1337` : '';
 }

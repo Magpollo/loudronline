@@ -71,7 +71,10 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
           </li>
         </ul>
       </div>
-      <div className="flex flex-col text-sm m-2 mb-4 lg:mb-0">
+      <div
+        id="quicklinks"
+        className="flex flex-col text-sm m-2 mb-4 lg:mb-0"
+      >
         <p className="text-gray-400 mb-2">Quick Links</p>
         <ul>
           <li className="py-1">
