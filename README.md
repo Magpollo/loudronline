@@ -61,9 +61,9 @@ npm run develop
   - [x] Create `strapi` project
   - [x] Create collections and models
   - [x] Create dummy content
-- [] Design frontend pages
-  - [ ] Home
-  - [ ] ...
+- [x] Design frontend pages
+  - [x] Home
+  - [x] ...
 - [ ] Design shop pages
 - [ ] Setup `mongodb` for shop data`
   - [ ] Home
