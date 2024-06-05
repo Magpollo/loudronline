@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getData } from '@/utils/helpers';
+import { getData, getStrapiUrl } from '@/utils/helpers';
 
 export default async function EventsWidget({ props }: { props: any }) {
   const events: Event[] = await getEvents();
@@ -27,7 +27,9 @@ export default async function EventsWidget({ props }: { props: any }) {
             >
               <div className="w-[300px] h-[300px] mb-3">
                 <Image
-                  src={`http://localhost:1337${event.attributes.headerImage.data.attributes.url}`}
+                  src={`${getStrapiUrl()}${
+                    event.attributes.headerImage.data.attributes.url
+                  }`}
                   alt={event.attributes.title}
                   width={300}
                   height={300}

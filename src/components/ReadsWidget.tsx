@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDate, getData } from '@/utils/helpers';
+import { formatDate, getData, getStrapiUrl } from '@/utils/helpers';
 
 export default async function EventsWidget({ props }: { props: any }) {
   const posts = await getLatestPosts();
@@ -27,7 +27,9 @@ export default async function EventsWidget({ props }: { props: any }) {
               <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/10">
                 <div className="relative h-[200px] w-full">
                   <Image
-                    src={`http://localhost:1337${post.attributes.headerImage.data.attributes.url}`}
+                    src={`${getStrapiUrl()}${
+                      post.attributes.headerImage.data.attributes.url
+                    }`}
                     alt={post.attributes.title}
                     width={300}
                     height={300}

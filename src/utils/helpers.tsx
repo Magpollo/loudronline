@@ -24,7 +24,7 @@ export function formatDate(date: string): string {
 }
 
 export async function getData(url: string): Promise<any[]> {
-  const urlWithHost = `http://localhost:1337/${url}`;
+  const urlWithHost = `${getStrapiUrl()}/${url}`;
   const res = await fetch(urlWithHost, {
     method: 'GET',
     headers: {
@@ -44,5 +44,8 @@ export function formatYoutubeUrl(url: string): string {
 
 // chnage url if in development mode or production mode
 export function getStrapiUrl(): string {
-  return process.env.NODE_ENV === 'development' ? `http://localhost:1337` : '';
+  return process.env.NODE_ENV === 'development'
+    ? `http://localhost:1337`
+    : process.env.STRAPI_URL_BASE ||
+        'https://productivity-tips-api-sef4.onrender.com';
 }

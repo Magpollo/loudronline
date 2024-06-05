@@ -16,7 +16,9 @@ export default async function Events({ slug }: { slug: string }) {
             >
               <div className="relative w-full h-[300px] mb-3">
                 <Image
-                  src={`http://localhost:1337${event.attributes.headerImage.data.attributes.url}`}
+                  src={`${getStrapiUrl()}${
+                    event.attributes.headerImage.data.attributes.url
+                  }`}
                   alt={event.attributes.title}
                   width={300}
                   height={300}

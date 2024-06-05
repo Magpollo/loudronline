@@ -54,7 +54,10 @@ export default async function Videos({ slug }: { slug: string }) {
               <div className="flex flex-row items-center">
                 <div className="rounded-full h-8 w-8 mr-4">
                   <Image
-                    src={`http://localhost:1337${video.attributes.creator.data.attributes.profileImage.data.attributes.url}`}
+                    src={`${getStrapiUrl()}${
+                      video.attributes.creator.data.attributes.profileImage.data
+                        .attributes.url
+                    }`}
                     alt={video.attributes.creator.data.attributes.name}
                     width={32}
                     height={32}

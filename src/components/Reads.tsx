@@ -35,7 +35,9 @@ export default async function Reads({ slug }: { slug: string }) {
               <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/50">
                 <div className="relative h-[200px] w-full">
                   <Image
-                    src={`http://localhost:1337${post.attributes.headerImage?.data.attributes.url}`}
+                    src={`${getStrapiUrl()}${
+                      post.attributes.headerImage?.data.attributes.url
+                    }`}
                     alt={post.attributes.title}
                     width={300}
                     height={300}
