@@ -6,13 +6,7 @@ import type { ThemeProviderProps } from 'next-themes/dist/types';
 import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider } from '@chakra-ui/react';
 
-export default function Providers({
-  children,
-  ...props
-}: {
-  children: React.ReactNode;
-  props: ThemeProviderProps;
-}) {
+export default function Providers({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemeProvider
       {...props}
