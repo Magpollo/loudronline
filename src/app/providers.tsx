@@ -11,14 +11,12 @@ export default function Providers({
   ...props
 }: {
   children: React.ReactNode;
-  props?: ThemeProviderProps;
+  props: ThemeProviderProps;
 }) {
   return (
     <NextThemeProvider
       {...props}
       attribute="class"
-      enableSystem={true}
-      defaultTheme="system"
     >
       <CacheProvider>
         <ChakraProvider>{children}</ChakraProvider>

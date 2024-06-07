@@ -31,17 +31,17 @@ export default function Navbar() {
             />
           </Link>
           <div className="flex flex-row">
-            <Link href="/category/events">
+            <Link href="/events">
               <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                 events
               </div>
             </Link>
-            <Link href="/category/reads">
+            <Link href="/reads">
               <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                 reads
               </div>
             </Link>
-            <Link href="/category/videos">
+            <Link href="/videos">
               <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
                 videos
               </div>
