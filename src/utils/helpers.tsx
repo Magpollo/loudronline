@@ -50,3 +50,12 @@ export function getStrapiUrl(): string {
     : process.env.STRAPI_URL_BASE ||
         'https://loudronline-backend-production.up.railway.app';
 }
+
+export function getStrapiMedia(media: any) {
+  if (media && media.data && media.data.attributes) {
+    const { url } = media.data.attributes;
+    const imageUrl = url.startsWith('/') ? getStrapiUrl() + url : url;
+    return imageUrl;
+  }
+  return '/placeholder.jpeg';
+}

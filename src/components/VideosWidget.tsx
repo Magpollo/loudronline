@@ -51,10 +51,7 @@ export default async function VideosWidget({ props }: { props: any }) {
               <div className="flex flex-row items-center">
                 <div className="rounded-full h-8 w-8 mr-4">
                   <Image
-                    src={`${getStrapiUrl()}${
-                      video.attributes.creator.data.attributes.profileImage.data
-                        .attributes.url
-                    }`}
+                    src={`${video.attributes.creator.data.attributes.profileImage.data.attributes?.url}`}
                     alt={video.attributes.creator.data.attributes.name}
                     width={32}
                     height={32}

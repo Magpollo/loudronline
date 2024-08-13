@@ -27,9 +27,7 @@ export default async function EventsWidget({ props }: { props: any }) {
             >
               <div className="w-[300px] h-[300px] mb-3">
                 <Image
-                  src={`${getStrapiUrl()}${
-                    event.attributes.headerImage.data.attributes.url
-                  }`}
+                  src={event.attributes.headerImage.data.attributes.url}
                   alt={event.attributes.title}
                   width={300}
                   height={300}
