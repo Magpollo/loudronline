@@ -1,4 +1,4 @@
-interface Event {
+interface LoudrEvent {
   id: number;
   attributes: {
     title: string;

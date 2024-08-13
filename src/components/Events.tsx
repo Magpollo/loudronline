@@ -8,7 +8,7 @@ export default async function Events({ slug }: { slug: string }) {
     <section className="p-5">
       <div className="my-5 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-8 font-plus-jakarta">
         {events &&
-          events.map((event: Event) => (
+          events.map((event: LoudrEvent) => (
             <Link
               href={`/events/${event.attributes.slug}`}
               key={event.id}
@@ -43,7 +43,7 @@ export default async function Events({ slug }: { slug: string }) {
   );
 }
 
-async function getEvents(): Promise<Event[]> {
+async function getEvents(): Promise<LoudrEvent[]> {
   const events = await getData(
     'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&publicationState=live&locale[0]=en'
   );

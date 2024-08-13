@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getData, getStrapiUrl } from '@/utils/helpers';
 
 export default async function EventsWidget({ props }: { props: any }) {
-  const events: Event[] = await getEvents();
+  const events: LoudrEvent[] = await getEvents();
   return (
     <section
       {...props}
@@ -20,7 +20,7 @@ export default async function EventsWidget({ props }: { props: any }) {
       </h1>
       <div className="flex flex-row p-2 overflow-x-scroll no-scrollbar">
         {events &&
-          events.map((event: Event) => (
+          events.map((event: any) => (
             <div
               key={event.id}
               className="flex flex-col h-fit w-fit mr-6 p-2 cursor-pointer hover:bg-slate-500/10"
@@ -54,7 +54,7 @@ export default async function EventsWidget({ props }: { props: any }) {
   );
 }
 
-async function getEvents(): Promise<Event[]> {
+async function getEvents(): Promise<LoudrEvent[]> {
   const events = await getData(
     'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[start]=0&pagination[limit]=4&publicationState=live&locale[0]=en'
   );
