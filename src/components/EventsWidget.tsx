@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getData, getStrapiUrl } from '@/utils/helpers';
+import { getData, getStrapiMedia } from '@/utils/helpers';
 
 export default async function EventsWidget({ props }: { props: any }) {
   const events: LoudrEvent[] = await getEvents();
@@ -27,7 +27,7 @@ export default async function EventsWidget({ props }: { props: any }) {
             >
               <div className="w-[300px] h-[300px] mb-3">
                 <Image
-                  src={event.attributes.headerImage.data.attributes.url}
+                  src={getStrapiMedia(event.attributes.headerImage)}
                   alt={event.attributes.title}
                   width={300}
                   height={300}
