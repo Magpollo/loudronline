@@ -47,5 +47,5 @@ export function getStrapiUrl(): string {
   return process.env.NODE_ENV === 'development'
     ? `http://localhost:1337`
     : process.env.STRAPI_URL_BASE ||
-        'https://productivity-tips-api-sef4.onrender.com';
+        'https://loudronline-backend-production.up.railway.app';
 }
