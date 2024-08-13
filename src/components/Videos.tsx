@@ -1,7 +1,7 @@
 import {
   getData,
   formatDate,
-  getStrapiUrl,
+  getStrapiMedia,
   formatYoutubeUrl,
 } from '@/utils/helpers';
 import Image from 'next/image';
@@ -53,10 +53,9 @@ export default async function Videos({ videos }: { videos: any }) {
               <div className="flex flex-row items-center">
                 <div className="rounded-full h-8 w-8 mr-4">
                   <Image
-                    src={`${getStrapiUrl()}${
-                      video.attributes.creator.data.attributes.profileImage.data
-                        .attributes.url
-                    }`}
+                    src={getStrapiMedia(
+                      video.attributes.creator.data.attributes.profileImage
+                    )}
                     alt={video.attributes.creator.data.attributes.name}
                     width={32}
                     height={32}

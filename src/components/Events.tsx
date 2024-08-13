@@ -1,4 +1,9 @@
-import { getData, formatDate, getStrapiUrl } from '@/utils/helpers';
+import {
+  getData,
+  formatDate,
+  getStrapiUrl,
+  getStrapiMedia,
+} from '@/utils/helpers';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -15,9 +20,7 @@ export default function Events({ events }: { events: LoudrEvent[] }) {
             >
               <div className="relative w-full h-[300px] mb-3">
                 <Image
-                  src={`${getStrapiUrl()}${
-                    event.attributes.headerImage.data.attributes.url
-                  }`}
+                  src={getStrapiMedia(event.attributes.headerImage)}
                   alt={event.attributes.title}
                   width={300}
                   height={300}

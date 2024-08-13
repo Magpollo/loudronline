@@ -1,4 +1,4 @@
-import { getData, formatDate, getStrapiUrl } from '@/utils/helpers';
+import { getData, formatDate, getStrapiMedia } from '@/utils/helpers';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -32,9 +32,7 @@ export default async function Reads({ posts }: { posts: any }) {
               <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/50">
                 <div className="relative h-[200px] w-full">
                   <Image
-                    src={`${getStrapiUrl()}${
-                      post.attributes.headerImage?.data.attributes.url
-                    }`}
+                    src={getStrapiMedia(post.attributes.headerImage)}
                     alt={post.attributes.title}
                     width={300}
                     height={300}
