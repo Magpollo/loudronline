@@ -31,7 +31,7 @@ export async function getData(url: string): Promise<any[]> {
       Authorization: `bearer ${process.env.STRAPI_CLIENT_SECRET}`,
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 60 }, // Revalidate every 60 seconds
+    next: { revalidate: 30 }, // Revalidate every 30 seconds
   });
   const { data } = await res.json();
   return data;
