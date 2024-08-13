@@ -2,11 +2,8 @@ import { getData, formatDate, getStrapiUrl } from '@/utils/helpers';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default async function Reads({ slug }: { slug: string }) {
+export default async function Reads({ posts }: { posts: any }) {
   const tags = await getTags();
-  const posts = await getData(
-    'api/posts?sort[0]=publishedAt:desc&filters[$and][0][contentType][$ne]=events&filters[$and][1][contentType][$ne]=videos&populate[0]=headerImage&populate[1]=post_categories&fields[0]=title&fields[1]=postId&fields[2]=slug&fields[3]=description&fields[4]=contentType&fields[5]=publishedAt&publicationState=live&locale[0]=en'
-  );
 
   return (
     <section className="py-3 px-7">
