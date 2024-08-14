@@ -4,9 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
-import SearchIcon from '@/assets/icons/search';
 import MobileNavbar from '@/components/MobileNavbar';
+import SearchBar from './SearchBar';
 
 export default function Navbar() {
   const [searchValue, setSearchValue] = useState('');
@@ -61,26 +60,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <InputGroup
-          variant={'unstyled'}
-          className="w-2/6 h-fit bg-gray-100 dark:bg-[#24272a] py-3 mr-10"
-        >
-          <InputLeftElement pointerEvents="none">
-            <SearchIcon
-              width={25}
-              height={25}
-              className="my-3 mx-1 fill-none"
-            />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search Loudr..."
-            value={searchValue}
-            onChange={handleSearch}
-            variant={'unstyled'}
-            className="ml-8 placeholder:text-sm"
-          />
-        </InputGroup>
+        <SearchBar />
       </nav>
       <MobileNavbar />
     </>

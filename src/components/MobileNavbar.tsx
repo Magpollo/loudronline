@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import MenuIcon from '@/assets/icons/menu';
 import Image from 'next/image';
-import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
-import SearchIcon from '@/assets/icons/search';
+import SearchBar from './SearchBar';
 
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,10 +28,6 @@ export default function MobileNavbar() {
     const isExploreSubNav = ['/events', '/reads', '/videos'].includes(pathname);
     setOpenExplore(isExploreSubNav);
   }, [pathname]);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -84,26 +79,7 @@ export default function MobileNavbar() {
           </Link>
         </div>
         <div className="w-full h-fit flex flex-row justify-around items-center p-3 border-b border-slate-300 dark:border-[#24272A]">
-          <InputGroup
-            variant={'unstyled'}
-            className="w-5/6 bg-gray-100 dark:bg-[#24272a] py-3"
-          >
-            <InputLeftElement pointerEvents="none">
-              <SearchIcon
-                width={25}
-                height={25}
-                className="my-3 mx-1 fill-none"
-              />
-            </InputLeftElement>
-            <Input
-              type="text"
-              placeholder="Search Loudr..."
-              value={searchValue}
-              onChange={handleSearch}
-              variant={'unstyled'}
-              className="ml-8 placeholder:text-sm"
-            />
-          </InputGroup>
+          <SearchBar mobile={true} />
           <div>
             <MenuIcon
               onClick={toggleMenu}
