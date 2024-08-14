@@ -53,7 +53,7 @@ export default async function EventsWidget({ props }: { props: any }) {
 
 async function getLatestPosts(): Promise<any> {
   const posts = await getData(
-    'api/posts?sort[0]=publishedAt:desc&filters[contentType][$ne]=events&populate[0]=headerImage&populate[1]=post_categories&fields[0]=title&fields[1]=postId&fields[2]=slug&fields[3]=description&fields[4]=contentType&fields[5]=publishedAt&pagination[start]=0&pagination[limit]=3&publicationState=live&locale[0]=en'
+    'api/posts?sort[0]=publishedAt:desc&filters[$and][0][contentType][$ne]=events&filters[$and][1][contentType][$ne]=videos&populate[0]=headerImage&populate[1]=post_categories&fields[0]=title&fields[1]=postId&fields[2]=slug&fields[3]=description&fields[4]=contentType&fields[5]=publishedAt&pagination[start]=0&pagination[limit]=3&publicationState=live&locale[0]=en'
   );
   return posts;
 }

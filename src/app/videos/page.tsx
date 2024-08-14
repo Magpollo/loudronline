@@ -1,15 +1,18 @@
 import { getData } from '@/utils/helpers';
 import Videos from '@/components/Videos';
 
-async function getVideos(): Promise<any> {
-  const videos = await getData(
-    'api/posts?sort[0]=publishedAt:desc&filters[contentType][$eq]=videos&populate[creator][populate][0]=profileImage&populate[creator][fields][1]=name&populate[creator][fields][2]=creatorId&populate[post_categories][fields][0]=name&fields[0]=title&fields[1]=slug&fields[2]=postId&fields[3]=youtubeUrl&fields[4]=publishedAt&pagination[start]=0&pagination[limit]=3&publicationState=live&locale[0]=en'
-  );
-  return videos;
-}
-
 export default async function Page() {
-  const videos = await getVideos();
+  const videos = await getData(
+    'api/posts?filters[contentType][$eq]=videos&populate[0]=headerImage&populate[1]=post_categories&populate[2]=creator&fields[0]=title&fields[1]=postId&fields[2]=slug&fields[3]=description&fields[4]=contentType&fields[5]=publishedAt&fields[6]=youtubeUrl&publicationState=live&locale[0]=en'
+  );
+  const categories = await getData(
+    'api/post-categories?sort[0]=id:asc&filters[$and][0][slug][$ne]=events&filters[$and][1][slug][$ne]=videos&fields[0]=name&fields[1]=id&fields[2]=slug&publicationState=live&locale[0]=en'
+  );
 
-  return <Videos videos={videos} />;
+  return (
+    <Videos
+      initialVideos={videos}
+      categories={categories}
+    />
+  );
 }

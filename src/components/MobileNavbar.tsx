@@ -2,29 +2,33 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import MenuIcon from '@/assets/icons/menu';
 import Image from 'next/image';
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import SearchIcon from '@/assets/icons/search';
-import { useParams } from 'next/navigation';
 
-export default function Navbar() {
+export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [openExplore, setOpenExplore] = useState(false);
   const [openShop, setOpenShop] = useState(false);
-  const { slug } = useParams();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (isOpen) {
-      // scroll to top of page
       window.scrollTo(0, 0);
-      // disable scrolling
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    // Check if the current path is a sub-nav of Explore
+    const isExploreSubNav = ['/events', '/reads', '/videos'].includes(pathname);
+    setOpenExplore(isExploreSubNav);
+  }, [pathname]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -34,6 +38,34 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
+  const NavLink = ({
+    href,
+    children,
+  }: {
+    href: string;
+    children: React.ReactNode;
+  }) => {
+    const isActive = pathname === href;
+    return (
+      <Link
+        href={href}
+        onClick={closeMenu}
+      >
+        <div
+          className={`capitalize text-xl font-bold mb-3 transition duration-300 ease-in-out ${
+            isActive ? 'text-[#FF9D12]' : 'text-white/50 hover:text-[#FF9D12]'
+          }`}
+        >
+          {children}
+        </div>
+      </Link>
+    );
+  };
+
   return (
     <nav className="relative font-plus-jakarta md:hidden">
       <div className="h-fit">
@@ -41,6 +73,7 @@ export default function Navbar() {
           <Link
             href="/"
             className="scale-50"
+            onClick={closeMenu}
           >
             <Image
               src="/logo.svg"
@@ -50,14 +83,6 @@ export default function Navbar() {
             />
           </Link>
         </div>
-        {/* Show Category slug if there is a slug */}
-        {slug && (
-          <div className="w-full h-fit flex flex-row justify-center items-center">
-            <div className="capitalize font-semibold font-larken text-3xl text-white/50 dark:text-white">
-              {slug}
-            </div>
-          </div>
-        )}
         <div className="w-full h-fit flex flex-row justify-around items-center p-3 border-b border-slate-300 dark:border-[#24272A]">
           <InputGroup
             variant={'unstyled'}
@@ -82,7 +107,6 @@ export default function Navbar() {
           <div>
             <MenuIcon
               onClick={toggleMenu}
-              // color #FF9D12 when open
               className={`transition-all delay duration-300 ease-in-out cursor-pointer ${
                 isOpen
                   ? 'stroke-[#FF9D12]'
@@ -95,47 +119,24 @@ export default function Navbar() {
 
       {isOpen && (
         <div
-          className={`fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 ${
-            isOpen ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={slug ? { marginTop: '210px' } : { marginTop: '173px' }}
+          className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100"
+          style={{ marginTop: '173px' }}
         >
           <div className="flex flex-col">
             <div>
               <div
                 onClick={() => setOpenExplore(!openExplore)}
-                className={`cursor-pointer text-xl font-bold mb-5 hover:text-[#FF9D12] transition duration-300 ease-in-out ${
-                  openExplore && 'text-[#FF9D12]'
+                className={`cursor-pointer text-xl font-bold mb-5 transition duration-300 ease-in-out ${
+                  openExplore ? 'text-[#FF9D12]' : 'hover:text-[#FF9D12]'
                 }`}
               >
                 Explore
               </div>
               {openExplore && (
                 <div className="flex flex-col p-3 m-5 border-l border-l-white/50">
-                  <Link
-                    href="/events"
-                    onClick={() => setIsOpen(!isOpen)}
-                  >
-                    <div className="capitalize text-xl text-white/50 font-bold mb-3 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                      events
-                    </div>
-                  </Link>
-                  <Link
-                    href="/reads"
-                    onClick={() => setIsOpen(!isOpen)}
-                  >
-                    <div className="capitalize text-xl text-white/50 font-bold mb-3 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                      reads
-                    </div>
-                  </Link>
-                  <Link
-                    href="/videos"
-                    onClick={() => setIsOpen(!isOpen)}
-                  >
-                    <div className="capitalize text-xl text-white/50 font-bold  hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                      videos
-                    </div>
-                  </Link>
+                  <NavLink href="/events">events</NavLink>
+                  <NavLink href="/reads">reads</NavLink>
+                  <NavLink href="/videos">videos</NavLink>
                 </div>
               )}
             </div>
@@ -157,14 +158,7 @@ export default function Navbar() {
               )}
             </div>
 
-            <Link
-              href="/about"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <div className="text-xl font-bold mb-5 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                About
-              </div>
-            </Link>
+            <NavLink href="/about">About</NavLink>
           </div>
         </div>
       )}

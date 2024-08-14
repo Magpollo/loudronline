@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import MenuIcon from '@/assets/icons/menu';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import SearchIcon from '@/assets/icons/search';
@@ -10,9 +10,31 @@ import MobileNavbar from '@/components/MobileNavbar';
 
 export default function Navbar() {
   const [searchValue, setSearchValue] = useState('');
+  const pathname = usePathname();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
+  };
+
+  const NavLink = ({
+    href,
+    children,
+  }: {
+    href: string;
+    children: React.ReactNode;
+  }) => {
+    const isActive = pathname === href;
+    return (
+      <Link href={href}>
+        <div
+          className={`capitalize text-xl mr-10 font-bold transition duration-300 ease-in-out ${
+            isActive ? 'text-[#FF9D12]' : 'hover:text-[#FF9D12]'
+          }`}
+        >
+          {children}
+        </div>
+      </Link>
+    );
   };
 
   return (
@@ -31,32 +53,11 @@ export default function Navbar() {
             />
           </Link>
           <div className="flex flex-row">
-            <Link href="/events">
-              <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                events
-              </div>
-            </Link>
-            <Link href="/reads">
-              <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                reads
-              </div>
-            </Link>
-            <Link href="/videos">
-              <div className="capitalize text-xl mr-10 font-bold hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                videos
-              </div>
-            </Link>
-
-            <Link href="/shop">
-              <div className="text-xl font-bold mr-10 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                Shop
-              </div>
-            </Link>
-            <Link href="/about">
-              <div className="text-xl font-bold mr-10 hover:text-[#FF9D12] transition duration-300 ease-in-out ">
-                About
-              </div>
-            </Link>
+            <NavLink href="/events">events</NavLink>
+            <NavLink href="/reads">reads</NavLink>
+            <NavLink href="/videos">videos</NavLink>
+            <NavLink href="/shop">Shop</NavLink>
+            <NavLink href="/about">About</NavLink>
           </div>
         </div>
 
