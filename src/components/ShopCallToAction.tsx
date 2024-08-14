@@ -24,7 +24,7 @@ export default function ShopCTA() {
           know when we go live{' '}
         </p>
         <button
-          className="hover:bg-[#ffc843] dark:hover:bg-[#ffc843] transition-all duration-200 ease-in-out bg-black dark:bg-white dark:text-black text-md font-bold uppercase py-4 px-28 rounded-lg"
+          className="hover:bg-[#ffc843] dark:hover:bg-[#ffc843] transition-all duration-200 ease-in-out bg-white text-black dark:bg-white dark:text-black text-md font-bold uppercase py-4 px-28 rounded-lg"
           onClick={handleSubscribeClick}
         >
           Subscribe
