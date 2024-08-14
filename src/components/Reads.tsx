@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { formatDate, getStrapiMedia } from '@/utils/helpers';
-import Link from 'next/link';
-import Image from 'next/image';
+import ReadCard from './ReadCard';
 
 export default function Reads({
   initialPosts,
@@ -62,36 +60,10 @@ export default function Reads({
 
       <div className="my-5 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-4 font-plus-jakarta">
         {posts.map((post: any) => (
-          <Link
-            href={`/reads/${post.attributes.slug}`}
+          <ReadCard
             key={post.id}
-          >
-            <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/50">
-              <div className="relative h-[200px] w-full">
-                <Image
-                  src={getStrapiMedia(post.attributes.headerImage)}
-                  alt={post.attributes.title}
-                  width={300}
-                  height={300}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="flex flex-row my-3 items-center">
-                {post.attributes.post_categories.data.map((category: any) => (
-                  <span
-                    key={category.id}
-                    className="py-2 px-4 rounded-sm bg-[#FF9D12]/20 text-[#FF9D12] font-bold mr-3 capitalize"
-                  >
-                    {category.attributes.name}
-                  </span>
-                ))}
-                <span className="text-[#697077]">
-                  {formatDate(post.attributes.publishedAt)}
-                </span>
-              </div>
-              <h1 className="mb-1 font-bold">{post.attributes.title}</h1>
-            </div>
-          </Link>
+            post={post}
+          />
         ))}
       </div>
     </section>

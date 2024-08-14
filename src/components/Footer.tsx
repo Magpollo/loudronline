@@ -11,7 +11,7 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
   return (
     <footer
       id="footer"
-      className="w-full h-fit p-7 lg:p-14 bg-slate-100 dark:bg-[#141818] flex flex-col md:flex-row justify-around"
+      className="w-full h-fit p-7 lg:p-14 bg-slate-100 dark:bg-[#141818] flex flex-col md:flex-row justify-around mt-auto"
     >
       <div className="flex flex-col m-2 mb-4 lg:mb-0">
         <div className="flex flex-row items-center">

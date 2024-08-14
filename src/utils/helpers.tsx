@@ -45,10 +45,15 @@ export function formatYoutubeUrl(url: string): string {
 
 // chnage url if in development mode or production mode
 export function getStrapiUrl(): string {
-  return process.env.NODE_ENV === 'development'
-    ? `http://localhost:1337`
-    : process.env.STRAPI_URL_BASE ||
-        'https://loudronline-backend-production.up.railway.app';
+  // return process.env.NODE_ENV === 'development'
+  //   ? `http://localhost:1337`
+  //   : process.env.STRAPI_URL_BASE ||
+  //       'https://loudronline-backend-production.up.railway.app';
+  // use prod env for now
+  return (
+    process.env.STRAPI_URL_BASE ||
+    'https://loudronline-backend-production.up.railway.app'
+  );
 }
 
 export function getStrapiMedia(media: any) {

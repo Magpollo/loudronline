@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { getData, getStrapiMedia } from '@/utils/helpers';
+import { getData } from '@/utils/helpers';
+import EventCard from './EventCard';
 
 export default async function EventsWidget({ props }: { props: any }) {
   const events: LoudrEvent[] = await getEvents();
@@ -20,31 +20,12 @@ export default async function EventsWidget({ props }: { props: any }) {
       </h1>
       <div className="flex flex-row p-2 overflow-x-scroll no-scrollbar">
         {events &&
-          events.map((event: any) => (
+          events.map((event: LoudrEvent) => (
             <div
               key={event.id}
-              className="flex flex-col h-fit w-fit mr-6 p-2 cursor-pointer hover:bg-slate-500/10"
+              className="w-[300px] flex-shrink-0 mr-6"
             >
-              <div className="w-[300px] h-[300px] mb-3">
-                <Image
-                  src={getStrapiMedia(event.attributes.headerImage)}
-                  alt={event.attributes.title}
-                  width={300}
-                  height={300}
-                  // style image to be 300px by 300px
-                  className="w-[300px] h-[300px] object-cover"
-                />
-              </div>
-
-              <h1 className="mb-2 font-bold">{event.attributes.title}</h1>
-              <p className="mb-1 text-[#FF9D12]">
-                {new Date(event.attributes.date).toLocaleDateString('en', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-              </p>
-              <p className="text-[#697077]">{event.attributes.location}</p>
+              <EventCard event={event} />
             </div>
           ))}
       </div>

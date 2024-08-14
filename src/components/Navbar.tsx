@@ -8,12 +8,7 @@ import MobileNavbar from '@/components/MobileNavbar';
 import SearchBar from './SearchBar';
 
 export default function Navbar() {
-  const [searchValue, setSearchValue] = useState('');
   const pathname = usePathname();
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
 
   const NavLink = ({
     href,

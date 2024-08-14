@@ -9,7 +9,6 @@ import SearchBar from './SearchBar';
 
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
   const [openExplore, setOpenExplore] = useState(false);
   const [openShop, setOpenShop] = useState(false);
   const pathname = usePathname();

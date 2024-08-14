@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { formatDate, getData, getStrapiMedia } from '@/utils/helpers';
+import { getData } from '@/utils/helpers';
+import ReadCard from './ReadCard';
 
-export default async function EventsWidget({ props }: { props: any }) {
+export default async function ReadsWidget({ props }: { props: any }) {
   const posts = await getLatestPosts();
   return (
     <section
@@ -20,31 +20,10 @@ export default async function EventsWidget({ props }: { props: any }) {
       <div className="h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-4 font-plus-jakarta">
         {posts &&
           posts.map((post: any) => (
-            <Link
-              href={`/reads/${post.attributes.slug}`}
+            <ReadCard
               key={post.id}
-            >
-              <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/10">
-                <div className="relative h-[200px] w-full">
-                  <Image
-                    src={getStrapiMedia(post.attributes.headerImage)}
-                    alt={post.attributes.title}
-                    width={300}
-                    height={300}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="flex flex-row my-3 items-center">
-                  <span className="py-2 px-4 rounded-sm bg-[#FF9D12]/20 text-[#FF9D12] font-bold mr-3 capitalize">
-                    {post.attributes.post_categories.data[0].attributes.name}
-                  </span>
-                  <span className="text-[#697077]">
-                    {formatDate(post.attributes.publishedAt)}
-                  </span>
-                </div>
-                <h1 className="mb-1 font-bold">{post.attributes.title}</h1>
-              </div>
-            </Link>
+              post={post}
+            />
           ))}
       </div>
     </section>

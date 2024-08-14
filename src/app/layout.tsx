@@ -17,10 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${plusJakarta.variable} ${larken.variable}`}>
+      <body
+        className={`${plusJakarta.variable} ${larken.variable} flex flex-col min-h-screen`}
+      >
         <Providers>
           <Navbar />
-          {children}
+          <main className="flex-grow">{children}</main>
           <Footer />
         </Providers>
       </body>
