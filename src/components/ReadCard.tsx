@@ -29,7 +29,7 @@ export default function ReadCard({ post }: ReadCardProps) {
             </span>
           ))}
           <span className="text-[#697077]">
-            {formatDate(post.attributes.publishedAt)}
+            {formatDate(post.attributes.date)}
           </span>
         </div>
         <h1 className="mb-1 font-bold">{post.attributes.title}</h1>
