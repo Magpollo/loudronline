@@ -7,6 +7,7 @@ import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '@/utils/theme';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default function Providers({ children, ...props }: ThemeProviderProps) {
   return (
@@ -17,6 +18,7 @@ export default function Providers({ children, ...props }: ThemeProviderProps) {
       <CacheProvider>
         <ChakraProvider theme={theme}>
           <Analytics />
+          <SpeedInsights />
           {children}
         </ChakraProvider>
       </CacheProvider>
