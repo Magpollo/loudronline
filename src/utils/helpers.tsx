@@ -33,6 +33,9 @@ export async function getData(url: string): Promise<any[]> {
     },
     next: { revalidate: 30 }, // Revalidate every 30 seconds
   });
+  if (!res.ok) {
+    throw new Error(`Error fetching data from ${urlWithHost}, ${res.status}`);
+  }
   const { data } = await res.json();
   return data;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import SearchIcon from '@/assets/icons/search';
@@ -16,6 +16,7 @@ export default function SearchBar({ mobile = false }) {
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const router = useRouter();
+  const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
@@ -27,7 +28,20 @@ export default function SearchBar({ mobile = false }) {
       }
     }, 300);
 
-    return () => clearTimeout(delayDebounceFn);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      clearTimeout(delayDebounceFn);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [searchValue]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +55,10 @@ export default function SearchBar({ mobile = false }) {
   };
 
   return (
-    <div className="relative w-full">
+    <div
+      className="relative w-full"
+      ref={searchRef}
+    >
       <InputGroup
         variant={'unstyled'}
         className={`${

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import ReadCard from './ReadCard';
 
 export default function Reads({
@@ -10,30 +10,26 @@ export default function Reads({
   initialPosts: any[];
   categories: any[];
 }) {
-  const [posts, setPosts] = useState(initialPosts);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const fetchMorePosts = async (page: number, category: string | null) => {
+    const response = await fetch(
+      `/api/reads?page=${page}&category=${category || ''}`
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch more posts');
+    }
+    return response.json();
+  };
 
-  const handleCategoryClick = useCallback(
-    (category: string) => {
-      setSelectedCategory((prevCategory) => {
-        if (prevCategory === category) {
-          // If the clicked category is already selected, unselect it
-          setPosts(initialPosts);
-          return null;
-        } else {
-          // If a new category is selected, filter the posts
-          const filteredPosts = initialPosts.filter((post) =>
-            post.attributes.post_categories.data.some(
-              (cat: any) => cat.attributes.name === category
-            )
-          );
-          setPosts(filteredPosts);
-          return category;
-        }
-      });
-    },
-    [initialPosts]
-  );
+  const {
+    items: posts,
+    loading,
+    hasMore,
+    handleCategoryClick,
+    selectedCategory,
+  } = useInfiniteScroll({
+    initialItems: initialPosts,
+    fetchMore: fetchMorePosts,
+  });
 
   return (
     <section className="py-3 px-7">
@@ -44,13 +40,11 @@ export default function Reads({
             <div
               key={category.id}
               className={`px-4 py-2 text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer ${
-                selectedCategory == category.attributes.name
+                selectedCategory === category.attributes.name
                   ? 'bg-[#FF9D12] text-white dark:bg-[#FF9D12] dark:text-white hover:bg-[#FF9D12]/80 dark:hover:bg-[#FF9D12]/80'
                   : ''
               }`}
-              onClick={() => {
-                handleCategoryClick(category.attributes.name);
-              }}
+              onClick={() => handleCategoryClick(category.attributes.name)}
             >
               {category.attributes.name}
             </div>
@@ -66,6 +60,8 @@ export default function Reads({
           />
         ))}
       </div>
+      {loading && <p>Loading more posts...</p>}
+      {!hasMore && <p>No more posts to load.</p>}
     </section>
   );
 }
