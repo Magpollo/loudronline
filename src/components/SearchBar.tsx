@@ -69,7 +69,7 @@ export default function SearchBar({ mobile = false }) {
           <SearchIcon
             width={25}
             height={25}
-            className="my-3 mx-1 fill-none"
+            className="my-3 mx-1 fill-none text-gray-500 dark:text-white dark:fill-none"
           />
         </InputLeftElement>
         <Input

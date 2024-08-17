@@ -6,11 +6,13 @@ import { usePathname } from 'next/navigation';
 import MenuIcon from '@/assets/icons/menu';
 import Image from 'next/image';
 import SearchBar from './SearchBar';
+import About from './About';
 
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [openExplore, setOpenExplore] = useState(false);
   const [openShop, setOpenShop] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -39,19 +41,35 @@ export default function MobileNavbar() {
   const NavLink = ({
     href,
     children,
+    isAbout = false,
   }: {
     href: string;
     children: React.ReactNode;
+    isAbout?: boolean;
   }) => {
     const isActive = pathname === href;
+    const handleClick = (e: React.MouseEvent) => {
+      if (isAbout) {
+        e.preventDefault();
+        setIsAboutOpen(true);
+        closeMenu();
+      } else {
+        closeMenu();
+      }
+    };
+
     return (
       <Link
         href={href}
-        onClick={closeMenu}
+        onClick={handleClick}
       >
         <div
           className={`capitalize text-xl font-bold mb-3 transition duration-300 ease-in-out ${
-            isActive ? 'text-[#FF9D12]' : 'text-white/50 hover:text-[#FF9D12]'
+            isActive
+              ? 'text-[#FF9D12]'
+              : isAbout
+              ? 'text-white hover:text-[#FF9D12]'
+              : 'text-white/50 hover:text-[#FF9D12]'
           }`}
         >
           {children}
@@ -133,10 +151,20 @@ export default function MobileNavbar() {
               )}
             </div>
 
-            <NavLink href="/about">About</NavLink>
+            <NavLink
+              href="/about"
+              isAbout={true}
+            >
+              About
+            </NavLink>
           </div>
         </div>
       )}
+      <About
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+        isMobile={true}
+      />
     </nav>
   );
 }
