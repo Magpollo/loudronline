@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getData } from '@/utils/helpers';
 import EventCard from './EventCard';
 
-export default async function EventsWidget({ props }: { props: any }) {
+export default async function EventsWidget({ props }: { props?: any }) {
   const events: LoudrEvent[] = await getEvents();
   return (
     <section

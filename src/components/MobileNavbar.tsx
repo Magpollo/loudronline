@@ -42,10 +42,12 @@ export default function MobileNavbar() {
     href,
     children,
     isAbout = false,
+    className = '',
   }: {
     href: string;
     children: React.ReactNode;
     isAbout?: boolean;
+    className?: string;
   }) => {
     const isActive = pathname === href;
     const handleClick = (e: React.MouseEvent) => {
@@ -62,14 +64,15 @@ export default function MobileNavbar() {
       <Link
         href={href}
         onClick={handleClick}
+        className={className}
       >
         <div
           className={`capitalize text-xl font-bold mb-3 transition duration-300 ease-in-out ${
             isActive
               ? 'text-[#FF9D12]'
               : isAbout
-              ? 'text-white hover:text-[#FF9D12]'
-              : 'text-white/50 hover:text-[#FF9D12]'
+              ? 'text-black dark:text-white hover:text-[#FF9D12]'
+              : 'text-gray-500 hover:text-[#FF9D12]'
           }`}
         >
           {children}
@@ -126,7 +129,7 @@ export default function MobileNavbar() {
                 Explore
               </div>
               {openExplore && (
-                <div className="flex flex-col p-3 m-5 border-l border-l-white/50">
+                <div className="flex flex-col p-3 m-5 border-l border-l-gray-500">
                   <NavLink href="/events">events</NavLink>
                   <NavLink href="/reads">reads</NavLink>
                   <NavLink href="/videos">videos</NavLink>
@@ -143,8 +146,8 @@ export default function MobileNavbar() {
                 Shop
               </div>
               {openShop && (
-                <div className="flex flex-col p-3 m-5 border-l border-l-white/50">
-                  <div className="text-xl text-white/50 font-bold transition duration-300 ease-in-out">
+                <div className="flex flex-col p-3 m-5 border-l border-l-gray-500">
+                  <div className="text-xl text-gray-500 font-bold transition duration-300 ease-in-out">
                     Coming soon
                   </div>
                 </div>

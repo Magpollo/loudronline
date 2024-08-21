@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatDate, getStrapiMedia } from '@/utils/helpers';
+import he from 'he';
 
 interface ReadCardProps {
   post: any;
@@ -32,7 +33,7 @@ export default function ReadCard({ post }: ReadCardProps) {
             {formatDate(post.attributes.date)}
           </span>
         </div>
-        <h1 className="mb-1 font-bold">{post.attributes.title}</h1>
+        <h1 className="mb-1 font-bold">{he.decode(post.attributes.title)}</h1>
       </div>
     </Link>
   );

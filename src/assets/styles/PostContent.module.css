@@ -1,0 +1,35 @@
+.enhancedHtmlContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.paragraph {
+  margin-bottom: 1.5em;
+  line-height: 1.6;
+}
+
+.imageGrid {
+  display: grid;
+  gap: 1em;
+  margin: 2em 0;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.responsiveImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+
+.link {
+  color: #ffc843;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #ffd873;
+  text-decoration: underline;
+}

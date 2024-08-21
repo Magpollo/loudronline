@@ -62,7 +62,6 @@ export default function EventDetails({ event }: EventDetailsProps) {
       </div>
       
       <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4">Cities</h2>
         <EventsWidget props={{ className: 'mt-4' }} />
       </div>
     </div>
