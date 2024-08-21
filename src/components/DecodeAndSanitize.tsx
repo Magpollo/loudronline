@@ -150,7 +150,7 @@ const DecodeAndSanitize = ({ children }: { children?: ReactNode }) => {
 
   return (
     <Linkify componentDecorator={componentDecorator}>
-      <div className={styles.enhancedHtmlContent}>{groupedContent}</div>;
+      <div className={styles.enhancedHtmlContent}>{groupedContent}</div>
     </Linkify>
   );
 };
