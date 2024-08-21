@@ -82,3 +82,10 @@ export function formatEventDate(date: string | Date): string {
       year: 'numeric',
     });
   }
+
+  export async function getEventLocations(): Promise<string[]> {
+    const locations = await getData(
+      'api/posts?filters[contentType][$eq]=events&fields[0]=location&pagination[pageSize]=100&publicationState=live&locale[0]=en'
+    );
+    return Array.from(new Set(locations.map((event: any) => event.attributes.location)));
+  }

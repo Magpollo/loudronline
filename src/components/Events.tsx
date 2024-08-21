@@ -1,15 +1,17 @@
 'use client';
-
 import EventCard from '@/components/EventCard';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import FilterNavBar from './FilterNavBar';
 
 export default function Events({
   initialEvents,
+  locations,
 }: {
   initialEvents: LoudrEvent[];
+  locations: string[];
 }) {
-  const fetchMoreEvents = async (page: number, category: string | null) => {
-    const response = await fetch(`/api/events?page=${page}`);
+  const fetchMoreEvents = async (page: number, location: string | null) => {
+    const response = await fetch(`/api/events?page=${page}&location=${location || ''}`);
     if (!response.ok) {
       throw new Error('Failed to fetch more events');
     }
@@ -20,6 +22,8 @@ export default function Events({
     items: events,
     loading,
     hasMore,
+    handleCategoryClick: handleLocationClick,
+    selectedCategory: selectedLocation,
   } = useInfiniteScroll({
     initialItems: initialEvents,
     fetchMore: fetchMoreEvents,
@@ -27,6 +31,13 @@ export default function Events({
 
   return (
     <section className="p-5">
+      <FilterNavBar
+        items={locations.map(location => ({ id: location, name: location }))}
+        selectedItem={selectedLocation}
+        onItemClick={handleLocationClick}
+        title="Filter by location"
+      />
+
       <div className="my-5 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-8 font-plus-jakarta">
         {events.map((event: LoudrEvent) => (
           <EventCard
