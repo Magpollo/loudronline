@@ -24,7 +24,7 @@ export default async function ReadPage({
           {he.decode(read.attributes.description)}
         </h2>
       )}
-      {read.attributes.createdBy.data && (
+      {read.attributes.createdBy?.data && (
         <h5 className="mb-2">
           By{' '}
           <span className="underline">{`${read.attributes.createdBy.data.attributes.firstname} ${read.attributes.createdBy.data.attributes.lastname}`}</span>
