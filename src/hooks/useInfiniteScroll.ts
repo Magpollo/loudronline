@@ -37,19 +37,22 @@ export function useInfiniteScroll<T>({
 
   const handleCategoryClick = useCallback(
     async (category: string) => {
-      setSelectedCategory((prevCategory) =>
-        prevCategory === category ? null : category
-      );
+      const newSelectedCategory = selectedCategory === category ? null : category;
+      setSelectedCategory(newSelectedCategory);
       setPage(1);
       setHasMore(true);
       try {
-        const filteredItems = await fetchMore(1, category);
-        setItems(filteredItems);
+        if (newSelectedCategory === null) {
+          setItems(initialItems);
+        } else {
+          const filteredItems = await fetchMore(1, newSelectedCategory);
+          setItems(filteredItems);
+        }
       } catch (error) {
         console.error('Error fetching items for category:', error);
       }
     },
-    [fetchMore]
+    [fetchMore, initialItems, selectedCategory]
   );
 
   useEffect(() => {
