@@ -1,4 +1,9 @@
 import { getData } from '@/utils/helpers';
+import EventDetails from '@/components/EventDetails';
+
+interface EventCardProps {
+    event: LoudrEvent;
+  }
 
 async function getEvent(slug: string) {
   const event = await getData(
@@ -14,5 +19,5 @@ export default async function EventPage({
 }) {
   const event: LoudrEvent = await getEvent(params.slug);
 
-  return <div>{event.attributes.title}</div>;
+  return <EventDetails event={event} />;;
 }
