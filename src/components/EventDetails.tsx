@@ -33,9 +33,7 @@ function WebEventLayout({ event }: { event: LoudrEvent }) {
         </div>
         
         <div className="prose prose-lg max-w-none">
-          <p>{event.attributes.description}  Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-            Asperiores ipsum facere laborum incidunt nam ab esse voluptate laboriosam 
-            et quo quos, quidem culpa rem voluptates aspernatur velit minus? Itaque, dolorem!</p>
+          <p>{event.attributes.description}</p>
         </div>
       </div>
     </div>
@@ -59,9 +57,7 @@ export default function EventDetails({ event }: EventDetailsProps) {
         </div>
         
         <div className="prose prose-lg max-w-none">
-          <p>{event.attributes.description} Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-            Asperiores ipsum facere laborum incidunt nam ab esse voluptate laboriosam 
-            et quo quos, quidem culpa rem voluptates aspernatur velit minus? Itaque, dolorem! </p>
+          <p>{event.attributes.description}</p>
         </div>
       </div>
       
