@@ -50,7 +50,7 @@ export default function Home(): ReactElement {
           ))}
         </div>
       </div>
-      <EventsWidget props={{ className: 'mt-10' }} />
+      <EventsWidget className="mt-4" />
       <ShopCTA />
       <ReadsWidget props={{ className: 'my-10' }} />
       <VideosWidget props={{ className: 'my-5' }} />

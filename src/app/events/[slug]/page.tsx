@@ -1,23 +1,10 @@
-import { getData } from '@/utils/helpers';
+import { getEvent, getEvents, getEventLocations } from '@/utils/helpers';
 import EventDetails from '@/components/EventDetails';
 
-interface EventCardProps {
-    event: LoudrEvent;
-  }
+export default async function Page({ params }: { params: { slug: string } }) {
+  const event = await getEvent(params.slug);
+  const initialEvents = await getEvents();
+  const locations = await getEventLocations();
 
-async function getEvent(slug: string) {
-  const event = await getData(
-    `api/posts?filters[$and][0][contentType][$eq]=events&filters[$and][1][slug][$eq]=${slug}&populate=*`
-  );
-  return event[0];
-}
-
-export default async function EventPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const event: LoudrEvent = await getEvent(params.slug);
-
-  return <EventDetails event={event} />;;
+  return <EventDetails event={event} initialEvents={initialEvents} locations={locations} />;
 }

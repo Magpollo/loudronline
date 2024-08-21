@@ -1,14 +1,22 @@
 import Link from 'next/link';
-import { getData } from '@/utils/helpers';
 import EventCard from './EventCard';
+import { getEvents } from '@/utils/helpers';
 
-export default async function EventsWidget({ props }: { props?: any }) {
-  const events: LoudrEvent[] = await getEvents();
+interface EventsWidgetProps {
+    className?: string;
+    filteredEvents?: LoudrEvent[];
+}
+
+interface EventsWidgetClientProps {
+  events: LoudrEvent[];
+  className?: string;
+}
+
+export function EventsWidgetClient({ events, className }: EventsWidgetClientProps) {
   return (
     <section
-      {...props}
       id="events"
-      className="w-full h-fit mt-3 font-plus-jakarta"
+      className={`w-full h-fit mt-3 font-plus-jakarta ${className}`}
     >
       <h1 className="text-2xl ml-2 mb-4">
         <span className="font-larken">Upcoming Events</span>
@@ -19,23 +27,20 @@ export default async function EventsWidget({ props }: { props?: any }) {
         </Link>
       </h1>
       <div className="flex flex-row p-2 overflow-x-scroll no-scrollbar">
-        {events &&
-          events.map((event: LoudrEvent) => (
-            <div
-              key={event.id}
-              className="w-[300px] flex-shrink-0 mr-6"
-            >
-              <EventCard event={event} />
-            </div>
-          ))}
+        {events.map((event: LoudrEvent) => (
+          <div
+            key={event.id}
+            className="w-[300px] flex-shrink-0 mr-6"
+          >
+            <EventCard event={event} />
+          </div>
+        ))}
       </div>
     </section>
   );
 }
 
-async function getEvents(): Promise<LoudrEvent[]> {
-  const events = await getData(
-    'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[start]=0&pagination[limit]=4&publicationState=live&locale[0]=en'
-  );
-  return events;
+export default async function EventsWidget({ className, filteredEvents }: EventsWidgetProps) {
+    const events = filteredEvents || await getEvents();
+    return <EventsWidgetClient events={events} className={className} />;
 }

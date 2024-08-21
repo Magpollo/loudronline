@@ -7,7 +7,7 @@ interface FilterItem {
 
 interface FilterBarProps {
   items: FilterItem[];
-  selectedItem: string | null;
+  selectedItem: string | null | undefined;
   onItemClick: (itemName: string) => void;
   title?: string;
 }

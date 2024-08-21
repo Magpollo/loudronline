@@ -68,10 +68,14 @@ export function getStrapiMedia(media: any) {
   return '/placeholder.jpeg';
 }
 
-export async function getEvents(): Promise<LoudrEvent[]> {
-  const events = await getData(
-    'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[page]=1&pagination[pageSize]=24&publicationState=live&locale[0]=en'
-  );
+export async function getEvents(selectedLocation?: string | null): Promise<LoudrEvent[]> {
+  let query = 'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[page]=1&pagination[pageSize]=24&publicationState=live&locale[0]=en';
+  
+  if (selectedLocation) {
+    query += `&filters[location][$eq]=${encodeURIComponent(selectedLocation)}`;
+  }
+
+  const events = await getData(query);
   return events;
 }
 
@@ -89,3 +93,8 @@ export function formatEventDate(date: string | Date): string {
     );
     return Array.from(new Set(locations.map((event: any) => event.attributes.location)));
   }
+
+  export async function getEvent(slug: string): Promise<LoudrEvent> {
+  const events = await getData(`api/posts?filters[slug][$eq]=${slug}&filters[contentType][$eq]=events&populate=*`);
+  return events[0];
+}

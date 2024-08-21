@@ -1,10 +1,17 @@
+'use client';
 import Image from 'next/image';
-import { getStrapiMedia, formatEventDate } from '@/utils/helpers';
+import { getStrapiMedia, formatEventDate, getEventLocations } from '@/utils/helpers';
 import EventCard from '@/components/EventCard';
-import EventsWidget from '@/components/EventsWidget';
+import EventsWidget, { EventsWidgetClient } from '@/components/EventsWidget';
+/* import { EventsWidgetClient } from '@/components/EventsWidget'; */
+
+import FilterNavBar from '@/components/FilterNavBar';
+import { useState } from 'react';
 
 interface EventDetailsProps {
   event: LoudrEvent;
+  initialEvents: LoudrEvent[];
+  locations: string[];
 }
 
 function WebEventLayout({ event }: { event: LoudrEvent }) {
@@ -40,30 +47,55 @@ function WebEventLayout({ event }: { event: LoudrEvent }) {
   );
 }
 
-export default function EventDetails({ event }: EventDetailsProps) {
-  return (
-    <div className="w-3/4 mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="lg:hidden mb-8">
-        <EventCard event={event} />
-      </div>
-      
-      <WebEventLayout event={event} />
-      
-      <div className="lg:hidden mt-8 space-y-8">
-        <div className="flex justify-center">
-          <button className="bg-white text-black px-8 py-4 rounded-md w-full sm:w-2/3 text-lg font-semibold hover:bg-gray-100 transition-colors">
-            GET TICKETS
-          </button>
+export default function EventDetails({ event, initialEvents, locations }: EventDetailsProps) {
+    const [selectedLocation, setSelectedLocation] = useState<string | undefined>(undefined);
+    const [filteredEvents, setFilteredEvents] = useState<LoudrEvent[]>(initialEvents);
+  
+    const handleLocationClick = (location: string) => {
+      setSelectedLocation(prevLocation => {
+        const newLocation = prevLocation === location ? undefined : location;
+        if (newLocation) {
+          setFilteredEvents(initialEvents.filter(event => event.attributes.location === newLocation));
+        } else {
+          setFilteredEvents(initialEvents);
+        }
+        return newLocation;
+      });
+    };
+  
+    return (
+      <div className="w-3/4 mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="lg:hidden mb-8">
+          <EventCard event={event} />
         </div>
         
-        <div className="prose prose-lg max-w-none">
-          <p>{event.attributes.description}</p>
+        <WebEventLayout event={event} />
+        
+        <div className="lg:hidden mt-8 space-y-8">
+          <div className="flex justify-center">
+            <button className="bg-white text-black px-8 py-4 rounded-md w-full sm:w-2/3 text-lg font-semibold hover:bg-gray-100 transition-colors">
+              GET TICKETS
+            </button>
+          </div>
+          
+          <div className="prose prose-lg max-w-none">
+            <p>{event.attributes.description}</p>
+          </div>
+        </div>
+        
+        <div className="mt-12">
+          <FilterNavBar
+            items={locations.map(location => ({ id: location, name: location }))}
+            selectedItem={selectedLocation}
+            onItemClick={handleLocationClick}
+            title="Filter by location"
+          />
+          
+          <EventsWidgetClient 
+            events={filteredEvents}
+            className="mt-4"
+          />
         </div>
       </div>
-      
-      <div className="mt-12">
-        <EventsWidget props={{ className: 'mt-4' }} />
-      </div>
-    </div>
-  );
+    );
 }
