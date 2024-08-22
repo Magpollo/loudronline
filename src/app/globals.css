@@ -29,3 +29,7 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.main-heading {
+    font-family: var(--font-larken), var(--font-plus-jakarta), sans-serif;
+  }

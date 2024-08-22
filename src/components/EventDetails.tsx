@@ -17,7 +17,7 @@ interface EventDetailsProps {
 function WebEventLayout({ event }: { event: LoudrEvent }) {
   return (
     <div className="hidden lg:flex space-x-8">
-      <div className="w-full">
+      <div className="w-3/4">
         <Image
           src={getStrapiMedia(event.attributes.headerImage)}
           alt={event.attributes.title}
@@ -26,20 +26,20 @@ function WebEventLayout({ event }: { event: LoudrEvent }) {
           className="w-full h-auto max-h-[450px] object-fill"
         />
       </div>
-      <div className="w-full space-y-0">
-        <h1 className="text-4xl font-bold">{event.attributes.title}</h1>
+      <div className="w-3/4 space-y-0">
+        <h1 className="text-4xl font-bold main-heading">{event.attributes.title}</h1>
         <p className="text-md text-[#FF9D12]">
           { formatEventDate(event.attributes.date) }
         </p>
         <p className="text-lg text-[#697077]">{event.attributes.location}</p>
         
-        <div className="pt-2 py-4">
+        <div className="w-full pt-2 py-4">
           <button className="bg-white text-black px-8 py-4 rounded-md w-full text-lg font-semibold hover:bg-gray-100 transition-colors">
             GET TICKETS
           </button>
         </div>
         
-        <div className="prose prose-lg max-w-none">
+        <div className="prose prose-lg w-full">
           <p>{event.attributes.description}</p>
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function EventDetails({ event, initialEvents, locations }: EventD
     };
   
     return (
-      <div className="w-3/4 mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="lg:hidden mb-8">
           <EventCard event={event} />
         </div>
