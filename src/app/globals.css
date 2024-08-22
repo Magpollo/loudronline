@@ -32,4 +32,8 @@ body {
 
 .main-heading {
     font-family: var(--font-larken), var(--font-plus-jakarta), sans-serif;
-  }
+}
+
+a, p, button {
+    font-family: var(--font-plus-jakarta), sans-serif;
+}

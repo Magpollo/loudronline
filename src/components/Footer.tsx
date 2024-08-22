@@ -24,7 +24,7 @@ const Footer: React.FC = forwardRef((props, ref: any) => {
           />
           <p className="text-2xl font-bold ml-8">loudronline</p>
         </div>
-        <p className="text-sm text-gray-400 mt-2">&copy; loudronline 2022</p>
+        <p className="text-sm text-gray-400 mt-2">&copy; loudronline {new Date().getFullYear()}</p>
       </div>
       <div className="flex flex-col text-sm m-2 mb-4 lg:mb-0">
         <p className="text-gray-400 mb-2">Find Us</p>
