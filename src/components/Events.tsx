@@ -30,7 +30,7 @@ export default function Events({
   });
 
   return (
-    <section className="p-5">
+    <section className="py-3 px-7">
       <FilterNavBar
         items={locations.map(location => ({ id: location, name: location }))}
         selectedItem={selectedLocation}
