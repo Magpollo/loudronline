@@ -94,7 +94,7 @@ export default function Navbar() {
 
         <SearchBar />
       </nav>
-      <div className="h-[80px] md:block hidden"></div>
+      <div className="h-[100px] md:block hidden"></div>
       <MobileNavbar />
       <About
         isOpen={isAboutOpen}
