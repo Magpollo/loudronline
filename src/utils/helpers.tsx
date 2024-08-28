@@ -31,7 +31,7 @@ export async function getData(url: string): Promise<any[]> {
       Authorization: `bearer ${process.env.STRAPI_CLIENT_SECRET}`,
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 30 }, // Revalidate every 30 seconds
+    next: { revalidate: 300 }, // Revalidate every 5 minutes
   });
   if (!res.ok) {
     throw new Error(`Error fetching data from ${urlWithHost}, ${res.status}`);
@@ -68,9 +68,12 @@ export function getStrapiMedia(media: any) {
   return '/placeholder.jpeg';
 }
 
-export async function getEvents(selectedLocation?: string | null): Promise<LoudrEvent[]> {
-  let query = 'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[page]=1&pagination[pageSize]=24&publicationState=live&locale[0]=en';
-  
+export async function getEvents(
+  selectedLocation?: string | null
+): Promise<LoudrEvent[]> {
+  let query =
+    'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[page]=1&pagination[pageSize]=24&publicationState=live&locale[0]=en';
+
   if (selectedLocation) {
     query += `&filters[location][$eq]=${encodeURIComponent(selectedLocation)}`;
   }
@@ -80,21 +83,25 @@ export async function getEvents(selectedLocation?: string | null): Promise<Loudr
 }
 
 export function formatEventDate(date: string | Date): string {
-    return new Date(date).toLocaleDateString('en', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  }
+  return new Date(date).toLocaleDateString('en', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
 
-  export async function getEventLocations(): Promise<string[]> {
-    const locations = await getData(
-      'api/posts?filters[contentType][$eq]=events&fields[0]=location&pagination[pageSize]=100&publicationState=live&locale[0]=en'
-    );
-    return Array.from(new Set(locations.map((event: any) => event.attributes.location)));
-  }
+export async function getEventLocations(): Promise<string[]> {
+  const locations = await getData(
+    'api/posts?filters[contentType][$eq]=events&fields[0]=location&pagination[pageSize]=100&publicationState=live&locale[0]=en'
+  );
+  return Array.from(
+    new Set(locations.map((event: any) => event.attributes.location))
+  );
+}
 
-  export async function getEvent(slug: string): Promise<LoudrEvent> {
-  const events = await getData(`api/posts?filters[slug][$eq]=${slug}&filters[contentType][$eq]=events&populate=*`);
+export async function getEvent(slug: string): Promise<LoudrEvent> {
+  const events = await getData(
+    `api/posts?filters[slug][$eq]=${slug}&filters[contentType][$eq]=events&populate=*`
+  );
   return events[0];
 }

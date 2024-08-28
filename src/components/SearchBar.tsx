@@ -56,14 +56,12 @@ export default function SearchBar({ mobile = false }) {
 
   return (
     <div
-      className="relative w-full"
+      className="relative w-full md:w-fit md:right-0"
       ref={searchRef}
     >
       <InputGroup
         variant={'unstyled'}
-        className={`${
-          mobile ? 'w-[90%]' : 'w-[60%]'
-        } ml-4 bg-gray-100 dark:bg-[#24272a] py-3 ${mobile ? '' : 'ml-10'}`}
+        className={`ml-4 bg-gray-100 dark:bg-[#24272a] py-3 w-[93%] md:w-[200px] lg:w-[250px]`}
       >
         <InputLeftElement pointerEvents="none">
           <SearchIcon

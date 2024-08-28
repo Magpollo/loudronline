@@ -59,20 +59,21 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="font-plus-jakarta hidden md:flex flex-row justify-between items-center ">
+      <nav className="font-plus-jakarta hidden md:flex flex-row justify-between items-center mx-7 my-5">
         <div className="w-full h-fit flex flex-row items-center">
           <Link
             href="/"
-            className="scale-50 mr-5"
+            className="mr-5 flex-shrink-0"
           >
             <Image
               src="/logo.svg"
               alt="Loudronline Logo"
-              width={100}
-              height={100}
+              width={30}
+              height={30}
+              className="min-h-full min-w-full"
             />
           </Link>
-          <div className="flex flex-row">
+          <div className="flex flex-shrink flex-row ml-5">
             <NavLink href="/events">events</NavLink>
             <NavLink href="/reads">reads</NavLink>
             <NavLink href="/videos">videos</NavLink>
