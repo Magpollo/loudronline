@@ -23,7 +23,7 @@ function WebEventLayout({ event }: { event: LoudrEvent }) {
           alt={event.attributes.title}
           width={500}
           height={450}
-          className="w-full h-auto max-h-[450px] object-fill"
+          className="w-full h-auto max-h-[450px] object-contain"
         />
       </div>
       <div className="w-3/4 space-y-0">
