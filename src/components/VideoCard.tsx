@@ -16,22 +16,22 @@ export default function VideoCard({ video }: VideoCardProps) {
         />
       </div>
       <div className="flex flex-row my-3 items-center">
-        {video.attributes.post_categories.data.map((category: any) => (
+{/*         {video.attributes.post_categories.data.map((category: any) => (
           <span
             key={category.attributes.name}
             className="py-1 px-1 text-sm rounded-sm bg-[#FF9D12]/20 text-[#FF9D12] font-bold mr-3 capitalize"
           >
             {category.attributes.name}
           </span>
-        ))}
+        ))} */}
         <span className="text-[#697077]">
-          {formatDate(video.attributes.publishedAt)}
+{/*           {formatDate(video.attributes.publishedAt)} */}
         </span>
       </div>
       <Link href={`/videos/${video.attributes.slug}`}>
         <div className="flex flex-row items-center">
           <div className="rounded-full h-8 w-8 mr-4">
-            <Image
+{/*             <Image
               src={getStrapiMedia(
                 video.attributes.creator.data.attributes.profileImage
               )}
@@ -39,12 +39,12 @@ export default function VideoCard({ video }: VideoCardProps) {
               width={32}
               height={32}
               className="h-full w-full object-cover rounded-full"
-            />
+            /> */}
           </div>
           <div>
             <h1 className="mb-1 font-bold">{video.attributes.title}</h1>
             <span className="text-[#697077]">
-              {video.attributes.creator.data.attributes.name}
+{/*               {video.attributes.creator.data.attributes.name} */}
             </span>
           </div>
         </div>

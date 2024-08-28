@@ -59,7 +59,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="font-plus-jakarta hidden md:flex flex-row justify-between items-center mx-7 my-5">
+      <nav className="font-plus-jakarta hidden md:flex flex-row justify-between items-center px-7 py-4 fixed top-0 left-0 right-0 dark:bg-[#1d2023] z-50">
         <div className="w-full h-fit flex flex-row items-center">
           <Link
             href="/"
@@ -94,6 +94,7 @@ export default function Navbar() {
 
         <SearchBar />
       </nav>
+      <div className="h-[66px] md:block hidden"></div>
       <MobileNavbar />
       <About
         isOpen={isAboutOpen}

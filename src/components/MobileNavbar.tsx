@@ -82,7 +82,7 @@ export default function MobileNavbar() {
   };
 
   return (
-    <nav className="relative font-plus-jakarta md:hidden">
+    <nav className="sticky top-0 left-0 right-0 z-40 bg-white dark:bg-[#1d2023] font-plus-jakarta md:hidden">
       <div className="h-fit">
         <div className="w-full h-fit flex flex-row justify-center items-center">
           <Link
@@ -115,8 +115,8 @@ export default function MobileNavbar() {
 
       {isOpen && (
         <div
-          className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100"
-          style={{ marginTop: '173px' }}
+        className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100 overflow-y-auto"
+        style={{ marginTop: '173px' }}
         >
           <div className="flex flex-col">
             <div>

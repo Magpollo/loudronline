@@ -41,7 +41,7 @@ export default function Reads({
         title="Filter by category"
       />
 
-      <div className="my-5 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-4 font-plus-jakarta">
+      <div className="my-16 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-4 font-plus-jakarta">
         {posts.map((post: any) => (
           <ReadCard
             key={post.id}
