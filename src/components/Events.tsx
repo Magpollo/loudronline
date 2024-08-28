@@ -38,7 +38,7 @@ export default function Events({
         title="Filter by location"
       />
 
-      <div className="my-5 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-8 font-plus-jakarta">
+      <div className="my-16 h-fit w-full grid grid-cols-1 md:grid-cols-3 gap-4 font-plus-jakarta">
         {events.map((event: LoudrEvent) => (
           <EventCard
             key={event.id}

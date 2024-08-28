@@ -12,7 +12,7 @@ export default function EventCard({ event }: EventCardProps) {
       href={`/events/${event.attributes.slug}`}
       className="flex flex-col h-fit cursor-pointer p-2 hover:bg-slate-500/10"
     >
-      <div className="relative w-full h-[300px] mb-3">
+      <div className="relative h-[200px] w-full">
         <Image
           src={getStrapiMedia(event.attributes.headerImage)}
           alt={event.attributes.title}
@@ -30,7 +30,7 @@ export default function EventCard({ event }: EventCardProps) {
           year: 'numeric',
         })}
       </p>
-      <p className="text-[#697077]">{event.attributes.location}</p>
+      <p className="mb-1 text-[#697077]">{event.attributes.location}</p>
     </Link>
   );
 }

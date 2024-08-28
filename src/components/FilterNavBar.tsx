@@ -13,28 +13,28 @@ interface FilterBarProps {
 }
 
 export default function FilterBar({ items, selectedItem, onItemClick, title = "Filter" }: FilterBarProps) {
-  return (
-    <>
-    <div className="py-2 fixed w-full dark:bg-[#1d2023] z-50 border-t border-white/10">
-        <h2 className="font-bold font-plus-jakarta">{title}</h2>
-        <nav className="flex justify-start">
+    return (
+<>
+     <div className="sticky py-1 top-[170px] md:top-[64px] z-30 w-full bg-white dark:bg-[#1d2023] md:fixed md:z-50 border-b border-white/10 md:border-none ">
+          <h2 className="font-bold font-plus-jakarta">{title}</h2>
+          <nav className="flex justify-start">
             <div className="h-fit w-fit no-scrollbar flex flex-row items-center py-2 overflow-x-scroll">
-            {items.map((item) => (
+              {items.map((item) => (
                 <div
-                key={item.id}
-                className={`px-4 py-2 text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer ${
+                  key={item.id}
+                  className={`px-4 py-2 text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer ${
                     selectedItem === item.name
-                    ? 'bg-[#FF9D12] text-white dark:bg-[#FF9D12] dark:text-white hover:bg-[#FF9D12]/80 dark:hover:bg-[#FF9D12]/80'
-                    : ''
-                }`}
-                onClick={() => onItemClick(item.name)}
+                      ? 'bg-[#FF9D12] text-white dark:bg-[#FF9D12] dark:text-white hover:bg-[#FF9D12]/80 dark:hover:bg-[#FF9D12]/80'
+                      : ''
+                  }`}
+                  onClick={() => onItemClick(item.name)}
                 >
-                {item.name}
+                  {item.name}
                 </div>
-            ))}
+              ))}
             </div>
-        </nav>
-    </div>
-    </>
-  );
-}
+          </nav>
+      </div>
+</>
+    );
+  }
