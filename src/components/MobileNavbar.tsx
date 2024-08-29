@@ -120,7 +120,7 @@ export default function MobileNavbar() {
       {isOpen && (
         <div
         className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100 overflow-y-auto"
-        style={{ marginTop: '5px' }}
+        style={{ marginTop: '173px' }}
         >
           <div className="flex flex-col">
             <div>
