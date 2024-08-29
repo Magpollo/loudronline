@@ -35,9 +35,9 @@ const categories = [
 
 export default function Home(): ReactElement {
   return (
-    <main className="flex flex-col px-4 overflow-hidden">
-      <div className="flex justify-start">
-        <div className="h-fit w-fit no-scrollbar flex flex-row items-center p-2 overflow-x-scroll">
+    <main className="flex flex-col px-4">
+      <div className="sticky py-4 top-[70px] md:top-[64px] z-30 w-full bg-white dark:bg-[#1d2023] md:fixed md:z-50">
+      <div className="h-fit w-full no-scrollbar flex flex-row items-center p-2 overflow-x-auto">
           {categories.map((category) => (
             <Link
               key={category.id}
@@ -50,7 +50,7 @@ export default function Home(): ReactElement {
           ))}
         </div>
       </div>
-      <EventsWidget className="mt-4" />
+      <EventsWidget className="md:mt-14" />
       <ShopCTA />
       <ReadsWidget props={{ className: 'my-10' }} />
       <VideosWidget props={{ className: 'my-5' }} />

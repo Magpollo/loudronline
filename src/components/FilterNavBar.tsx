@@ -15,7 +15,7 @@ interface FilterBarProps {
 export default function FilterBar({ items, selectedItem, onItemClick, title = "Filter" }: FilterBarProps) {
     return (
 <>
-     <div className="sticky py-4 top-[70px] md:top-[64px] z-30 w-full bg-white dark:bg-[#1d2023] md:fixed md:z-50 border-b border-white/10 md:border-none ">
+     <div className="sticky py-4 top-[70px] md:top-[64px] z-30 w-full bg-white dark:bg-[#1d2023] md:fixed md:z-50 border-b border-white/10 md:border-none">
           <h2 className="font-bold font-plus-jakarta">{title}</h2>
           <nav className="flex justify-start">
             <div className="h-fit w-fit no-scrollbar flex flex-row items-center py-2 overflow-x-scroll">
