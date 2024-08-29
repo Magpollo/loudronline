@@ -82,22 +82,26 @@ export default function MobileNavbar() {
   };
 
   return (
-    <nav className="sticky top-0 left-0 right-0 z-40 bg-white dark:bg-[#1d2023] font-plus-jakarta md:hidden">
-      <div className="h-fit">
-        <div className="w-full h-fit flex flex-row justify-center items-center">
-          <Link
-            href="/"
-            className="scale-50"
-            onClick={closeMenu}
-          >
-            <Image
-              src="/logo.svg"
-              alt="Loudronline Logo"
-              width={100}
-              height={100}
-            />
-          </Link>
+    <>
+      <nav className="bg-white dark:bg-[#1d2023] font-plus-jakarta md:hidden">
+        <div className="h-fit">
+          <div className="w-full h-fit flex flex-row justify-center items-center">
+            <Link
+              href="/"
+              className="scale-50"
+              onClick={closeMenu}
+            >
+              <Image
+                src="/logo.svg"
+                alt="Loudronline Logo"
+                width={100}
+                height={100}
+              />
+            </Link>
+          </div>
         </div>
+      </nav>
+      <div className="sticky top-0 z-40 bg-white dark:bg-[#1d2023] md:hidden">
         <div className="w-full h-fit flex flex-row justify-around items-center p-3 border-b border-slate-300 dark:border-[#24272A]">
           <SearchBar mobile={true} />
           <div>
@@ -116,7 +120,7 @@ export default function MobileNavbar() {
       {isOpen && (
         <div
         className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100 overflow-y-auto"
-        style={{ marginTop: '173px' }}
+        style={{ marginTop: '5px' }}
         >
           <div className="flex flex-col">
             <div>
@@ -168,6 +172,6 @@ export default function MobileNavbar() {
         onClose={() => setIsAboutOpen(false)}
         isMobile={true}
       />
-    </nav>
+    </>
   );
 }
