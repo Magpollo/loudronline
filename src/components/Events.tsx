@@ -11,7 +11,9 @@ export default function Events({
   locations: string[];
 }) {
   const fetchMoreEvents = async (page: number, location: string | null) => {
-    const response = await fetch(`/api/events?page=${page}&location=${location || ''}`);
+    const response = await fetch(
+      `/api/events?page=${page}&location=${location || ''}`
+    );
     if (!response.ok) {
       throw new Error('Failed to fetch more events');
     }
@@ -32,7 +34,7 @@ export default function Events({
   return (
     <section className="py-3 px-7">
       <FilterNavBar
-        items={locations.map(location => ({ id: location, name: location }))}
+        items={locations.map((location) => ({ id: location, name: location }))}
         selectedItem={selectedLocation}
         onItemClick={handleLocationClick}
         title="Filter by location"

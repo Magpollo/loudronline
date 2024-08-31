@@ -13,7 +13,7 @@ const About: React.FC<AboutProps> = ({ isOpen, onClose, isMobile }) => {
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 z-50 flex ${
+      className={`fixed inset-0 bg-black bg-opacity-50 z-[100] flex ${
         isMobile ? 'items-center justify-center' : 'items-start justify-end'
       }`}
       onClick={onClose}

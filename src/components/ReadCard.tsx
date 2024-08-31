@@ -33,7 +33,9 @@ export default function ReadCard({ post }: ReadCardProps) {
             {formatDate(post.attributes.date)}
           </span>
         </div>
-        <h1 className="mb-1 font-bold">{he.decode(post.attributes.title)}</h1>
+        <h1 className="mb-1 font-bold truncate">
+          {he.decode(post.attributes.title)}
+        </h1>
       </div>
     </Link>
   );

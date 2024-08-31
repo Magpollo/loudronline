@@ -3,8 +3,8 @@ import EventCard from './EventCard';
 import { getEvents } from '@/utils/helpers';
 
 interface EventsWidgetProps {
-    className?: string;
-    filteredEvents?: LoudrEvent[];
+  className?: string;
+  filteredEvents?: LoudrEvent[];
 }
 
 interface EventsWidgetClientProps {
@@ -12,12 +12,12 @@ interface EventsWidgetClientProps {
   className?: string;
 }
 
-export function EventsWidgetClient({ events, className }: EventsWidgetClientProps) {
+export function EventsWidgetClient({
+  events,
+  className,
+}: EventsWidgetClientProps) {
   return (
-    <section
-      id="events"
-      className={`w-full h-fit mt-3 font-plus-jakarta ${className}`}
-    >
+    <section className={`w-full h-fit mt-3 font-plus-jakarta ${className}`}>
       <h1 className="text-2xl ml-2 mb-4">
         <span className="font-larken">Upcoming Events</span>
         <Link href="/events">
@@ -40,7 +40,15 @@ export function EventsWidgetClient({ events, className }: EventsWidgetClientProp
   );
 }
 
-export default async function EventsWidget({ className, filteredEvents }: EventsWidgetProps) {
-    const events = filteredEvents || await getEvents();
-    return <EventsWidgetClient events={events} className={className} />;
+export default async function EventsWidget({
+  className,
+  filteredEvents,
+}: EventsWidgetProps) {
+  const events = filteredEvents || (await getEvents());
+  return (
+    <EventsWidgetClient
+      events={events}
+      className={className}
+    />
+  );
 }

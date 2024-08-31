@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-export default function ShopCTA() {
+export default function ShopCTA({ props }: { props: any }) {
   const handleSubscribeClick = () => {
     const newsletter = document.getElementById('newsletter');
     if (newsletter) {
@@ -10,10 +10,7 @@ export default function ShopCTA() {
   };
 
   return (
-    <section
-      className="mt-10"
-      id="shop"
-    >
+    <section {...props}>
       <h1 className="text-2xl font-larken mb-5">Shop our essentials</h1>
       <div className="bg-[#95426A] flex flex-col items-center justify-center p-5">
         <h1 className="text-loudr-yellow w-fit font-bold text-lg mb-5 font-plus-jakarta">

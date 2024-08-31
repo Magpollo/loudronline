@@ -5,10 +5,7 @@ import VideoCard from './VideoCard';
 export default async function VideosWidget({ props }: { props: any }) {
   const videos = await getLatestVideos();
   return (
-    <section
-      {...props}
-      id="videos"
-    >
+    <section {...props}>
       <h1 className="text-2xl ml-2 mb-6">
         <span className="font-larken">Watch Stuff</span>
         <Link href="/videos">
@@ -32,7 +29,7 @@ export default async function VideosWidget({ props }: { props: any }) {
 
 async function getLatestVideos(): Promise<any> {
   const videos = await getData(
-    'api/posts?sort[0]=publishedAt:desc&filters[contentType][$eq]=videos&populate[headerImage][fields][0]=url&populate[post_categories][fields][0]=name&populate[post_categories][fields][1]=slug&populate[creator][populate][0]=profileImage&populate[creator][fields][0]=name&populate[creator][fields][1]=creatorId&fields[0]=title&fields[1]=postId&fields[2]=slug&fields[3]=description&fields[4]=contentType&fields[5]=publishedAt&fields[6]=youtubeUrl&publicationState=live&locale[0]=en&pagination[start]=0&pagination[limit]=3'
+    'api/posts?sort[0]=publishedAt:desc&filters[contentType][$eq]=videos&populate[headerImage][fields][0]=url&populate[post_categories][fields][0]=name&populate[post_categories][fields][1]=slug&populate[creator][populate][0]=profileImage&populate[creator][fields][0]=name&populate[creator][fields][1]=creatorId&fields[0]=title&fields[1]=postId&fields[2]=slug&fields[3]=description&fields[4]=contentType&fields[5]=publishedAt&fields[6]=youtubeUrl&fields[7]=date&publicationState=live&locale[0]=en&pagination[start]=0&pagination[limit]=3'
   );
   return videos;
 }

@@ -37,7 +37,10 @@ export default function Videos({
   return (
     <section className="py-3 px-7">
       <FilterNavBar
-        items={categories.map(category => ({ id: category.id, name: category.attributes.name }))}
+        items={categories.map((category) => ({
+          id: category.id,
+          name: category.attributes.name,
+        }))}
         selectedItem={selectedCategory}
         onItemClick={handleCategoryClick}
         title="Filter by category"

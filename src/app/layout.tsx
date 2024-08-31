@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${plusJakarta.variable} ${larken.variable} flex flex-col min-h-screen`}
+        className={`${plusJakarta.variable} ${larken.variable} flex flex-col min-h-screen dark:bg-[#1d2023] dark:text-white`}
       >
         <Providers>
           <Navbar />

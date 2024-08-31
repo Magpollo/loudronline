@@ -119,8 +119,8 @@ export default function MobileNavbar() {
 
       {isOpen && (
         <div
-        className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100 overflow-y-auto"
-        style={{ marginTop: '173px' }}
+          className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100 overflow-y-auto"
+          style={{ marginTop: '173px' }}
         >
           <div className="flex flex-col">
             <div>
@@ -136,7 +136,7 @@ export default function MobileNavbar() {
                 <div className="flex flex-col p-3 m-5 border-l border-l-gray-500">
                   <NavLink href="/events">events</NavLink>
                   <NavLink href="/reads">reads</NavLink>
-                  <NavLink href="/videos">videos</NavLink>
+                  <NavLink href="/videos">watch</NavLink>
                 </div>
               )}
             </div>

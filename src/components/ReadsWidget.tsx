@@ -5,10 +5,7 @@ import ReadCard from './ReadCard';
 export default async function ReadsWidget({ props }: { props: any }) {
   const posts = await getLatestPosts();
   return (
-    <section
-      {...props}
-      id="reads"
-    >
+    <section {...props}>
       <h1 className="text-2xl ml-2 mb-6">
         <span className="font-larken">Latest news</span>
         <Link href="/reads">

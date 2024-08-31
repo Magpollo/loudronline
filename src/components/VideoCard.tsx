@@ -1,6 +1,5 @@
 import { formatDate, getStrapiMedia, formatYoutubeUrl } from '@/utils/helpers';
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface VideoCardProps {
   video: any;
@@ -25,12 +24,16 @@ export default function VideoCard({ video }: VideoCardProps) {
           </span>
         ))}
         <span className="text-[#697077]">
-          {formatDate(video.attributes.publishedAt)}
+          {formatDate(video.attributes.date)}
         </span>
       </div>
-      <Link href={`/videos/${video.attributes.slug}`}>
-        <div className="flex flex-row items-center">
-          <div className="rounded-full h-8 w-8 mr-4">
+      <a
+        href={video.attributes.youtubeUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div className="flex flex-row items-center overflow-hidden">
+          <div className="rounded-full flex-shrink-0 h-8 w-8 mr-4">
             <Image
               src={getStrapiMedia(
                 video.attributes.creator.data.attributes.profileImage
@@ -42,13 +45,15 @@ export default function VideoCard({ video }: VideoCardProps) {
             />
           </div>
           <div>
-            <h1 className="mb-1 font-bold">{video.attributes.title}</h1>
+            <h1 className="mb-1 font-bold truncate">
+              {video.attributes.title}
+            </h1>
             <span className="text-[#697077]">
               {video.attributes.creator.data.attributes.name}
             </span>
           </div>
         </div>
-      </Link>
+      </a>
     </div>
   );
 }

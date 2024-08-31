@@ -67,7 +67,7 @@ export default function SearchBar({ mobile = false }) {
           <SearchIcon
             width={25}
             height={25}
-            className="my-3 mx-1 fill-none text-gray-500 dark:text-white dark:fill-none"
+            className="my-3 mx-1 fill-none text-black dark:text-white dark:fill-none"
           />
         </InputLeftElement>
         <Input
@@ -83,7 +83,7 @@ export default function SearchBar({ mobile = false }) {
         <div
           className={`absolute z-10 w-full mt-1 bg-white dark:bg-[#24272a] border border-gray-200 dark:border-gray-700 rounded-md shadow-lg ${
             mobile ? '' : 'right-8 md:w-[calc(100%-2rem)]'
-          }`}
+          } max-h-[40vh] overflow-y-auto`}
         >
           {searchResults.map((result: SearchResult, index: number) => (
             <div

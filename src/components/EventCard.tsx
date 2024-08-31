@@ -12,7 +12,7 @@ export default function EventCard({ event }: EventCardProps) {
       href={`/events/${event.attributes.slug}`}
       className="flex flex-col h-fit cursor-pointer p-2 hover:bg-slate-500/10"
     >
-      <div className="relative h-[200px] w-full">
+      <div className="relative h-[300px] w-full">
         <Image
           src={getStrapiMedia(event.attributes.headerImage)}
           alt={event.attributes.title}
@@ -22,7 +22,7 @@ export default function EventCard({ event }: EventCardProps) {
         />
       </div>
 
-      <h1 className="mb-2 font-bold">{event.attributes.title}</h1>
+      <h1 className="mb-2 font-bold truncate">{event.attributes.title}</h1>
       <p className="mb-1 text-[#FF9D12]">
         {new Date(event.attributes.date).toLocaleDateString('en', {
           day: 'numeric',
