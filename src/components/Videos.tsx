@@ -15,7 +15,9 @@ export default function Videos({
   const fetchVideos = useCallback(
     async (page: number, category: string | null) => {
       const response = await fetch(
-        `/api/videos?page=${page}&category=${category || ''}`
+        `/api/videos?page=${page}&category=${encodeURIComponent(
+          category || ''
+        )}`
       );
       if (!response.ok) throw new Error('Failed to fetch videos');
       return response.json();
