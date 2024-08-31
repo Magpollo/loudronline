@@ -35,7 +35,7 @@ export default function HomeContent({
               <div
                 className={`px-4 py-2 text-sm whitespace-nowrap hover:bg-[#D3D3D3] bg-[#F7F7F7] dark:bg-[#24272A] dark:hover:bg-[#33373A] mr-4 cursor-pointer ${
                   activeSection === category.slug
-                    ? 'bg-[#33373A] text-white dark:bg-white dark:text-black font-semibold'
+                    ? 'bg-black text-white dark:bg-white dark:text-black font-semibold'
                     : ''
                 }`}
               >
