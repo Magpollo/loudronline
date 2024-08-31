@@ -14,7 +14,7 @@ export function useElementInView() {
         });
       },
       {
-        threshold: 0.4,
+        threshold: 0.5,
         rootMargin: '80px 0px 30px 0px',
       } // Adjust this value as needed
     );
