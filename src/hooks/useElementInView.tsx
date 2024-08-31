@@ -3,7 +3,6 @@ import { useRef, useEffect, useState } from 'react';
 export function useElementInView() {
   const ref = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const root = document.getElementById('homepage-content');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -15,18 +14,17 @@ export function useElementInView() {
         });
       },
       {
-        root,
-        threshold: 1.0,
-        rootMargin: '20px',
+        threshold: 0.4,
+        rootMargin: '80px 0px 30px 0px',
       } // Adjust this value as needed
     );
-
-    Object.values(ref.current).forEach((el) => {
+    const currentRef = ref.current;
+    Object.values(currentRef).forEach((el) => {
       if (el) observer.observe(el);
     });
 
     return () => {
-      Object.values(ref.current).forEach((el) => {
+      Object.values(currentRef).forEach((el) => {
         if (el) observer.unobserve(el);
       });
     };
