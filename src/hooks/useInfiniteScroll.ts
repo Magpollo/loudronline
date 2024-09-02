@@ -37,7 +37,8 @@ export function useInfiniteScroll<T>({
 
   const handleCategoryClick = useCallback(
     async (category: string) => {
-      const newSelectedCategory = selectedCategory === category ? null : category;
+      const newSelectedCategory =
+        selectedCategory === category ? null : category;
       setSelectedCategory(newSelectedCategory);
       setPage(1);
       setHasMore(true);
@@ -58,8 +59,8 @@ export function useInfiniteScroll<T>({
   useEffect(() => {
     const handleScroll = () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 30
       ) {
         loadMoreItems();
       }

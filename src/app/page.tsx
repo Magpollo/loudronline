@@ -9,16 +9,16 @@ export default function Home(): ReactElement {
   return (
     <HomeContent>
       <div id="events">
-        <EventsWidget className="my-10 md:my-14" />
+        <EventsWidget className="py-10 md:py-14" />
       </div>
       <div id="shop">
-        <ShopCTA props={{ className: 'my-10 md:my-20' }} />
+        <ShopCTA props={{ className: 'py-10 md:py-20' }} />
       </div>
       <div id="reads">
-        <ReadsWidget props={{ className: 'my-10 md:my-14' }} />
+        <ReadsWidget props={{ className: 'py-10 md:py-14' }} />
       </div>
       <div id="watch">
-        <VideosWidget props={{ className: 'my-10 md:my-10' }} />
+        <VideosWidget props={{ className: 'py-10 md:py-10' }} />
       </div>
     </HomeContent>
   );

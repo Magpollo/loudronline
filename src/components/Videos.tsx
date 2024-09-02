@@ -4,6 +4,8 @@ import { useCallback } from 'react';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import VideoCard from './VideoCard';
 import FilterNavBar from './FilterNavBar';
+import LoadingPosts from './LoadingPosts';
+import NoMorePosts from './NoMorePosts';
 
 export default function Videos({
   initialVideos,
@@ -55,8 +57,8 @@ export default function Videos({
           />
         ))}
       </div>
-      {loading && <p>Loading more videos...</p>}
-      {!hasMore && <p>No more videos to load.</p>}
+      {loading && <LoadingPosts />}
+      {!hasMore && <NoMorePosts />}
     </section>
   );
 }

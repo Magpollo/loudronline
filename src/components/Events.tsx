@@ -2,6 +2,8 @@
 import EventCard from '@/components/EventCard';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import FilterNavBar from './FilterNavBar';
+import LoadingPosts from './LoadingPosts';
+import NoMorePosts from './NoMorePosts';
 
 export default function Events({
   initialEvents,
@@ -48,8 +50,8 @@ export default function Events({
           />
         ))}
       </div>
-      {loading && <p>Loading more events...</p>}
-      {!hasMore && <p>No more events to load.</p>}
+      {loading && <LoadingPosts />}
+      {!hasMore && <NoMorePosts />}
     </section>
   );
 }

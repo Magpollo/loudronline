@@ -3,6 +3,8 @@
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import ReadCard from './ReadCard';
 import FilterNavBar from './FilterNavBar';
+import LoadingPosts from './LoadingPosts';
+import NoMorePosts from './NoMorePosts';
 
 export default function Reads({
   initialPosts,
@@ -52,8 +54,8 @@ export default function Reads({
           />
         ))}
       </div>
-      {loading && <p>Loading more posts...</p>}
-      {!hasMore && <p>No more posts to load.</p>}
+      {loading && <LoadingPosts />}
+      {!hasMore && <NoMorePosts />}
     </section>
   );
 }
