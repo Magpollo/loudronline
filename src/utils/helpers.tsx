@@ -72,7 +72,7 @@ export async function getEvents(
   selectedLocation?: string | null
 ): Promise<LoudrEvent[]> {
   let query =
-    'api/posts?sort[0]=date:asc&filters[contentType][$eq]=events&populate=headerImage&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&pagination[page]=1&pagination[pageSize]=24&publicationState=live&locale[0]=en';
+    'api/events?sort[0]=date:asc&populate=cover&fields[0]=title&fields[1]=id&fields[2]=slug&fields[3]=description&fields[4]=date&fields[5]=location&fields[6]=url&pagination[page]=1&pagination[pageSize]=24&publicationState=live&locale[0]=en';
 
   if (selectedLocation) {
     query += `&filters[location][$eq]=${encodeURIComponent(selectedLocation)}`;
@@ -92,7 +92,7 @@ export function formatEventDate(date: string | Date): string {
 
 export async function getEventLocations(): Promise<string[]> {
   const locations = await getData(
-    'api/posts?filters[contentType][$eq]=events&fields[0]=location&pagination[pageSize]=100&publicationState=live&locale[0]=en'
+    'api/events?fields[0]=location&pagination[pageSize]=100&publicationState=live&locale[0]=en'
   );
   return Array.from(
     new Set(locations.map((event: any) => event.attributes.location))
@@ -101,7 +101,7 @@ export async function getEventLocations(): Promise<string[]> {
 
 export async function getEvent(slug: string): Promise<LoudrEvent> {
   const events = await getData(
-    `api/posts?filters[slug][$eq]=${slug}&filters[contentType][$eq]=events&populate=*`
+    `api/events?filters[slug][$eq]=${slug}&populate=*`
   );
   return events[0];
 }

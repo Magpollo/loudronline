@@ -5,5 +5,10 @@ export default async function Page() {
   const events = await getEvents();
   const locations = await getEventLocations();
 
-  return <Events initialEvents={events} locations={locations} />;
+  return (
+    <Events
+      initialEvents={events}
+      locations={locations}
+    />
+  );
 }

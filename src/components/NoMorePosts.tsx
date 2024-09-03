@@ -16,7 +16,7 @@ export default function NoMorePosts() {
   if (!isVisible) return null;
 
   return (
-    <div className="flex justify-center items-center flex-col">
+    <div className="flex justify-center items-center flex-col py-3">
       <WarningIcon
         color="#FFC843"
         className="w-10 h-10 mb-2"

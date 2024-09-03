@@ -10,7 +10,7 @@ export default function VideoCard({ video }: VideoCardProps) {
     <div className="bg-[#F5F5F5] dark:bg-[#24272a] p-2 mb-5 hover:bg-slate-500/10">
       <div className="relative h-[200px] w-full">
         <iframe
-          src={formatYoutubeUrl(video.attributes.youtubeUrl)}
+          src={formatYoutubeUrl(video.attributes.url)}
           className="h-full w-full object-cover"
         />
       </div>
@@ -28,7 +28,7 @@ export default function VideoCard({ video }: VideoCardProps) {
         </span>
       </div>
       <a
-        href={video.attributes.youtubeUrl}
+        href={video.attributes.url}
         target="_blank"
         rel="noopener noreferrer"
       >

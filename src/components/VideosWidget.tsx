@@ -18,7 +18,7 @@ export default async function VideosWidget({ props }: { props: any }) {
         {videos &&
           videos.map((video: any) => (
             <VideoCard
-              key={video.attributes.postId}
+              key={video.attributes.videoId}
               video={video}
             />
           ))}
@@ -29,7 +29,7 @@ export default async function VideosWidget({ props }: { props: any }) {
 
 async function getLatestVideos(): Promise<any> {
   const videos = await getData(
-    'api/posts?sort[0]=publishedAt:desc&filters[contentType][$eq]=videos&populate[headerImage][fields][0]=url&populate[post_categories][fields][0]=name&populate[post_categories][fields][1]=slug&populate[creator][populate][0]=profileImage&populate[creator][fields][0]=name&populate[creator][fields][1]=creatorId&fields[0]=title&fields[1]=postId&fields[2]=slug&fields[3]=description&fields[4]=contentType&fields[5]=publishedAt&fields[6]=youtubeUrl&fields[7]=date&publicationState=live&locale[0]=en&pagination[start]=0&pagination[limit]=3'
+    'api/videos?sort[0]=date:desc&populate[post_categories][populate]=*&populate[creator][populate]=*&fields[0]=title&fields[1]=videoId&fields[2]=slug&fields[3]=description&fields[4]=publishedAt&fields[5]=url&fields[6]=date&publicationState=live&locale[0]=en&pagination[start]=0&pagination[limit]=3'
   );
   return videos;
 }

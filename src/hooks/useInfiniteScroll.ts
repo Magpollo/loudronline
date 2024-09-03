@@ -60,7 +60,7 @@ export function useInfiniteScroll<T>({
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 30
+        document.documentElement.offsetHeight - 50
       ) {
         loadMoreItems();
       }
