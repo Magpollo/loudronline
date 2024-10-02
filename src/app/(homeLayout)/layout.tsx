@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import './globals.css';
+import '../globals.css';
 import { plusJakarta, larken } from '@/assets/fonts/fonts';
 import Providers from '@/app/providers';
 import Navbar from '@/components/Navbar';
