@@ -15,14 +15,17 @@ export default function GamesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className="h-full"
+    >
       <body
-        className={`${plusJakarta.variable} ${larken.variable} flex flex-col min-h-screen dark:bg-[#1d2023] dark:text-white`}
+        className={`${plusJakarta.variable} ${larken.variable} flex flex-col h-full overflow-hidden dark:bg-[#1d2023] dark:text-white`}
       >
         <Providers>
-          <main className="flex-grow flex flex-col">
+          <main className="flex flex-col h-full relative">
             {/* Back Home Link */}
-            <div className="self-start mt-5 ml-5">
+            <div className="absolute top-5 left-5 z-10">
               <Link
                 href="/"
                 className="text-sm hover:underline transition-all duration-200"
@@ -30,7 +33,8 @@ export default function GamesLayout({
                 {'<-  Home'}
               </Link>
             </div>
-            {children}
+
+            <div className="flex-grow overflow-auto pt-10">{children}</div>
           </main>
         </Providers>
       </body>

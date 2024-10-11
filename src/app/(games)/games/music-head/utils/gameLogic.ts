@@ -13,6 +13,7 @@ export interface GameState {
   isPlaying: boolean;
   gameEnded: boolean;
   playbackDuration: number; // in seconds
+  currentPlaybackTime: number; // current playback time in seconds
 }
 
 export type GameAction =
@@ -21,6 +22,7 @@ export type GameAction =
   | { type: 'SKIP' }
   | { type: 'PLAY' }
   | { type: 'PAUSE' }
+  | { type: 'UPDATE_PLAYBACK_TIME'; payload: number }
   | { type: 'END_GAME' };
 
 export const initialState: GameState = {
@@ -31,6 +33,7 @@ export const initialState: GameState = {
   isPlaying: false,
   gameEnded: false,
   playbackDuration: 1, // Start with 1 second
+  currentPlaybackTime: 0,
 };
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -74,11 +77,23 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         skipsLeft: newSkipsLeft,
         playbackDuration: newPlaybackDuration,
         score: newScore,
+        currentPlaybackTime: 0, // Reset playback time on skip
       };
     case 'PLAY':
       return { ...state, isPlaying: true };
     case 'PAUSE':
       return { ...state, isPlaying: false };
+    case 'UPDATE_PLAYBACK_TIME':
+      const newPlaybackTime = action.payload;
+      if (newPlaybackTime >= state.playbackDuration) {
+        // If playback time exceeds allowed duration, pause the audio
+        return {
+          ...state,
+          isPlaying: false,
+          currentPlaybackTime: state.playbackDuration,
+        };
+      }
+      return { ...state, currentPlaybackTime: newPlaybackTime };
     case 'END_GAME':
       return { ...state, gameEnded: true };
     default:

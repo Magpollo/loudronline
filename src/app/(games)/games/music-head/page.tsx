@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export default function MusicHeadStart() {
   return (
-    <section className="flex flex-col items-center justify-between min-h-screen font-larken p-4">
+    <section className="flex flex-col items-center justify-between h-full p-4">
       <div className="flex-grow flex items-center justify-center">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
@@ -32,7 +32,7 @@ export default function MusicHeadStart() {
         </div>
       </div>
 
-      <div className="mt-auto text-center">
+      <div className="text-center">
         <p className="text-sm">Tip: Listen carefully to the first second!</p>
       </div>
     </section>
