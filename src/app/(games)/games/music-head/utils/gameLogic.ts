@@ -23,7 +23,8 @@ export type GameAction =
   | { type: 'PLAY' }
   | { type: 'PAUSE' }
   | { type: 'UPDATE_PLAYBACK_TIME'; payload: number }
-  | { type: 'END_GAME' };
+  | { type: 'END_GAME' }
+  | { type: 'RESET_GAME' };
 
 export const initialState: GameState = {
   currentSong: null,
@@ -41,26 +42,44 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case 'LOAD_SONG':
       return { ...state, currentSong: action.payload };
     case 'MAKE_GUESS':
-      if (
-        state.currentSong &&
-        (action.payload.toLowerCase() ===
-          state.currentSong.title.toLowerCase() ||
-          action.payload.toLowerCase() ===
-            state.currentSong.artist.toLowerCase())
-      ) {
-        // Correct guess
-        return { ...state, gameEnded: true };
-      } else {
-        // Incorrect guess
-        const newGuessesLeft = state.guessesLeft - 1;
-        const newScore = Math.max(0, state.score - 10); // Deduct 10 points for incorrect guess
-        return {
-          ...state,
-          guessesLeft: newGuessesLeft,
-          score: newScore,
-          gameEnded: newGuessesLeft === 0,
-        };
+      if (state.currentSong) {
+        const guessLower = action.payload.toLowerCase().trim();
+        const titleLower = state.currentSong.title.toLowerCase().trim();
+        const artistLower = state.currentSong.artist.toLowerCase().trim();
+
+        // Function to normalize strings for comparison
+        const normalize = (str: string) =>
+          str
+            .replace(/[^\w\s]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .split(' ');
+
+        const normalizedGuess = normalize(guessLower);
+        const normalizedTitle = normalize(titleLower);
+        const normalizedArtist = normalize(artistLower);
+
+        // Check if the guess contains all words from both the title and artist
+        const isCorrect =
+          normalizedTitle.every((word) => normalizedGuess.includes(word)) &&
+          normalizedArtist.every((word) => normalizedGuess.includes(word));
+
+        if (isCorrect) {
+          // Correct guess
+          return { ...state, gameEnded: true };
+        } else {
+          // Incorrect guess
+          const newGuessesLeft = state.guessesLeft - 1;
+          const newScore = Math.max(0, state.score - 30); // Deduct 30 points for incorrect guess
+          return {
+            ...state,
+            guessesLeft: newGuessesLeft,
+            score: newScore,
+            gameEnded: newGuessesLeft === 0,
+          };
+        }
       }
+      return state; // Return unchanged state if there's no current song
     case 'SKIP':
       const newSkipsLeft = state.skipsLeft - 1;
       const newPlaybackDuration = state.playbackDuration + 1;
@@ -96,6 +115,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, currentPlaybackTime: newPlaybackTime };
     case 'END_GAME':
       return { ...state, gameEnded: true };
+    case 'RESET_GAME':
+      return {
+        ...initialState,
+        currentSong: state.currentSong, // Keep the current song
+      };
     default:
       return state;
   }
