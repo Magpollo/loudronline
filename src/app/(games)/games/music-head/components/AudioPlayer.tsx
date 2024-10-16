@@ -88,22 +88,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     }
   };
 
-  // Calculate the visual progress based on skips used
+  // Calculate the visual progress based on current playback time and duration
   const visualProgress = () => {
-    const baseProgress =
-      gameState.currentPlaybackTime / gameState.playbackDuration;
-    const skipsUsed = 2 - gameState.skipsLeft;
-    let maxProgress;
+    return gameState.currentPlaybackTime / gameState.playbackDuration;
+  };
 
-    if (skipsUsed === 0) {
-      maxProgress = 1 / 3;
-    } else if (skipsUsed === 1) {
-      maxProgress = 2 / 3;
-    } else {
-      maxProgress = 1;
-    }
-
-    return Math.min(maxProgress, baseProgress);
+  // Calculate the maximum progress based on skips used
+  const maxProgress = () => {
+    return (gameState.skipsUsed + 1) / 3; // 1/3, 2/3, or 1 based on skips used
   };
 
   return (
@@ -128,9 +120,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
             style={{
               height: `${height * 100}%`,
               backgroundColor:
-                (!resetState && visualProgress() > index / waveformBars) ||
-                (resetState && index / waveformBars <= visualProgress())
-                  ? 'white'
+                index / waveformBars <= maxProgress()
+                  ? visualProgress() > index / waveformBars
+                    ? 'white'
+                    : 'rgba(255, 255, 255, 0.6)'
                   : 'rgba(255, 255, 255, 0.3)',
             }}
           />

@@ -74,6 +74,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
       </div>
       {selectedSong && (
         <div className="mt-4 bg-loudr-yellow rounded-md p-4 flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={selectedSong.albumCover}
             alt={`${selectedSong.name} album cover`}

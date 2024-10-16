@@ -8,8 +8,8 @@ export interface Song {
 export interface GameState {
   currentSong: Song | null;
   score: number;
-  skipsLeft: number;
-  guessesLeft: number;
+  skipsUsed: number;
+  incorrectGuesses: number;
   isPlaying: boolean;
   gameEnded: boolean;
   playbackDuration: number; // in seconds
@@ -28,9 +28,9 @@ export type GameAction =
 
 export const initialState: GameState = {
   currentSong: null,
-  score: 100, // Start with maximum score
-  skipsLeft: 2,
-  guessesLeft: 3,
+  score: 0,
+  skipsUsed: 0,
+  incorrectGuesses: 0,
   isPlaying: false,
   gameEnded: false,
   playbackDuration: 1, // Start with 1 second
@@ -40,7 +40,13 @@ export const initialState: GameState = {
 export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'LOAD_SONG':
-      return { ...state, currentSong: action.payload };
+      return {
+        ...state,
+        currentSong: action.payload,
+        score: 0,
+        skipsUsed: 0,
+        incorrectGuesses: 0,
+      };
     case 'MAKE_GUESS':
       if (state.currentSong) {
         const guessLower = action.payload.toLowerCase().trim();
@@ -66,36 +72,30 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
 
         if (isCorrect) {
           // Correct guess
-          return { ...state, gameEnded: true };
+          const finalScore = calculateFinalScore(
+            state.skipsUsed,
+            state.incorrectGuesses
+          );
+          return { ...state, gameEnded: true, score: finalScore };
         } else {
           // Incorrect guess
-          const newGuessesLeft = state.guessesLeft - 1;
-          const newScore = Math.max(0, state.score - 30); // Deduct 30 points for incorrect guess
+          const newIncorrectGuesses = state.incorrectGuesses + 1;
           return {
             ...state,
-            guessesLeft: newGuessesLeft,
-            score: newScore,
-            gameEnded: newGuessesLeft === 0,
+            incorrectGuesses: newIncorrectGuesses,
+            gameEnded: newIncorrectGuesses === 3,
+            score: newIncorrectGuesses === 3 ? 0 : state.score, // Set score to 0 if all guesses are used
           };
         }
       }
-      return state; // Return unchanged state if there's no current song
+      return state;
     case 'SKIP':
-      const newSkipsLeft = state.skipsLeft - 1;
-      const newPlaybackDuration = state.playbackDuration + 1;
-      let newScore;
-      if (newPlaybackDuration === 2) {
-        newScore = 70;
-      } else if (newPlaybackDuration === 3) {
-        newScore = 50;
-      } else {
-        newScore = state.score;
-      }
+      const newSkipsUsed = state.skipsUsed + 1;
+      const newPlaybackDuration = newSkipsUsed + 1; // 1, 2, or 3 seconds
       return {
         ...state,
-        skipsLeft: newSkipsLeft,
+        skipsUsed: newSkipsUsed,
         playbackDuration: newPlaybackDuration,
-        score: newScore,
         currentPlaybackTime: 0, // Reset playback time on skip
       };
     case 'PLAY':
@@ -114,7 +114,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       }
       return { ...state, currentPlaybackTime: newPlaybackTime };
     case 'END_GAME':
-      return { ...state, gameEnded: true };
+      const finalScore = calculateFinalScore(
+        state.skipsUsed,
+        state.incorrectGuesses
+      );
+      return { ...state, gameEnded: true, score: finalScore };
     case 'RESET_GAME':
       return {
         ...initialState,
@@ -123,4 +127,12 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     default:
       return state;
   }
+}
+
+function calculateFinalScore(
+  skipsUsed: number,
+  incorrectGuesses: number
+): number {
+  const score = 10 - skipsUsed * 2 - incorrectGuesses * 2;
+  return Math.max(0, score);
 }

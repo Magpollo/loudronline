@@ -67,7 +67,7 @@ export default function MusicHead() {
   };
 
   const handleAddSecond = () => {
-    if (state.skipsLeft > 0) {
+    if (state.skipsUsed < 2) {
       dispatch({ type: 'SKIP' });
       setShowTooltip(true);
       setTimeout(() => setShowTooltip(false), 2000); // Hide tooltip after 2 seconds
@@ -116,19 +116,20 @@ export default function MusicHead() {
           {showTryAgain ? (
             <span className="text-loudr-yellow">Try Again!</span>
           ) : (
-            `Attempts Left: ${state.guessesLeft}/3`
+            `Attempts Left: ${3 - state.incorrectGuesses}/3`
           )}
         </h3>
         <div className="flex flex-col space-y-2 w-full max-w-md relative">
           <button
             onClick={handleAddSecond}
             className="bg-white/10 text-white px-3 py-6 mb-1 rounded-md relative"
-            disabled={state.skipsLeft === 0}
+            disabled={state.skipsUsed === 2}
           >
             +1 SEC
             {showTooltip && (
               <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white text-gray-900 px-2 py-1 rounded shadow z-10">
-                {state.skipsLeft} skip{state.skipsLeft !== 1 ? 's' : ''} left
+                {2 - state.skipsUsed} skip{state.skipsUsed !== 1 ? 's' : ''}{' '}
+                left
               </div>
             )}
           </button>
