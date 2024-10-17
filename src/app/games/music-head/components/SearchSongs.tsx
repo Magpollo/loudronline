@@ -54,12 +54,12 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
         <input
           type="text"
           placeholder="Guess here..."
-          className="w-full p-3 text-white bg-[#24272A] rounded-md"
+          className="w-full p-3 dark:text-white dark:bg-[#24272A] bg-white/60 text-black rounded-md"
           value={inputValue}
           onChange={handleInputChange}
         />
         {suggestions.length > 0 && (
-          <ul className="absolute w-full bg-[#24272A] mt-1 max-h-60 overflow-y-auto rounded-md">
+          <ul className="absolute w-full dark:bg-[#24272A] bg-gray-400 mt-1 max-h-60 overflow-y-auto rounded-md">
             {suggestions.map((song) => (
               <li
                 key={song.id}

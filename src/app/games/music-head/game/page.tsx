@@ -133,7 +133,7 @@ export default function MusicHead() {
           Listen to the intro and guess the song. You have 3 attempts and can
           add up to 2 seconds.
         </h1> */}
-        <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md dark:bg-[#141818] bg-gray-300 flex flex-col justify-center">
+        <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md dark:bg-[#141818] bg-slate-400 flex flex-col justify-center">
           <AudioPlayer
             audioSrc="/musichead.mp3"
             gameState={state}
@@ -175,7 +175,7 @@ export default function MusicHead() {
             className={`px-3 py-6 font-bold rounded-md transition-all duration-300 hover:scale-105 ${
               guess
                 ? 'dark:bg-white dark:text-black bg-black text-white'
-                : 'bg-white/10 text-white'
+                : 'dark:bg-white/10 dark:text-white bg-black/30 text-white'
             }`}
             disabled={!guess || showTryAgain}
           >
