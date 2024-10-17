@@ -104,7 +104,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         disabled={!audioLoaded}
       >
         {gameState.isPlaying ? (
-          <span className="text-white text-xl">■</span>
+          <span className="text-white text-xl mb-1">■</span>
         ) : (
           <span className="text-white text-xl ml-1">▶</span>
         )}

@@ -8,14 +8,14 @@ import {
   Song,
 } from '../utils/gameLogic';
 import { useReducer, useEffect, useState } from 'react';
-import SearchSongs from '@/app/(games)/games/music-head/components/SearchSongs';
-import AudioPlayer from '@/app/(games)/games/music-head/components/AudioPlayer';
+import SearchSongs from '@/app/games/music-head/components/SearchSongs';
+import AudioPlayer from '@/app/games/music-head/components/AudioPlayer';
 import {
   encryptData,
   decryptData,
-} from '@/app/(games)/games/music-head/utils/encryption';
-import SuccessScreen from '@/app/(games)/games/music-head/components/SuccessScreen';
-import { currentSong } from '@/app/(games)/games/currentSong';
+} from '@/app/games/music-head/utils/encryption';
+import SuccessScreen from '@/app/games/music-head/components/SuccessScreen';
+import { currentSong } from '@/app/games/currentSong';
 
 const GAME_STATE_KEY = 'musichead_game_state';
 
@@ -58,7 +58,7 @@ export default function MusicHead() {
     if (state.currentSong === null) {
       dispatch({ type: 'LOAD_SONG', payload: weeklySong });
     }
-  }, [state.currentSong]);
+  }, [state.currentSong]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -99,8 +99,16 @@ export default function MusicHead() {
   };
 
   const handleShare = () => {
-    // Implement share functionality here
-    console.log('Sharing score:', state.score);
+    const tweetText = `I scored ${state.score} points in Music Head on Loudronline! Can you beat my score? #MusicHead #Loudronline`;
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      tweetText
+    )}`;
+
+    if (typeof window !== 'undefined' && window.open) {
+      window.open(tweetUrl, '_blank');
+    } else {
+      console.error('Unable to open new window for sharing.');
+    }
   };
 
   const handlePlayAgain = () => {
@@ -119,13 +127,13 @@ export default function MusicHead() {
   }
 
   return (
-    <section className="py-10 text-center h-screen font-larken overflow-hidden">
+    <section className="py-10 text-center h-full font-larken overflow-hidden">
       <div className="w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
         {/* <h1 className="md:text-xl font-semibold mb-8">
           Listen to the intro and guess the song. You have 3 attempts and can
           add up to 2 seconds.
         </h1> */}
-        <div className="w-full max-w-xs mb-8 p-4 rounded-md bg-[#141818] flex flex-col justify-center">
+        <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md bg-[#141818] flex flex-col justify-center">
           <AudioPlayer
             audioSrc="/musichead.mp3"
             gameState={state}
@@ -148,10 +156,10 @@ export default function MusicHead() {
           </h3>
         </div>
 
-        <div className="flex flex-col space-y-2 w-full max-w-xs relative">
+        <div className="flex flex-col space-y-2 w-full max-w-xs md:max-w-lg relative">
           <button
             onClick={handleAddSecond}
-            className="bg-white text-black font-bold px-3 py-6 mb-1 rounded-md relative"
+            className="bg-white text-black font-bold px-3 py-6 mb-1 rounded-md relative hover:scale-105 transition-transform duration-300"
             disabled={state.skipsUsed === 2}
           >
             +1 SEC
@@ -164,7 +172,7 @@ export default function MusicHead() {
           </button>
           <button
             onClick={handleGuess}
-            className={`px-3 py-6 font-bold rounded-md transition-colors duration-300 ${
+            className={`px-3 py-6 font-bold rounded-md transition-all duration-300 hover:scale-105 ${
               guess ? 'bg-white text-black' : 'bg-white/10 text-white'
             }`}
             disabled={!guess || showTryAgain}

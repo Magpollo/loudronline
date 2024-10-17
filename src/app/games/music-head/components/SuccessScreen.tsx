@@ -29,10 +29,10 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-[#1d2023] text-white p-4">
-      <div className="mb-10 w-full max-w-xs rounded-md bg-[#141818] py-5 px-2 flex flex-col justify-center items-center mx-auto">
+    <div className="flex flex-col items-center justify-center h-full bg-[#1d2023] text-white p-4">
+      <div className="my-10 w-full max-w-xs rounded-md bg-[#141818] py-5 px-2 flex flex-col justify-center items-center mx-auto">
         <div
-          className="w-32 h-32 p-3 mb-7 rounded-full flex flex-col items-center justify-center"
+          className="w-32 h-32 p-3 mt-3 mb-7 rounded-full flex flex-col items-center justify-center"
           style={{ backgroundColor: `${scoreColor}33` }} // 33 is 20% opacity in hex
         >
           <span
@@ -55,7 +55,7 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
 
       <button
         onClick={onShare}
-        className="bg-white text-black w-full max-w-xs py-5 rounded-md font-semibold mb-4"
+        className="bg-white text-black w-full max-w-xs py-5 rounded-md font-semibold mb-4 hover:scale-105 transition-transform duration-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -66,12 +66,6 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
           <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
         </svg>
         SHARE SCORE
-      </button>
-      <button
-        onClick={onPlayAgain}
-        className="bg-transparent border border-white text-white w-full max-w-xs py-5 rounded-md font-semibold"
-      >
-        PLAY AGAIN
       </button>
     </div>
   );

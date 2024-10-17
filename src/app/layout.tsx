@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import '../globals.css';
+import '@/app/globals.css';
 import { plusJakarta, larken } from '@/assets/fonts/fonts';
 import Providers from '@/app/providers';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import FooterWrapper from '@/components/FooterWrapper';
 
 export const metadata: Metadata = {
   title: 'Loudronline',
@@ -23,7 +23,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           <main className="flex-grow">{children}</main>
-          <Footer />
+          <FooterWrapper />
         </Providers>
       </body>
     </html>

@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import MenuIcon from '@/assets/icons/menu';
 import Image from 'next/image';
-import SearchBar from './SearchBar';
 import About from './About';
+import SearchBar from './SearchBar';
 
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -101,9 +101,51 @@ export default function MobileNavbar() {
           </div>
         </div>
       </nav>
+      {/* Music head game title */}
+      {pathname.includes('/games/music-head') && (
+        <h1 className="md:hidden text-center text-3xl font-bold font-larken py-2">
+          Music head
+        </h1>
+      )}
       <div className="sticky top-0 z-40 bg-white dark:bg-[#1d2023] md:hidden">
-        <div className="w-full h-fit flex flex-row justify-around items-center p-3 border-b border-slate-300 dark:border-[#24272A]">
-          <SearchBar mobile={true} />
+        <div className="w-full h-fit flex flex-row justify-between items-center p-3 border-b border-slate-300 dark:border-[#24272A]">
+          {/* Music head game icon */}
+          {pathname.includes('/games/music-head/game') ? (
+            <div className="flex justify-start items-center">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="scale-125"
+              >
+                <path
+                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  stroke="#F6F4F1"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9.08997 9.00008C9.32507 8.33175 9.78912 7.76819 10.3999 7.40921C11.0107 7.05024 11.7289 6.91902 12.4271 7.03879C13.1254 7.15857 13.7588 7.52161 14.215 8.06361C14.6713 8.60561 14.921 9.2916 14.92 10.0001C14.92 12.0001 11.92 13.0001 11.92 13.0001"
+                  stroke="#F6F4F1"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 17H12.01"
+                  stroke="#F6F4F1"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          ) : (
+            <SearchBar mobile={true} />
+          )}
           <div>
             <MenuIcon
               onClick={toggleMenu}
@@ -120,7 +162,11 @@ export default function MobileNavbar() {
       {isOpen && (
         <div
           className="fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-[#1d2023] p-10 z-50 transition-opacity duration-300 ease-in-out delay-75 opacity-100 overflow-y-auto"
-          style={{ marginTop: '173px' }}
+          style={{
+            marginTop: pathname.includes('/games/music-head')
+              ? '203px'
+              : '173px',
+          }}
         >
           <div className="flex flex-col">
             <div>
