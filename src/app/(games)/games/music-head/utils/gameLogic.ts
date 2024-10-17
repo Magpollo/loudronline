@@ -40,13 +40,15 @@ export const initialState: GameState = {
 export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'LOAD_SONG':
-      return {
-        ...state,
-        currentSong: action.payload,
-        score: 0,
-        skipsUsed: 0,
-        incorrectGuesses: 0,
-      };
+      if (state.currentSong === null) {
+        return {
+          ...state,
+          currentSong: action.payload,
+          isPlaying: false,
+          currentPlaybackTime: 0,
+        };
+      }
+      return state;
     case 'MAKE_GUESS':
       if (state.currentSong) {
         const guessLower = action.payload.toLowerCase().trim();

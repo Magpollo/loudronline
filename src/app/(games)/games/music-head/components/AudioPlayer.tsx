@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
   useEffect,
   useRef,
@@ -20,7 +22,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [audioLoaded, setAudioLoaded] = useState(false);
-  const [resetState, setResetState] = useState(false);
   const waveformBars = 30; // Number of bars in the waveform
 
   // Generate random heights for the waveform bars only once
@@ -40,21 +41,21 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         console.error('Error loading audio:', e);
       };
     }
-  }, [audioSrc]);
+  }, [audioSrc]); // This effect will run when audioSrc changes
 
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
+      audio.currentTime = 0;
       if (gameState.isPlaying) {
         audio
           .play()
           .catch((error) => console.error('Error playing audio:', error));
-        setResetState(false);
       } else {
         audio.pause();
       }
     }
-  }, [gameState.isPlaying]);
+  }, [gameState.isPlaying, gameState.playbackDuration]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -75,15 +76,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     const audio = audioRef.current;
     if (audio) {
       if (!gameState.isPlaying) {
-        if (audio.currentTime >= gameState.playbackDuration || resetState) {
-          audio.currentTime = 0;
-          dispatch({ type: 'UPDATE_PLAYBACK_TIME', payload: 0 });
-          setResetState(false);
-        }
+        audio.currentTime = 0;
+        dispatch({ type: 'UPDATE_PLAYBACK_TIME', payload: 0 });
         dispatch({ type: 'PLAY' });
       } else {
         dispatch({ type: 'PAUSE' });
-        setResetState(true);
       }
     }
   };
@@ -99,24 +96,24 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
 
   return (
-    <div className="my-4 p-2 sm:p-4 rounded-lg flex flex-row items-center space-x-4">
+    <div className="flex items-center space-x-4 w-full mb-4">
       <audio ref={audioRef} />
       <button
         onClick={togglePlay}
-        className="w-12 h-12 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0"
+        className="flex-shrink-0 w-12 h-12 bg-transparent border-2 border-white rounded-full flex items-center justify-center"
         disabled={!audioLoaded}
       >
         {gameState.isPlaying ? (
-          <span className="text-gray-900 text-xl sm:text-base">■</span>
+          <span className="text-white text-xl">■</span>
         ) : (
-          <span className="text-gray-900 text-xl sm:text-base ml-1">▶</span>
+          <span className="text-white text-xl ml-1">▶</span>
         )}
       </button>
-      <div className="flex-grow h-16 sm:h-20 flex items-center justify-center space-x-1">
+      <div className="flex-grow h-16 flex items-center justify-center space-x-0.5 lg:space-x-1">
         {barHeights.map((height, index) => (
           <div
             key={index}
-            className="w-1 sm:w-2 rounded-full transition-all duration-200"
+            className="w-1 lg:w-2 rounded-full transition-all duration-200"
             style={{
               height: `${height * 100}%`,
               backgroundColor:

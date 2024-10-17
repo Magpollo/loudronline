@@ -15,6 +15,7 @@ import {
   decryptData,
 } from '@/app/(games)/games/music-head/utils/encryption';
 import SuccessScreen from '@/app/(games)/games/music-head/components/SuccessScreen';
+import { currentSong } from '@/app/(games)/games/currentSong';
 
 const GAME_STATE_KEY = 'musichead_game_state';
 
@@ -24,7 +25,15 @@ export default function MusicHead() {
       const savedState = localStorage.getItem(GAME_STATE_KEY);
       if (savedState) {
         try {
-          return decryptData(savedState);
+          const decryptedState = decryptData(savedState);
+          return {
+            ...initial,
+            score: decryptedState.score,
+            skipsUsed: decryptedState.skipsUsed,
+            incorrectGuesses: decryptedState.incorrectGuesses,
+            gameEnded: decryptedState.gameEnded,
+            playbackDuration: decryptedState.playbackDuration,
+          };
         } catch (error) {
           console.error('Failed to load saved game state:', error);
         }
@@ -39,21 +48,36 @@ export default function MusicHead() {
 
   // Load weekly song from /public/musichead.mp3
   const weeklySong: Song = {
-    id: 'essence',
-    title: 'Essence (feat. Tems)',
-    artist: 'Wizkid, Tems',
-    previewUrl: '/musichead.mp3',
+    id: currentSong.id,
+    title: currentSong.title,
+    artist: currentSong.artist,
+    previewUrl: `/musichead.mp3?v=${currentSong.fileVersion}`,
   };
 
   useEffect(() => {
-    dispatch({ type: 'LOAD_SONG', payload: weeklySong });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (state.currentSong === null) {
+      dispatch({ type: 'LOAD_SONG', payload: weeklySong });
+    }
+  }, [state.currentSong]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(GAME_STATE_KEY, encryptData(state));
+      const stateToSave = {
+        score: state.score,
+        skipsUsed: state.skipsUsed,
+        incorrectGuesses: state.incorrectGuesses,
+        gameEnded: state.gameEnded,
+        playbackDuration: state.playbackDuration,
+      };
+      localStorage.setItem(GAME_STATE_KEY, encryptData(stateToSave));
     }
-  }, [state]);
+  }, [
+    state.score,
+    state.skipsUsed,
+    state.incorrectGuesses,
+    state.gameEnded,
+    state.playbackDuration,
+  ]);
 
   const handleGuess = () => {
     dispatch({ type: 'MAKE_GUESS', payload: guess });
@@ -95,39 +119,44 @@ export default function MusicHead() {
   }
 
   return (
-    <section className="flex flex-col items-center justify-between text-center h-screen p-7 font-larken overflow-hidden">
-      <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
-        <h1 className="md:text-xl font-semibold mb-8">
+    <section className="py-10 text-center h-screen font-larken overflow-hidden">
+      <div className="w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
+        {/* <h1 className="md:text-xl font-semibold mb-8">
           Listen to the intro and guess the song. You have 3 attempts and can
           add up to 2 seconds.
-        </h1>
-        <div className="w-full sm:w-2/3 lg:w-1/2 mb-8">
+        </h1> */}
+        <div className="w-full max-w-xs mb-8 p-4 rounded-md bg-[#141818] flex flex-col justify-center">
+          <AudioPlayer
+            audioSrc="/musichead.mp3"
+            gameState={state}
+            dispatch={dispatch}
+          />
           <SearchSongs
             guess={guess}
             setGuess={setGuess}
           />
+          <h3 className="md:text-xl font-semibold mt-4">
+            {showTryAgain ? (
+              <span className="text-[#DA4946] px-2 py-1 rounded-sm bg-[#DA4946]/20">
+                Try Again!
+              </span>
+            ) : (
+              <span className="text-[#FF9D12] px-2 py-1 rounded-sm bg-[#FF9D12]/20">
+                Attempts Left: {3 - state.incorrectGuesses}/3
+              </span>
+            )}
+          </h3>
         </div>
-        <AudioPlayer
-          audioSrc="/musichead.mp3"
-          gameState={state}
-          dispatch={dispatch}
-        />
-        <h3 className="md:text-xl font-semibold mt-8 mb-8">
-          {showTryAgain ? (
-            <span className="text-loudr-yellow">Try Again!</span>
-          ) : (
-            `Attempts Left: ${3 - state.incorrectGuesses}/3`
-          )}
-        </h3>
-        <div className="flex flex-col space-y-2 w-full max-w-md relative">
+
+        <div className="flex flex-col space-y-2 w-full max-w-xs relative">
           <button
             onClick={handleAddSecond}
-            className="bg-white/10 text-white px-3 py-6 mb-1 rounded-md relative"
+            className="bg-white text-black font-bold px-3 py-6 mb-1 rounded-md relative"
             disabled={state.skipsUsed === 2}
           >
             +1 SEC
             {showTooltip && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white text-gray-900 px-2 py-1 rounded shadow z-10">
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-[#FF9D12] text-gray-900 px-2 py-1 rounded shadow z-10">
                 {2 - state.skipsUsed} skip{state.skipsUsed !== 1 ? 's' : ''}{' '}
                 left
               </div>
@@ -135,7 +164,7 @@ export default function MusicHead() {
           </button>
           <button
             onClick={handleGuess}
-            className={`px-3 py-6 rounded-md transition-colors duration-300 ${
+            className={`px-3 py-6 font-bold rounded-md transition-colors duration-300 ${
               guess ? 'bg-white text-black' : 'bg-white/10 text-white'
             }`}
             disabled={!guess || showTryAgain}
