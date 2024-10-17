@@ -14,7 +14,7 @@ export default function MusicHeadStart() {
       <div className="mt-8 flex justify-center">
         <Link
           href="/games/music-head/game"
-          className="hover:bg-[#ffc843] dark:hover:bg-[#ffc843] transition-all duration-200 ease-in-out bg-white text-black dark:bg-white dark:text-black text-md font-bold uppercase py-4 px-28 rounded-lg inline-block text-center"
+          className="hover:bg-[#ffc843] dark:hover:bg-[#ffc843] transition-all duration-200 ease-in-out bg-black text-white dark:bg-white dark:text-black text-md font-bold uppercase py-4 px-28 rounded-lg inline-block text-center"
         >
           Start Game
         </Link>

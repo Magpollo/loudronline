@@ -133,7 +133,7 @@ export default function MusicHead() {
           Listen to the intro and guess the song. You have 3 attempts and can
           add up to 2 seconds.
         </h1> */}
-        <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md bg-[#141818] flex flex-col justify-center">
+        <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md dark:bg-[#141818] bg-gray-300 flex flex-col justify-center">
           <AudioPlayer
             audioSrc="/musichead.mp3"
             gameState={state}
@@ -159,7 +159,7 @@ export default function MusicHead() {
         <div className="flex flex-col space-y-2 w-full max-w-xs md:max-w-lg relative">
           <button
             onClick={handleAddSecond}
-            className="bg-white text-black font-bold px-3 py-6 mb-1 rounded-md relative hover:scale-105 transition-transform duration-300"
+            className="dark:bg-white dark:text-black bg-black text-white font-bold px-3 py-6 mb-1 rounded-md relative hover:scale-105 transition-transform duration-300"
             disabled={state.skipsUsed === 2}
           >
             +1 SEC
@@ -173,7 +173,9 @@ export default function MusicHead() {
           <button
             onClick={handleGuess}
             className={`px-3 py-6 font-bold rounded-md transition-all duration-300 hover:scale-105 ${
-              guess ? 'bg-white text-black' : 'bg-white/10 text-white'
+              guess
+                ? 'dark:bg-white dark:text-black bg-black text-white'
+                : 'bg-white/10 text-white'
             }`}
             disabled={!guess || showTryAgain}
           >

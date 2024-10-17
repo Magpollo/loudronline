@@ -106,7 +106,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         {gameState.isPlaying ? (
           <span className="text-white text-xl mb-1">■</span>
         ) : (
-          <span className="text-white text-xl ml-1">▶</span>
+          <span className="text-white text-xl">▶</span>
         )}
       </button>
       <div className="flex-grow h-16 flex items-center justify-center space-x-0.5 lg:space-x-1">
