@@ -106,7 +106,24 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         {gameState.isPlaying ? (
           <span className="text-white text-xl mb-1">■</span>
         ) : (
-          <span className="text-white text-xl">▶</span>
+          <span className="text-white text-xl">
+            <svg
+              width="14"
+              height="15"
+              viewBox="0 0 14 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2.92627 1.87109L11.086 7.11662L2.92627 12.3621V1.87109Z"
+                fill="white"
+                stroke="white"
+                strokeWidth="1.16567"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
         )}
       </button>
       <div className="flex-grow h-16 flex items-center justify-center space-x-0.5 lg:space-x-1">

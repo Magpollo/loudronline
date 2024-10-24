@@ -10,7 +10,7 @@ export const plusJakarta = Plus_Jakarta_Sans({
 
 export const larken = localFont({
   src: './Larken/Larken-Variable.ttf',
-  weight: 'variable',
+  weight: '700',
   display: 'swap',
   style: 'normal',
   variable: '--font-larken',

@@ -143,7 +143,7 @@ export default function MusicHead() {
             guess={guess}
             setGuess={setGuess}
           />
-          <h3 className="md:text-xl font-semibold mt-4">
+          <h3 className="md:text-xl font-semibold mt-4 font-plus-jakarta">
             {showTryAgain ? (
               <span className="text-[#DA4946] px-2 py-1 rounded-sm bg-[#DA4946]/20">
                 Try Again!
