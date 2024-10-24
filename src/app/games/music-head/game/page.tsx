@@ -99,7 +99,7 @@ export default function MusicHead() {
   };
 
   const handleShare = () => {
-    const tweetText = `I scored ${state.score} points in Music Head on Loudronline! Can you beat my score? #MusicHead #Loudronline`;
+    const tweetText = `I scored ${state.score} points in Music Head on Loudronline! Can you beat my score? #MusicHead #Loudronline https://www.loudr.online/games/music-head/`;
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       tweetText
     )}`;
@@ -133,7 +133,7 @@ export default function MusicHead() {
           Listen to the intro and guess the song. You have 3 attempts and can
           add up to 2 seconds.
         </h1> */}
-        <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md dark:bg-[#141818] bg-slate-400 flex flex-col justify-center">
+        <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md dark:bg-[#141818] bg-gray-400 flex flex-col justify-center">
           <AudioPlayer
             audioSrc="/musichead.mp3"
             gameState={state}

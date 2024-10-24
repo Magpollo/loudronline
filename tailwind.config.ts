@@ -17,6 +17,7 @@ const config: Config = {
       fontFamily: {
         'plus-jakarta': 'var(--font-plus-jakarta)',
         larken: 'var(--font-larken)',
+        langar: 'var(--font-langar)',
       },
       colors: {
         'loudr-yellow': '#FFC843',

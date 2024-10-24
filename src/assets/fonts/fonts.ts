@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
+import { Langar } from 'next/font/google';
 
 export const plusJakarta = Plus_Jakarta_Sans({
   display: 'swap',
@@ -13,4 +14,11 @@ export const larken = localFont({
   display: 'swap',
   style: 'normal',
   variable: '--font-larken',
+});
+
+export const langar = Langar({
+  weight: '400',
+  style: 'normal',
+  variable: '--font-langar',
+  subsets: ['latin'],
 });

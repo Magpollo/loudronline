@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import '@/app/globals.css';
-import { plusJakarta, larken } from '@/assets/fonts/fonts';
+import { plusJakarta, larken, langar } from '@/assets/fonts/fonts';
 import Providers from '@/app/providers';
 import Navbar from '@/components/Navbar';
 import FooterWrapper from '@/components/FooterWrapper';
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${plusJakarta.variable} ${larken.variable} flex flex-col min-h-screen dark:bg-[#1d2023] dark:text-white`}
+        className={`${plusJakarta.variable} ${larken.variable} ${langar.variable} flex flex-col min-h-screen dark:bg-[#1d2023] dark:text-white`}
       >
         <Providers>
           <Navbar />

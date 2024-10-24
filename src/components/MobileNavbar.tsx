@@ -7,12 +7,14 @@ import MenuIcon from '@/assets/icons/menu';
 import Image from 'next/image';
 import About from './About';
 import SearchBar from './SearchBar';
+import HowToPlay from '@/app/games/music-head/components/HowToPlay';
 
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [openExplore, setOpenExplore] = useState(false);
   const [openShop, setOpenShop] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [openHelp, setOpenHelp] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -36,6 +38,10 @@ export default function MobileNavbar() {
 
   const closeMenu = () => {
     setIsOpen(false);
+  };
+
+  const onHelpClick = () => {
+    setOpenHelp(true);
   };
 
   const NavLink = ({
@@ -119,6 +125,7 @@ export default function MobileNavbar() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="scale-125 stroke-gray-600 dark:stroke-white"
+                onClick={onHelpClick}
               >
                 <path
                   d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
@@ -215,6 +222,7 @@ export default function MobileNavbar() {
         onClose={() => setIsAboutOpen(false)}
         isMobile={true}
       />
+      {openHelp && <HowToPlay toggle={() => setOpenHelp(!openHelp)} />}
     </>
   );
 }
