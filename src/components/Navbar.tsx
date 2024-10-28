@@ -47,7 +47,7 @@ export default function Navbar() {
         onClick={isAbout || isShop ? handleClick : undefined}
       >
         <div
-          className={`capitalize text-xl mr-10 font-bold transition duration-300 ease-in-out ${
+          className={`normal-case text-xl mr-10 font-bold transition duration-300 ease-in-out ${
             isActive ? 'text-[#FF9D12]' : 'hover:text-[#FF9D12]'
           }`}
         >
@@ -74,15 +74,16 @@ export default function Navbar() {
             />
           </Link>
           <div className="flex flex-shrink flex-row ml-5">
-            <NavLink href="/events">events</NavLink>
-            <NavLink href="/reads">reads</NavLink>
-            <NavLink href="/videos">watch</NavLink>
-            <NavLink
+            <NavLink href="/events">Events</NavLink>
+            <NavLink href="/reads">Reads</NavLink>
+            <NavLink href="/videos">Watch</NavLink>
+            {/* <NavLink
               href="/shop"
               isShop={true}
             >
               Shop
-            </NavLink>
+            </NavLink> */}
+            <NavLink href="/games/music-head">Music head</NavLink>
             <NavLink
               href="/about"
               isAbout={true}
