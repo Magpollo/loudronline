@@ -1,13 +1,14 @@
 'use client';
 
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { GameState, GameAction } from '../utils/gameLogic';
+
+const waveformBars = 30; // Move this outside
+// Generate random heights for the waveform bars once and reuse
+const barHeights = Array.from(
+  { length: waveformBars },
+  () => Math.random() * 0.8 + 0.2
+);
 
 interface AudioPlayerProps {
   audioSrc: string;
@@ -22,13 +23,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [audioLoaded, setAudioLoaded] = useState(false);
-  const waveformBars = 30; // Number of bars in the waveform
-
-  // Generate random heights for the waveform bars only once
-  const barHeights = useMemo(
-    () => Array.from({ length: waveformBars }, () => Math.random() * 0.8 + 0.2),
-    [waveformBars]
-  );
 
   useEffect(() => {
     if (audioRef.current) {
