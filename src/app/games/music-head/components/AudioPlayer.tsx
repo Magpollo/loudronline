@@ -3,13 +3,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { GameState, GameAction } from '../utils/gameLogic';
 
-const waveformBars = 30; // Move this outside
-// Generate random heights for the waveform bars once and reuse
-const barHeights = Array.from(
-  { length: waveformBars },
-  () => Math.random() * 0.8 + 0.2
-);
-
 interface AudioPlayerProps {
   audioSrc: string;
   gameState: GameState;
@@ -120,22 +113,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           </span>
         )}
       </button>
-      <div className="flex-grow h-16 flex items-center justify-center space-x-0.5 lg:space-x-1">
-        {barHeights.map((height, index) => (
-          <div
-            key={index}
-            className="w-1 lg:w-2 rounded-full transition-all duration-200"
-            style={{
-              height: `${height * 100}%`,
-              backgroundColor:
-                index / waveformBars <= maxProgress()
-                  ? visualProgress() > index / waveformBars
-                    ? 'white'
-                    : 'rgba(255, 255, 255, 0.6)'
-                  : 'rgba(255, 255, 255, 0.3)',
-            }}
-          />
-        ))}
+      <div className="flex-grow h-4 bg-white/30 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-white transition-all duration-200"
+          style={{
+            width: `${(visualProgress() * 100 * maxProgress())}%`,
+          }}
+        />
       </div>
     </div>
   );
