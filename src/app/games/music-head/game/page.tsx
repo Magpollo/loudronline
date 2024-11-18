@@ -198,6 +198,7 @@ export default function MusicHead() {
     return (
       <SuccessScreen
         score={state.score}
+        audioSrc={state.currentSong?.previewUrl || dailySong.previewUrl}
         isCouchPlay={state.isCouchPlay}
         onPlayAgain={handlePlayAgain}
       />
