@@ -12,8 +12,11 @@ export interface GameState {
   incorrectGuesses: number;
   isPlaying: boolean;
   gameEnded: boolean;
-  playbackDuration: number; // in seconds
-  currentPlaybackTime: number; // current playback time in seconds
+  playbackDuration: number;
+  currentPlaybackTime: number;
+  isCouchPlay: boolean;
+  lastPlayedDate: string | null;
+  currentSongId: string | null;
 }
 
 export type GameAction =
@@ -24,7 +27,9 @@ export type GameAction =
   | { type: 'PAUSE' }
   | { type: 'UPDATE_PLAYBACK_TIME'; payload: number }
   | { type: 'END_GAME' }
-  | { type: 'RESET_GAME' };
+  | { type: 'RESET_GAME' }
+  | { type: 'TOGGLE_COUCH_PLAY' }
+  | { type: 'NEXT_SONG'; payload: Song };
 
 export const initialState: GameState = {
   currentSong: null,
@@ -33,8 +38,11 @@ export const initialState: GameState = {
   incorrectGuesses: 0,
   isPlaying: false,
   gameEnded: false,
-  playbackDuration: 1, // Start with 1 second
+  playbackDuration: 1,
   currentPlaybackTime: 0,
+  isCouchPlay: false,
+  lastPlayedDate: null,
+  currentSongId: null,
 };
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -51,44 +59,32 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       return state;
     case 'MAKE_GUESS':
       if (state.currentSong) {
-        const guessLower = action.payload.toLowerCase().trim();
-        const titleLower = state.currentSong.title.toLowerCase().trim();
-        const artistLower = state.currentSong.artist.toLowerCase().trim();
+        const normalizedGuess = action.payload.toLowerCase();
+        const normalizedTitle = state.currentSong.title.toLowerCase();
 
-        // Function to normalize strings for comparison
-        const normalize = (str: string) =>
-          str
-            .replace(/[^\w\s]/g, '')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .split(' ');
-
-        const normalizedGuess = normalize(guessLower);
-        const normalizedTitle = normalize(titleLower);
-        const normalizedArtist = normalize(artistLower);
-
-        // Check if the guess contains all words from both the title and artist
         const isCorrect =
-          normalizedTitle.every((word) => normalizedGuess.includes(word)) &&
-          normalizedArtist.every((word) => normalizedGuess.includes(word));
+          normalizedGuess.includes(normalizedTitle) ||
+          normalizedTitle.includes(normalizedGuess);
 
         if (isCorrect) {
-          // Correct guess
-          const finalScore = calculateFinalScore(
+          const roundScore = calculateFinalScore(
             state.skipsUsed,
             state.incorrectGuesses
           );
-          return { ...state, gameEnded: true, score: finalScore };
-        } else {
-          // Incorrect guess
-          const newIncorrectGuesses = state.incorrectGuesses + 1;
           return {
             ...state,
-            incorrectGuesses: newIncorrectGuesses,
-            gameEnded: newIncorrectGuesses === 3,
-            score: newIncorrectGuesses === 3 ? 0 : state.score, // Set score to 0 if all guesses are used
+            gameEnded: true,
+            score: roundScore,
+            lastPlayedDate: !state.isCouchPlay
+              ? new Date().toISOString()
+              : state.lastPlayedDate,
           };
         }
+        return {
+          ...state,
+          incorrectGuesses: state.incorrectGuesses + 1,
+          gameEnded: state.incorrectGuesses >= 2,
+        };
       }
       return state;
     case 'SKIP':
@@ -124,7 +120,20 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case 'RESET_GAME':
       return {
         ...initialState,
-        currentSong: state.currentSong, // Keep the current song
+        currentSongId: state.currentSongId,
+        lastPlayedDate: new Date().toISOString(),
+      };
+    case 'TOGGLE_COUCH_PLAY':
+      return {
+        ...initialState,
+        isCouchPlay: !state.isCouchPlay,
+        currentSongId: state.currentSongId,
+      };
+    case 'NEXT_SONG':
+      return {
+        ...initialState,
+        currentSong: action.payload,
+        isCouchPlay: true,
       };
     default:
       return state;
@@ -137,4 +146,21 @@ function calculateFinalScore(
 ): number {
   const score = 10 - skipsUsed * 2 - incorrectGuesses * 2;
   return Math.max(0, score);
+}
+
+// Add helper function to check if user can play today
+export function canPlayToday(
+  lastPlayedDate: string | null,
+  currentSongId: string | null,
+  savedSongId: string
+): boolean {
+  if (!lastPlayedDate || !currentSongId) return true;
+
+  // Allow play if it's a new song
+  if (currentSongId !== savedSongId) return true;
+
+  // Check if last played was on a different day
+  const lastPlayed = new Date(lastPlayedDate);
+  const today = new Date();
+  return lastPlayed.toDateString() !== today.toDateString();
 }

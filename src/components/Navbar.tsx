@@ -7,6 +7,7 @@ import Image from 'next/image';
 import MobileNavbar from '@/components/MobileNavbar';
 import SearchBar from './SearchBar';
 import About from './About';
+import GameNav from '@/app/games/music-head/components/GameNav';
 
 export default function Navbar() {
   const pathname = usePathname();

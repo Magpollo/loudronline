@@ -6,6 +6,7 @@ import {
   GameState,
   GameAction,
   Song,
+  canPlayToday,
 } from '../utils/gameLogic';
 import { useReducer, useEffect, useState } from 'react';
 import SearchSongs from '@/app/games/music-head/components/SearchSongs';
@@ -15,7 +16,8 @@ import {
   decryptData,
 } from '@/app/games/music-head/utils/encryption';
 import SuccessScreen from '@/app/games/music-head/components/SuccessScreen';
-import { currentSong } from '@/app/games/currentSong';
+import { currentSong } from '@/app/games/music-head/utils/currentSong';
+import GameNav from '@/app/games/music-head/components/GameNav';
 
 const GAME_STATE_KEY = 'musichead_game_state';
 
@@ -26,40 +28,55 @@ export default function MusicHead() {
       if (savedState) {
         try {
           const decryptedState = decryptData(savedState);
+          if (
+            !decryptedState.isCouchPlay &&
+            !canPlayToday(
+              decryptedState.lastPlayedDate,
+              decryptedState.currentSongId,
+              currentSong.id
+            )
+          ) {
+            return {
+              ...decryptedState,
+              gameEnded: true,
+              isPlayable: false,
+            };
+          }
           return {
             ...initial,
-            score: decryptedState.score,
-            skipsUsed: decryptedState.skipsUsed,
-            incorrectGuesses: decryptedState.incorrectGuesses,
-            gameEnded: decryptedState.gameEnded,
-            playbackDuration: decryptedState.playbackDuration,
+            ...decryptedState,
+            currentSongId: currentSong.id,
           };
         } catch (error) {
           console.error('Failed to load saved game state:', error);
         }
       }
     }
-    return initial;
+    return {
+      ...initial,
+      currentSongId: currentSong.id,
+    };
   });
 
   const [guess, setGuess] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
   const [showTryAgain, setShowTryAgain] = useState(false);
 
-  // Load weekly song from /public/musichead.mp3
-  const weeklySong: Song = {
+  // Load daily song from songs array
+  const dailySong: Song = {
     id: currentSong.id,
     title: currentSong.title,
     artist: currentSong.artist,
-    previewUrl: `/musichead.mp3?v=${currentSong.fileVersion}`,
+    previewUrl: `/songs/${currentSong.filename}?v=${currentSong.fileVersion}`,
   };
 
   useEffect(() => {
     if (state.currentSong === null) {
-      dispatch({ type: 'LOAD_SONG', payload: weeklySong });
+      dispatch({ type: 'LOAD_SONG', payload: dailySong });
     }
   }, [state.currentSong]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Save game state to local storage every time it changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stateToSave = {
@@ -68,6 +85,9 @@ export default function MusicHead() {
         incorrectGuesses: state.incorrectGuesses,
         gameEnded: state.gameEnded,
         playbackDuration: state.playbackDuration,
+        isCouchPlay: state.isCouchPlay,
+        lastPlayedDate: state.lastPlayedDate,
+        currentSongId: state.currentSongId,
       };
       localStorage.setItem(GAME_STATE_KEY, encryptData(stateToSave));
     }
@@ -77,11 +97,25 @@ export default function MusicHead() {
     state.incorrectGuesses,
     state.gameEnded,
     state.playbackDuration,
+    state.isCouchPlay,
+    state.lastPlayedDate,
+    state.currentSongId,
   ]);
 
+  // Handle guess submission
   const handleGuess = () => {
     dispatch({ type: 'MAKE_GUESS', payload: guess });
-    if (guess.toLowerCase() !== weeklySong.title.toLowerCase()) {
+
+    // Convert both strings to lowercase for case-insensitive comparison
+    const normalizedGuess = guess.toLowerCase();
+    const normalizedTitle = dailySong.title.toLowerCase();
+
+    // Check if either string contains the other
+    const isCorrect =
+      normalizedGuess.includes(normalizedTitle) ||
+      normalizedTitle.includes(normalizedGuess);
+
+    if (!isCorrect) {
       setShowTryAgain(true);
       setTimeout(() => {
         setShowTryAgain(false);
@@ -90,6 +124,7 @@ export default function MusicHead() {
     setGuess(''); // Clear the input after submitting
   };
 
+  // Handle adding a second to the playback duration
   const handleAddSecond = () => {
     if (state.skipsUsed < 2) {
       dispatch({ type: 'SKIP' });
@@ -98,29 +133,54 @@ export default function MusicHead() {
     }
   };
 
-  const handleShare = () => {
-    const tweetText = `I scored ${state.score} points in Music Head on Loudronline! Can you beat my score? #MusicHead #Loudronline https://www.loudr.online/games/music-head/`;
-    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      tweetText
-    )}`;
+  // Get next random song for couch play
+  const getRandomSong = async (): Promise<Song> => {
+    const response = await fetch('/api/playlist-tracks');
+    const data = await response.json();
+    const tracks = data.tracks;
+    return tracks[Math.floor(Math.random() * tracks.length)];
+  };
 
-    if (typeof window !== 'undefined' && window.open) {
-      window.open(tweetUrl, '_blank');
+  const handlePlayAgain = async () => {
+    if (state.isCouchPlay) {
+      try {
+        const nextSong = await getRandomSong();
+        dispatch({ type: 'NEXT_SONG', payload: nextSong });
+      } catch (error) {
+        console.error('Failed to get next song:', error);
+      }
     } else {
-      console.error('Unable to open new window for sharing.');
+      if (
+        canPlayToday(state.lastPlayedDate, state.currentSongId, currentSong.id)
+      ) {
+        dispatch({ type: 'RESET_GAME' });
+      }
     }
   };
 
-  const handlePlayAgain = () => {
-    // Reset the game state
-    dispatch({ type: 'RESET_GAME' });
+  const handleToggleCouchPlay = async () => {
+    if (!state.isCouchPlay) {
+      // First get the random song
+      try {
+        const nextSong = await getRandomSong();
+        // Then toggle the mode and load the new song
+        dispatch({ type: 'TOGGLE_COUCH_PLAY' });
+        dispatch({ type: 'LOAD_SONG', payload: nextSong });
+      } catch (error) {
+        console.error('Failed to get next song:', error);
+      }
+    } else {
+      // If switching back to daily mode, first toggle mode then load daily song
+      dispatch({ type: 'TOGGLE_COUCH_PLAY' });
+      dispatch({ type: 'LOAD_SONG', payload: dailySong });
+    }
   };
 
   if (state.gameEnded) {
     return (
       <SuccessScreen
         score={state.score}
-        onShare={handleShare}
+        isCouchPlay={state.isCouchPlay}
         onPlayAgain={handlePlayAgain}
       />
     );
@@ -128,14 +188,14 @@ export default function MusicHead() {
 
   return (
     <section className="py-10 text-center h-full font-larken overflow-hidden">
-      <div className="w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
-        {/* <h1 className="md:text-xl font-semibold mb-8">
-          Listen to the intro and guess the song. You have 3 attempts and can
-          add up to 2 seconds.
-        </h1> */}
+      <GameNav
+        toggleCouchPlay={handleToggleCouchPlay}
+        isCouchPlay={state.isCouchPlay}
+      />
+      <div className="mt-5 w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
         <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md dark:bg-[#141818] bg-gray-400 flex flex-col justify-center">
           <AudioPlayer
-            audioSrc="/musichead.mp3"
+            audioSrc={state.currentSong?.previewUrl || dailySong.previewUrl}
             gameState={state}
             dispatch={dispatch}
           />

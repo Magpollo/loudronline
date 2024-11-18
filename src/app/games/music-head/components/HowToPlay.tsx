@@ -17,10 +17,10 @@ export default function HowToPlay({ toggle }: { toggle: () => void }) {
   }, [toggle]);
 
   return (
-    <section className="fixed top-0 left-0 z-[1000] h-screen w-full flex items-center justify-center filter bg-black/10">
+    <section className="fixed top-0 left-0 z-[5000] h-screen w-full flex items-center justify-center filter bg-black/10">
       <div
         ref={ref}
-        className="absolute z-[1100] bg-white dark:bg-[#1d2023] text-black dark:text-white font-larken flex flex-col items-center p-5 w-4/5 rounded-lg"
+        className="absolute z-[5000] bg-white dark:bg-[#1d2023] text-black dark:text-white font-larken flex flex-col items-center p-5 w-4/5 md:w-1/2 rounded-lg"
       >
         <svg
           width="24"

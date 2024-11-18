@@ -5,13 +5,13 @@ import Link from 'next/link';
 
 interface SuccessScreenProps {
   score: number;
-  onShare: () => void;
+  isCouchPlay: boolean;
   onPlayAgain: () => void;
 }
 
 const SuccessScreen: React.FC<SuccessScreenProps> = ({
   score,
-  onShare,
+  isCouchPlay,
   onPlayAgain,
 }) => {
   const getScoreColor = (score: number) => {
@@ -26,6 +26,20 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
     if (score === 0) return 'Wetin happen? Did someone hit the mute button?';
     if (score === 10) return "Perfect score! You're a music genius!";
     return 'Good work, Sherlock!';
+  };
+
+  // Handle sharing the score on Twitter
+  const handleShare = () => {
+    const tweetText = `I scored ${score} points in Music Head on Loudronline! Can you beat my score? #MusicHead #Loudronline https://www.loudr.online/games/music-head/`;
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      tweetText
+    )}`;
+
+    if (typeof window !== 'undefined' && window.open) {
+      window.open(tweetUrl, '_blank');
+    } else {
+      console.error('Unable to open new window for sharing.');
+    }
   };
 
   return (
@@ -53,20 +67,29 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
         </h2>
       </div>
 
-      <button
-        onClick={onShare}
-        className="bg-black text-white dark:bg-white dark:text-black w-full max-w-xs py-5 rounded-md font-semibold mb-4 hover:scale-105 transition-transform duration-300"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 inline-block mr-2"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+      {isCouchPlay ? (
+        <button
+          onClick={onPlayAgain}
+          className="bg-black text-white dark:bg-white dark:text-black w-full max-w-xs py-5 rounded-md font-semibold mb-4 hover:scale-105 transition-transform duration-300"
         >
-          <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-        </svg>
-        SHARE SCORE
-      </button>
+          NEXT SONG
+        </button>
+      ) : (
+        <button
+          onClick={handleShare}
+          className="bg-black text-white dark:bg-white dark:text-black w-full max-w-xs py-5 rounded-md font-semibold mb-4 hover:scale-105 transition-transform duration-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 inline-block mr-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+          </svg>
+          SHARE SCORE
+        </button>
+      )}
     </div>
   );
 };
