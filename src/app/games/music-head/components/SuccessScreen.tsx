@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 
 interface SuccessScreenProps {
@@ -14,6 +14,17 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
   isCouchPlay,
   onPlayAgain,
 }) => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+        const audio = new Audio('/musichead.mp3');
+        audio.play().catch(error => console.error('Error playing audio:', error));
+        return () => {
+            audio.pause();
+            audio.currentTime = 0;
+        };
+    }
+   }, []);
+
   const getScoreColor = (score: number) => {
     if (score <= 2) return '#DA4946';
     if (score <= 8) return '#FF9D12';

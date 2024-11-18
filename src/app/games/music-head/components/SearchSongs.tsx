@@ -49,7 +49,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
   };
 
   return (
-    <section className="w-full font-plus-jakarta mb-10">
+    <section className="w-full font-plus-jakarta mb-10 relative">
       <div className="w-full relative">
         <input
           type="text"
@@ -59,7 +59,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
           onChange={handleInputChange}
         />
         {suggestions.length > 0 && (
-          <ul className="absolute z-50 w-full dark:bg-[#24272A] bg-gray-400 mt-1 max-h-60 overflow-y-auto rounded-md">
+          <ul className="absolute w-full dark:bg-[#24272A] bg-gray-400 mt-1 max-h-60 overflow-y-auto rounded-md">
             {suggestions.map((song) => (
               <li
                 key={song.id}
@@ -73,8 +73,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
         )}
       </div>
       {selectedSong && (
-        <div className="mt-4 bg-[#B0A99E] rounded-md p-4 flex items-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+        <div className="mt-4 bg-loudr-yellow rounded-md p-4 flex items-center">
           <img
             src={selectedSong.albumCover}
             alt={`${selectedSong.name} album cover`}
