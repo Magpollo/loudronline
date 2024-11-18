@@ -8,7 +8,7 @@ import {
   Song,
   canPlayToday,
 } from '../utils/gameLogic';
-import { useReducer, useEffect, useState } from 'react';
+import { useReducer, useEffect, useState, useMemo } from 'react';
 import SearchSongs from '@/app/games/music-head/components/SearchSongs';
 import AudioPlayer from '@/app/games/music-head/components/AudioPlayer';
 import {
@@ -63,18 +63,36 @@ export default function MusicHead() {
   const [showTryAgain, setShowTryAgain] = useState(false);
 
   // Load daily song from songs array
-  const dailySong: Song = {
-    id: currentSong.id,
-    title: currentSong.title,
-    artist: currentSong.artist,
-    previewUrl: `/songs/${currentSong.filename}?v=${currentSong.fileVersion}`,
-  };
+  const dailySong = useMemo(
+    () => ({
+      id: currentSong.id,
+      title: currentSong.title,
+      artist: currentSong.artist,
+      previewUrl: `/songs/${currentSong.filename}?v=${currentSong.fileVersion}`,
+    }),
+    []
+  );
 
   useEffect(() => {
-    if (state.currentSong === null) {
-      dispatch({ type: 'LOAD_SONG', payload: dailySong });
-    }
-  }, [state.currentSong]); // eslint-disable-line react-hooks/exhaustive-deps
+    const initializeGame = async () => {
+      if (state.currentSong === null) {
+        if (state.isCouchPlay) {
+          try {
+            const nextSong = await getRandomSong();
+            dispatch({ type: 'LOAD_SONG', payload: nextSong });
+          } catch (error) {
+            console.error('Failed to load random song:', error);
+            // Fallback to daily song if random song fails to load
+            dispatch({ type: 'LOAD_SONG', payload: dailySong });
+          }
+        } else {
+          dispatch({ type: 'LOAD_SONG', payload: dailySong });
+        }
+      }
+    };
+
+    initializeGame();
+  }, [state.currentSong, state.isCouchPlay, dailySong]); // Add isCouchPlay to dependencies
 
   // Save game state to local storage every time it changes
   useEffect(() => {

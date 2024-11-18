@@ -6,8 +6,36 @@ import Navbar from '@/components/Navbar';
 import FooterWrapper from '@/components/FooterWrapper';
 
 export const metadata: Metadata = {
-  title: 'Loudronline',
-  description: 'Resonating the beat of African culture across the globe',
+  metadataBase: new URL('https://loudr.online'),
+  title: 'Loudr - Amplifying the Heartbeat of Afroculture',
+  description:
+    'Discover the pulse of African youth culture with Loudr. From exclusive music drops to fashion and art, we connect creators with a global audience.',
+  keywords:
+    'Loudr, African music, African fashion, African art, African youth culture, African creativity, African innovation, African entrepreneurship',
+  authors: { name: 'Loudr', url: 'https://loudr.online' },
+  openGraph: {
+    title: 'Loudr - Amplifying the Heartbeat of Afroculture',
+    description:
+      'Discover the pulse of African youth culture with Loudr. From exclusive music drops to fashion and art, we connect creators with a global audience.',
+    url: 'https://loudr.online',
+    siteName: 'Loudr',
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: '/Loudr_poster.png',
+        width: 2400,
+        height: 1260,
+      },
+    ],
+  },
+  twitter: {
+    title: 'Loudr - Amplifying the Heartbeat of Afroculture',
+    description:
+      'Discover the pulse of African youth culture with Loudr. From exclusive music drops to fashion and art, we connect creators with a global audience.',
+    images: ['/Loudr_poster.png'],
+    card: 'summary_large_image',
+  },
 };
 
 export default function RootLayout({

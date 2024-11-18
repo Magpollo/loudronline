@@ -92,7 +92,7 @@ export default function SwitchModes({
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-semibold">Daily Mode</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 w-4/5 md:w-full">
                     Guess the song of the day. Battle for the top spot on the
                     leaderboard
                   </p>
@@ -124,7 +124,7 @@ export default function SwitchModes({
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-semibold">Couch Play</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 w-4/5 md:w-full">
                     Replay as much as possible. Take turns guessing random songs
                   </p>
                 </div>
