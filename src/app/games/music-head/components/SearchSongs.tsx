@@ -50,7 +50,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
 
   return (
     <section className="w-full font-plus-jakarta mb-10 relative">
-      <div className="w-full relative">
+      <div className="w-full relative z-50">
         <input
           type="text"
           placeholder="Guess here..."

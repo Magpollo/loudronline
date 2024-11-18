@@ -234,7 +234,7 @@ export default function MusicHead() {
           </h3>
         </div>
 
-        <div className="flex flex-col space-y-2 w-full max-w-xs md:max-w-lg relative">
+        <div className="flex flex-col space-y-2 w-full max-w-xs md:max-w-lg relative z-0">
           <button
             onClick={handleAddSecond}
             className="dark:bg-white dark:text-black bg-black text-white font-bold px-3 py-6 mb-1 rounded-md relative hover:scale-105 transition-transform duration-300"
