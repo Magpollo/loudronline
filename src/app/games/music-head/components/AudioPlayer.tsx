@@ -87,7 +87,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <audio ref={audioRef} />
       <button
         onClick={togglePlay}
-        className="flex-shrink-0 w-12 h-12 bg-transparent border-2 border-white rounded-full flex items-center justify-center"
+        className="flex-shrink-0 w-10 h-10 bg-transparent border-2 border-white rounded-full flex items-center justify-center"
         disabled={!audioLoaded}
       >
         {gameState.isPlaying ? (
@@ -113,7 +113,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           </span>
         )}
       </button>
-      <div className="flex-grow h-4 bg-white/30 rounded-full overflow-hidden">
+      <div className="flex-grow h-2 bg-white/30 rounded-full overflow-hidden">
         <div
           className="h-full bg-white transition-all duration-200"
           style={{
