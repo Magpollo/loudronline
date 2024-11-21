@@ -103,3 +103,11 @@ export async function getPlaylistTracks(): Promise<Song[]> {
     throw error;
   }
 }
+
+// Get next random song for couch play
+export const getRandomSong = async (): Promise<Song> => {
+  const response = await fetch('/api/playlist-tracks');
+  const data = await response.json();
+  const tracks = data.tracks;
+  return tracks[Math.floor(Math.random() * tracks.length)];
+};

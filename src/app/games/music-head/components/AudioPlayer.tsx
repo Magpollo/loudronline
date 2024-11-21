@@ -1,21 +1,16 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { GameState, GameAction } from '../utils/gameLogic';
+import { useGame } from '@/app/games/music-head/context/GameContext';
 
 interface AudioPlayerProps {
   audioSrc: string;
-  gameState: GameState;
-  dispatch: React.Dispatch<GameAction>;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({
-  audioSrc,
-  gameState,
-  dispatch,
-}) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [audioLoaded, setAudioLoaded] = useState(false);
+  const { state, dispatch } = useGame();
 
   useEffect(() => {
     if (audioRef.current) {
@@ -34,7 +29,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     const audio = audioRef.current;
     if (audio) {
       audio.currentTime = 0;
-      if (gameState.isPlaying) {
+      if (state.isPlaying) {
         audio
           .play()
           .catch((error) => console.error('Error playing audio:', error));
@@ -42,14 +37,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         audio.pause();
       }
     }
-  }, [gameState.isPlaying, gameState.playbackDuration]);
+  }, [state.isPlaying, state.playbackDuration]);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
       const updatePlaybackTime = () => {
         dispatch({ type: 'UPDATE_PLAYBACK_TIME', payload: audio.currentTime });
-        if (audio.currentTime >= gameState.playbackDuration) {
+        if (audio.currentTime >= state.playbackDuration) {
           audio.pause();
           dispatch({ type: 'PAUSE' });
         }
@@ -57,12 +52,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       audio.addEventListener('timeupdate', updatePlaybackTime);
       return () => audio.removeEventListener('timeupdate', updatePlaybackTime);
     }
-  }, [dispatch, gameState.playbackDuration]);
+  }, [dispatch, state.playbackDuration]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
     if (audio) {
-      if (!gameState.isPlaying) {
+      if (!state.isPlaying) {
         audio.currentTime = 0;
         dispatch({ type: 'UPDATE_PLAYBACK_TIME', payload: 0 });
         dispatch({ type: 'PLAY' });
@@ -74,12 +69,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   // Calculate the visual progress based on current playback time and duration
   const visualProgress = () => {
-    return gameState.currentPlaybackTime / gameState.playbackDuration;
+    return state.currentPlaybackTime / state.playbackDuration;
   };
 
   // Calculate the maximum progress based on skips used
   const maxProgress = () => {
-    return (gameState.skipsUsed + 1) / 3; // 1/3, 2/3, or 1 based on skips used
+    return (state.skipsUsed + 1) / 3; // 1/3, 2/3, or 1 based on skips used
   };
 
   return (
@@ -90,7 +85,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         className="flex-shrink-0 w-12 h-12 bg-transparent border-2 border-white rounded-full flex items-center justify-center"
         disabled={!audioLoaded}
       >
-        {gameState.isPlaying ? (
+        {state.isPlaying ? (
           <span className="text-white text-xl mb-1">■</span>
         ) : (
           <span className="text-white text-xl">
@@ -117,7 +112,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <div
           className="h-full bg-white transition-all duration-200"
           style={{
-            width: `${(visualProgress() * 100 * maxProgress())}%`,
+            width: `${visualProgress() * 100 * maxProgress()}%`,
           }}
         />
       </div>

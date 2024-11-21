@@ -1,21 +1,50 @@
-import { Dispatch, useState } from 'react';
-import HowToPlay from './HowToPlay';
-import SwitchModes from './SwitchModes';
-interface GameNavProps {
-  toggleCouchPlay: () => void;
-  isCouchPlay: boolean;
-}
+import { useState, useMemo } from 'react';
+import HowToPlay from '@/app/games/music-head/components/HowToPlay';
+import SwitchModes from '@/app/games/music-head/components/SwitchModes';
+import { useGame } from '@/app/games/music-head/context/GameContext';
+import { getRandomSong } from '@/app/games/music-head/utils/spotifyApi';
+import { currentSong } from '@/app/games/music-head/utils/currentSong';
 
-export default function GameNav({
-  toggleCouchPlay,
-  isCouchPlay,
-}: GameNavProps) {
+export default function GameNav() {
+  const { state, dispatch } = useGame();
   const [showHowTo, setShowHowTo] = useState(false);
   const [showGameModes, setShowGameModes] = useState(false);
 
+  // Load daily song from songs array
+  const dailySong = useMemo(
+    () => ({
+      id: currentSong.id,
+      title: currentSong.title,
+      artist: currentSong.artist,
+      previewUrl: `/songs/${currentSong.filename}?v=${currentSong.fileVersion}`,
+    }),
+    []
+  );
+
+  const handleToggleCouchPlay = async () => {
+    if (!state.isCouchPlay) {
+      // Switching to couch play
+      try {
+        const nextSong = await getRandomSong();
+        dispatch({
+          type: 'SWITCH_TO_COUCH_PLAY',
+          payload: nextSong,
+        });
+      } catch (error) {
+        console.error('Failed to get next song:', error);
+      }
+    } else {
+      // Switching back to daily mode
+      dispatch({
+        type: 'SWITCH_TO_DAILY_MODE',
+        payload: dailySong,
+      });
+    }
+  };
+
   return (
     <>
-      <div className="fixed top-[162px] left-4 md:top-24 md:left-8 flex flex-row justify-around items-center w-16 z-[1000]">
+      <div className="flex flex-row justify-around items-center w-16 md:ml-7">
         <svg
           width="24"
           height="24"
@@ -80,11 +109,7 @@ export default function GameNav({
       </div>
       {showHowTo && <HowToPlay toggle={() => setShowHowTo(!showHowTo)} />}
       {showGameModes && (
-        <SwitchModes
-          toggleGameModes={() => setShowGameModes(false)}
-          toggleCouchPlay={toggleCouchPlay}
-          isCouchPlay={isCouchPlay}
-        />
+        <SwitchModes toggleGameModes={() => setShowGameModes(false)} />
       )}
     </>
   );

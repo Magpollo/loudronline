@@ -1,29 +1,25 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Link from 'next/link';
+import { useGame } from '@/app/games/music-head/context/GameContext';
+import { getRandomSong } from '@/app/games/music-head/utils/spotifyApi';
+import { canPlayToday } from '@/app/games/music-head/utils/gameLogic';
+import { currentSong } from '@/app/games/music-head/utils/currentSong';
 
-interface SuccessScreenProps {
-  score: number;
-  isCouchPlay: boolean;
-  onPlayAgain: () => void;
-}
-
-const SuccessScreen: React.FC<SuccessScreenProps> = ({
-  score,
-  isCouchPlay,
-  onPlayAgain,
-}) => {
+const SuccessScreen: React.FC = () => {
+  const { state, dispatch } = useGame();
   useEffect(() => {
     if (typeof window !== 'undefined') {
-        const audio = new Audio('/musichead.mp3');
-        audio.play().catch(error => console.error('Error playing audio:', error));
-        return () => {
-            audio.pause();
-            audio.currentTime = 0;
-        };
+      const audio = new Audio('/musichead.mp3');
+      audio
+        .play()
+        .catch((error) => console.error('Error playing audio:', error));
+      return () => {
+        audio.pause();
+        audio.currentTime = 0;
+      };
     }
-   }, []);
+  }, []);
 
   const getScoreColor = (score: number) => {
     if (score <= 2) return '#DA4946';
@@ -31,7 +27,7 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
     return '#6BDA46';
   };
 
-  const scoreColor = getScoreColor(score);
+  const scoreColor = getScoreColor(state.score);
 
   const getMessage = (score: number) => {
     if (score === 0) return 'Wetin happen? Did someone hit the mute button?';
@@ -41,7 +37,7 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
 
   // Handle sharing the score on Twitter
   const handleShare = () => {
-    const tweetText = `I scored ${score} points in Music Head on Loudronline! Can you beat my score? #MusicHead #Loudronline https://www.loudr.online/games/music-head/`;
+    const tweetText = `I scored ${state.score} points in Music Head on Loudronline! Can you beat my score? #MusicHead #Loudronline https://www.loudr.online/games/music-head/`;
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       tweetText
     )}`;
@@ -50,6 +46,23 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
       window.open(tweetUrl, '_blank');
     } else {
       console.error('Unable to open new window for sharing.');
+    }
+  };
+
+  const handlePlayAgain = async () => {
+    if (state.isCouchPlay) {
+      try {
+        const nextSong = await getRandomSong();
+        dispatch({ type: 'NEXT_SONG', payload: nextSong });
+      } catch (error) {
+        console.error('Failed to get next song:', error);
+      }
+    } else {
+      if (
+        canPlayToday(state.lastPlayedDate, state.currentSongId, currentSong.id)
+      ) {
+        dispatch({ type: 'RESET_GAME' });
+      }
     }
   };
 
@@ -64,7 +77,7 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
             className="text-5xl font-bold mb-2"
             style={{ color: scoreColor }}
           >
-            {score}
+            {state.score}
           </span>
           <span
             className="text-lg font-semibold uppercase tracking-wider"
@@ -74,13 +87,13 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
           </span>
         </div>
         <h2 className="text-lgfont-semibold mb-8 font-larken text-center">
-          {getMessage(score)}
+          {getMessage(state.score)}
         </h2>
       </div>
 
-      {isCouchPlay ? (
+      {state.isCouchPlay ? (
         <button
-          onClick={onPlayAgain}
+          onClick={handlePlayAgain}
           className="bg-black text-white dark:bg-white dark:text-black w-full max-w-xs py-5 rounded-md font-semibold mb-4 hover:scale-105 transition-transform duration-300"
         >
           NEXT SONG

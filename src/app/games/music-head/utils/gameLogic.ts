@@ -1,3 +1,9 @@
+import {
+  decryptData,
+  encryptData,
+} from '@/app/games/music-head/utils/encryption';
+import { GAME_STATE_KEY } from '@/app/games/music-head/context/GameContext';
+
 export interface Song {
   id: string;
   title: string;
@@ -21,15 +27,17 @@ export interface GameState {
 
 export type GameAction =
   | { type: 'LOAD_SONG'; payload: Song }
-  | { type: 'MAKE_GUESS'; payload: string }
+  | { type: 'MAKE_GUESS'; payload: { guess: string; isCorrect: boolean } }
   | { type: 'SKIP' }
   | { type: 'PLAY' }
   | { type: 'PAUSE' }
   | { type: 'UPDATE_PLAYBACK_TIME'; payload: number }
   | { type: 'END_GAME' }
   | { type: 'RESET_GAME' }
-  | { type: 'TOGGLE_COUCH_PLAY' }
-  | { type: 'NEXT_SONG'; payload: Song };
+  | { type: 'NEXT_SONG'; payload: Song }
+  | { type: 'SWITCH_TO_COUCH_PLAY'; payload: Song }
+  | { type: 'SWITCH_TO_DAILY_MODE'; payload: Song }
+  | { type: 'RESTORE_STATE'; payload: Partial<GameState> };
 
 export const initialState: GameState = {
   currentSong: null,
@@ -59,14 +67,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       return state;
     case 'MAKE_GUESS':
       if (state.currentSong) {
-        const normalizedGuess = action.payload.toLowerCase();
-        const normalizedTitle = state.currentSong.title.toLowerCase();
-
-        const isCorrect =
-          normalizedGuess.includes(normalizedTitle) ||
-          normalizedTitle.includes(normalizedGuess);
-
-        if (isCorrect) {
+        if (action.payload.isCorrect) {
           const roundScore = calculateFinalScore(
             state.skipsUsed,
             state.incorrectGuesses
@@ -78,12 +79,22 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
             lastPlayedDate: !state.isCouchPlay
               ? new Date().toISOString()
               : state.lastPlayedDate,
+            currentSongId: state.currentSong.id,
           };
         }
+        const newIncorrectGuesses = state.incorrectGuesses + 1;
+        const gameEnded = newIncorrectGuesses >= 3;
         return {
           ...state,
-          incorrectGuesses: state.incorrectGuesses + 1,
-          gameEnded: state.incorrectGuesses >= 2,
+          incorrectGuesses: newIncorrectGuesses,
+          gameEnded,
+          // Set these values if game ends due to too many incorrect guesses
+          ...(gameEnded && !state.isCouchPlay
+            ? {
+                lastPlayedDate: new Date().toISOString(),
+                currentSongId: state.currentSong.id,
+              }
+            : {}),
         };
       }
       return state;
@@ -123,17 +134,96 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         currentSongId: state.currentSongId,
         lastPlayedDate: new Date().toISOString(),
       };
-    case 'TOGGLE_COUCH_PLAY':
-      return {
-        ...initialState,
-        isCouchPlay: !state.isCouchPlay,
-        currentSongId: state.currentSongId,
-      };
     case 'NEXT_SONG':
       return {
         ...initialState,
         currentSong: action.payload,
         isCouchPlay: true,
+      };
+    case 'SWITCH_TO_COUCH_PLAY':
+      const stateToSave = {
+        score: state.score,
+        skipsUsed: state.skipsUsed,
+        incorrectGuesses: state.incorrectGuesses,
+        gameEnded: state.gameEnded,
+        lastPlayedDate: state.lastPlayedDate,
+        currentSongId: state.currentSongId,
+      };
+      console.log('saving backup state');
+      console.log(stateToSave);
+
+      localStorage.setItem(
+        GAME_STATE_KEY + '_daily_backup',
+        encryptData(stateToSave)
+      );
+      console.log('switched to couch play');
+
+      return {
+        ...initialState,
+        isCouchPlay: true,
+        currentSong: action.payload,
+        currentSongId: action.payload.id,
+      };
+    case 'SWITCH_TO_DAILY_MODE':
+      const savedState = localStorage.getItem(GAME_STATE_KEY);
+      const dailyBackup = localStorage.getItem(
+        GAME_STATE_KEY + '_daily_backup'
+      );
+
+      // First check the backup state (from current session)
+      if (dailyBackup) {
+        try {
+          const backupState = decryptData(dailyBackup);
+          // If backup state exists and is for the current song
+          if (backupState.currentSongId === action.payload.id) {
+            console.log('using backup state');
+            console.log(backupState);
+            return {
+              ...backupState,
+              currentSong: action.payload,
+              isCouchPlay: false,
+            };
+          } else {
+            console.log('backup state is for a different song');
+            localStorage.removeItem(GAME_STATE_KEY + '_daily_backup');
+          }
+        } catch (error) {
+          console.error('Failed to load daily backup state:', error);
+        }
+      }
+
+      if (savedState) {
+        try {
+          const decryptedState = decryptData(savedState);
+          if (!decryptedState.isCouchPlay) {
+            const canPlay = canPlayToday(
+              decryptedState.lastPlayedDate,
+              decryptedState.currentSongId,
+              action.payload.id
+            );
+            return {
+              ...decryptedState,
+              currentSong: action.payload,
+              isCouchPlay: false,
+              gameEnded: !canPlay || decryptedState.gameEnded,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to load saved daily state:', error);
+        }
+      }
+
+      // If no valid saved state or backup, start fresh
+      return {
+        ...initialState,
+        isCouchPlay: false,
+        currentSong: action.payload,
+        currentSongId: action.payload.id,
+      };
+    case 'RESTORE_STATE':
+      return {
+        ...state,
+        ...action.payload,
       };
     default:
       return state;
@@ -154,12 +244,17 @@ export function canPlayToday(
   currentSongId: string | null,
   savedSongId: string
 ): boolean {
-  if (!lastPlayedDate || !currentSongId) return true;
+  // If we're missing either date or song ID, only allow play if in couch mode
+  if (!lastPlayedDate || !currentSongId) {
+    return true;
+  }
 
-  // Allow play if it's a new song
-  if (currentSongId !== savedSongId) return true;
+  // Always allow play if it's a different song
+  if (currentSongId !== savedSongId) {
+    return true;
+  }
 
-  // Check if last played was on a different day
+  // For same song, check if it's a different day
   const lastPlayed = new Date(lastPlayedDate);
   const today = new Date();
   return lastPlayed.toDateString() !== today.toDateString();

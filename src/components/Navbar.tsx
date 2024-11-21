@@ -97,6 +97,9 @@ export default function Navbar() {
         <SearchBar />
       </nav>
       <div className="h-[100px] md:block hidden"></div>
+      <div className="hidden md:block">
+        {pathname.includes('/games/music-head/game') && <GameNav />}
+      </div>
       <MobileNavbar />
       <About
         isOpen={isAboutOpen}

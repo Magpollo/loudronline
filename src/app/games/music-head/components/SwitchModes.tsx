@@ -1,17 +1,18 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
+import { useGame } from '../context/GameContext';
+import { dailySong } from '../context/GameContext';
+import { getRandomSong } from '../utils/spotifyApi';
 
 export default function SwitchModes({
   toggleGameModes,
-  toggleCouchPlay,
-  isCouchPlay,
 }: {
   toggleGameModes: () => void;
-  toggleCouchPlay: () => void;
-  isCouchPlay: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const { state, dispatch } = useGame();
+  const dailyModeSong = useMemo(() => dailySong, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -26,11 +27,22 @@ export default function SwitchModes({
     };
   }, [toggleGameModes]);
 
-  const handleModeChange = (mode: 'daily' | 'couch') => {
-    if (mode === 'daily' && isCouchPlay) {
-      toggleCouchPlay();
-    } else if (mode === 'couch' && !isCouchPlay) {
-      toggleCouchPlay();
+  const handleModeChange = async (mode: 'daily' | 'couch') => {
+    if (mode === 'daily' && state.isCouchPlay) {
+      dispatch({
+        type: 'SWITCH_TO_DAILY_MODE',
+        payload: dailySong,
+      });
+    } else if (mode === 'couch' && !state.isCouchPlay) {
+      try {
+        const nextSong = await getRandomSong();
+        dispatch({
+          type: 'SWITCH_TO_COUCH_PLAY',
+          payload: nextSong,
+        });
+      } catch (error) {
+        console.error('Failed to get next song:', error);
+      }
     }
     toggleGameModes();
   };
@@ -76,14 +88,14 @@ export default function SwitchModes({
         </div>
         <h2 className="text-2xl font-semibold my-5">Game Mode</h2>
         <form className="w-full space-y-4 font-plus-jakarta">
-          <div className="relative w-full">
+          <div className="relative w-full z-[1000]">
             <input
               type="radio"
               id="daily-mode"
               name="game-mode"
-              checked={!isCouchPlay}
+              checked={!state.isCouchPlay}
               onChange={() => handleModeChange('daily')}
-              className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              className="absolute inset-0 opacity-0 cursor-pointer z-100"
             />
             <label
               htmlFor="daily-mode"
@@ -98,9 +110,9 @@ export default function SwitchModes({
                   </p>
                 </div>
                 <div
-                  className={`w-6 h-6 rounded-full border-2 border-gray-400 dark:border-white p-1`}
+                  className={`w-4 md:w-6 h-4 md:h-6 rounded-full border-2 border-gray-400 dark:border-white p-1`}
                 >
-                  {!isCouchPlay && (
+                  {!state.isCouchPlay && (
                     <div className="w-full h-full rounded-full bg-gray-400 dark:bg-white" />
                   )}
                 </div>
@@ -113,9 +125,9 @@ export default function SwitchModes({
               type="radio"
               id="couch-mode"
               name="game-mode"
-              checked={isCouchPlay}
+              checked={state.isCouchPlay}
               onChange={() => handleModeChange('couch')}
-              className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              className="absolute inset-0 opacity-0 cursor-pointer z-100"
             />
             <label
               htmlFor="couch-mode"
@@ -129,9 +141,9 @@ export default function SwitchModes({
                   </p>
                 </div>
                 <div
-                  className={`w-6 h-6 rounded-full border-2 border-gray-400 dark:border-white p-1`}
+                  className={`w-4 md:w-6 h-4 md:h-6 rounded-full border-2 border-gray-400 dark:border-white p-1`}
                 >
-                  {isCouchPlay && (
+                  {state.isCouchPlay && (
                     <div className="w-full h-full rounded-full bg-gray-400 dark:bg-white" />
                   )}
                 </div>

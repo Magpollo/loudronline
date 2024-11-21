@@ -1,134 +1,29 @@
 'use client';
 
-import {
-  gameReducer,
-  initialState,
-  GameState,
-  GameAction,
-  Song,
-  canPlayToday,
-} from '../utils/gameLogic';
-import { useReducer, useEffect, useState, useMemo } from 'react';
+import { useGame } from '../context/GameContext';
+import { useState, useEffect } from 'react';
 import SearchSongs from '@/app/games/music-head/components/SearchSongs';
 import AudioPlayer from '@/app/games/music-head/components/AudioPlayer';
-import {
-  encryptData,
-  decryptData,
-} from '@/app/games/music-head/utils/encryption';
 import SuccessScreen from '@/app/games/music-head/components/SuccessScreen';
-import { currentSong } from '@/app/games/music-head/utils/currentSong';
-import GameNav from '@/app/games/music-head/components/GameNav';
-
-const GAME_STATE_KEY = 'musichead_game_state';
+import { dailySong } from '@/app/games/music-head/context/GameContext';
 
 export default function MusicHead() {
-  const [state, dispatch] = useReducer(gameReducer, initialState, (initial) => {
-    if (typeof window !== 'undefined') {
-      const savedState = localStorage.getItem(GAME_STATE_KEY);
-      if (savedState) {
-        try {
-          const decryptedState = decryptData(savedState);
-          if (
-            !decryptedState.isCouchPlay &&
-            !canPlayToday(
-              decryptedState.lastPlayedDate,
-              decryptedState.currentSongId,
-              currentSong.id
-            )
-          ) {
-            return {
-              ...decryptedState,
-              gameEnded: true,
-              isPlayable: false,
-            };
-          }
-          return {
-            ...initial,
-            ...decryptedState,
-            currentSongId: currentSong.id,
-          };
-        } catch (error) {
-          console.error('Failed to load saved game state:', error);
-        }
-      }
-    }
-    return {
-      ...initial,
-      currentSongId: currentSong.id,
-    };
-  });
-
+  const { state, dispatch } = useGame();
   const [guess, setGuess] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
   const [showTryAgain, setShowTryAgain] = useState(false);
-
-  // Load daily song from songs array
-  const dailySong = useMemo(
-    () => ({
-      id: currentSong.id,
-      title: currentSong.title,
-      artist: currentSong.artist,
-      previewUrl: `/songs/${currentSong.filename}?v=${currentSong.fileVersion}`,
-    }),
-    []
-  );
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const initializeGame = async () => {
-      if (state.currentSong === null) {
-        if (state.isCouchPlay) {
-          try {
-            const nextSong = await getRandomSong();
-            dispatch({ type: 'LOAD_SONG', payload: nextSong });
-          } catch (error) {
-            console.error('Failed to load random song:', error);
-            // Fallback to daily song if random song fails to load
-            dispatch({ type: 'LOAD_SONG', payload: dailySong });
-          }
-        } else {
-          dispatch({ type: 'LOAD_SONG', payload: dailySong });
-        }
-      }
-    };
-
-    initializeGame();
-  }, [state.currentSong, state.isCouchPlay, dailySong]); // Add isCouchPlay to dependencies
-
-  // Save game state to local storage every time it changes
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const stateToSave = {
-        score: state.score,
-        skipsUsed: state.skipsUsed,
-        incorrectGuesses: state.incorrectGuesses,
-        gameEnded: state.gameEnded,
-        playbackDuration: state.playbackDuration,
-        isCouchPlay: state.isCouchPlay,
-        lastPlayedDate: state.lastPlayedDate,
-        currentSongId: state.currentSongId,
-      };
-      localStorage.setItem(GAME_STATE_KEY, encryptData(stateToSave));
-    }
-  }, [
-    state.score,
-    state.skipsUsed,
-    state.incorrectGuesses,
-    state.gameEnded,
-    state.playbackDuration,
-    state.isCouchPlay,
-    state.lastPlayedDate,
-    state.currentSongId,
-  ]);
+    setMounted(true);
+  }, []);
 
   // Handle guess submission
   const handleGuess = () => {
-    dispatch({ type: 'MAKE_GUESS', payload: guess });
-
-    // Convert both strings to lowercase for case-insensitive comparison
+    if (!guess) return;
+    console.log('guess', guess);
     const normalizedGuess = guess.toLowerCase();
-    const normalizedTitle = dailySong.title.toLowerCase();
-
-    // Check if either string contains the other
+    const normalizedTitle = (state.currentSong?.title || '').toLowerCase();
     const isCorrect =
       normalizedGuess.includes(normalizedTitle) ||
       normalizedTitle.includes(normalizedGuess);
@@ -137,9 +32,18 @@ export default function MusicHead() {
       setShowTryAgain(true);
       setTimeout(() => {
         setShowTryAgain(false);
-      }, 2000); // Show "Try Again!" for 2 seconds
+      }, 2000);
     }
-    setGuess(''); // Clear the input after submitting
+
+    dispatch({
+      type: 'MAKE_GUESS',
+      payload: {
+        guess,
+        isCorrect,
+      },
+    });
+
+    setGuess('');
   };
 
   // Handle adding a second to the playback duration
@@ -147,75 +51,25 @@ export default function MusicHead() {
     if (state.skipsUsed < 2) {
       dispatch({ type: 'SKIP' });
       setShowTooltip(true);
-      setTimeout(() => setShowTooltip(false), 2000); // Hide tooltip after 2 seconds
-    }
-  };
-
-  // Get next random song for couch play
-  const getRandomSong = async (): Promise<Song> => {
-    const response = await fetch('/api/playlist-tracks');
-    const data = await response.json();
-    const tracks = data.tracks;
-    return tracks[Math.floor(Math.random() * tracks.length)];
-  };
-
-  const handlePlayAgain = async () => {
-    if (state.isCouchPlay) {
-      try {
-        const nextSong = await getRandomSong();
-        dispatch({ type: 'NEXT_SONG', payload: nextSong });
-      } catch (error) {
-        console.error('Failed to get next song:', error);
-      }
-    } else {
-      if (
-        canPlayToday(state.lastPlayedDate, state.currentSongId, currentSong.id)
-      ) {
-        dispatch({ type: 'RESET_GAME' });
-      }
-    }
-  };
-
-  const handleToggleCouchPlay = async () => {
-    if (!state.isCouchPlay) {
-      // First get the random song
-      try {
-        const nextSong = await getRandomSong();
-        // Then toggle the mode and load the new song
-        dispatch({ type: 'TOGGLE_COUCH_PLAY' });
-        dispatch({ type: 'LOAD_SONG', payload: nextSong });
-      } catch (error) {
-        console.error('Failed to get next song:', error);
-      }
-    } else {
-      // If switching back to daily mode, first toggle mode then load daily song
-      dispatch({ type: 'TOGGLE_COUCH_PLAY' });
-      dispatch({ type: 'LOAD_SONG', payload: dailySong });
+      setTimeout(() => setShowTooltip(false), 2000);
     }
   };
 
   if (state.gameEnded) {
-    return (
-      <SuccessScreen
-        score={state.score}
-        isCouchPlay={state.isCouchPlay}
-        onPlayAgain={handlePlayAgain}
-      />
-    );
+    return <SuccessScreen />;
+  }
+
+  // Ensure the component is mounted before rendering attempts left
+  if (!mounted) {
+    return null; // or a loading spinner if desired
   }
 
   return (
     <section className="py-10 text-center h-full font-larken overflow-hidden">
-      <GameNav
-        toggleCouchPlay={handleToggleCouchPlay}
-        isCouchPlay={state.isCouchPlay}
-      />
       <div className="mt-5 w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
         <div className="w-full max-w-xs md:max-w-lg mb-8 p-4 rounded-md dark:bg-[#141818] bg-gray-400 flex flex-col justify-center">
           <AudioPlayer
             audioSrc={state.currentSong?.previewUrl || dailySong.previewUrl}
-            gameState={state}
-            dispatch={dispatch}
           />
           <SearchSongs
             guess={guess}

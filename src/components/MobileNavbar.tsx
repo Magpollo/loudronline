@@ -7,6 +7,7 @@ import MenuIcon from '@/assets/icons/menu';
 import Image from 'next/image';
 import About from './About';
 import SearchBar from './SearchBar';
+import GameNav from '@/app/games/music-head/components/GameNav';
 
 export default function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -112,7 +113,7 @@ export default function MobileNavbar() {
         <div className="w-full h-fit flex flex-row justify-between items-center p-3 border-b border-slate-300 dark:border-[#24272A]">
           {/* Music head game icons */}
           {pathname.includes('/games/music-head/game') ? (
-            <div className="w-20"></div>
+            <GameNav />
           ) : (
             <SearchBar mobile={true} />
           )}

@@ -8,6 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from '@/utils/theme';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { GameProvider } from '@/app/games/music-head/context/GameContext';
 
 export default function Providers({ children, ...props }: ThemeProviderProps) {
   return (
@@ -17,9 +18,11 @@ export default function Providers({ children, ...props }: ThemeProviderProps) {
     >
       <CacheProvider>
         <ChakraProvider theme={theme}>
-          <Analytics />
-          <SpeedInsights />
-          {children}
+          <GameProvider>
+            <Analytics />
+            <SpeedInsights />
+            {children}
+          </GameProvider>
         </ChakraProvider>
       </CacheProvider>
     </NextThemeProvider>

@@ -25,7 +25,7 @@ export const songs = [
   },
   {
     id: 'kelekele',
-    title: 'Kele Kele Love',
+    title: 'Kele Kele',
     artist: 'Tiwa Savage',
     filename: 'Tiwa Savage - Kele Kele Love.mp3',
   },

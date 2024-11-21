@@ -50,7 +50,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
 
   return (
     <section className="w-full font-plus-jakarta mb-10 relative">
-      <div className="w-full relative z-50">
+      <div className="w-full relative ">
         <input
           type="text"
           placeholder="Guess here..."
@@ -59,7 +59,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
           onChange={handleInputChange}
         />
         {suggestions.length > 0 && (
-          <ul className="absolute w-full dark:bg-[#24272A] bg-gray-400 mt-1 max-h-60 overflow-y-auto rounded-md">
+          <ul className="absolute z-50 w-full dark:bg-[#24272A] bg-gray-400 mt-1 max-h-60 overflow-y-auto rounded-md">
             {suggestions.map((song) => (
               <li
                 key={song.id}
