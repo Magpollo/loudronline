@@ -12,18 +12,21 @@ import {
   initialState,
   GameState,
   GameAction,
+  canPlayToday,
+  shouldResetState,
 } from '../utils/gameLogic';
 import { encryptData, decryptData } from '../utils/encryption';
 import { currentSong } from '../utils/currentSong';
-import { canPlayToday, Song } from '../utils/gameLogic';
+import { Song } from '../utils/gameLogic';
 
-export const GAME_STATE_KEY = 'musichead_game_state';
+export const GAME_STATE_KEY = 'musichead_game_state'; // Key for saved game state
 
 interface GameContextType {
   state: GameState;
   dispatch: React.Dispatch<GameAction>;
 }
 
+// Formatted daily song object
 export const dailySong: Song = {
   id: currentSong.id,
   title: currentSong.title,
@@ -44,7 +47,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    // Set mounted to true after the first render
     setMounted(true);
+
+    // Get saved state and daily backup
     const savedState = localStorage.getItem(GAME_STATE_KEY);
     const dailyBackup = localStorage.getItem(GAME_STATE_KEY + '_daily_backup');
 
@@ -52,14 +58,32 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       try {
         const decryptedState = decryptData(savedState);
 
-        // First check if we have a daily backup
+        // Check if we need to reset state due to song change
+        if (shouldResetState(decryptedState.currentSongId, currentSong.id)) {
+          // Clear all stored states
+          localStorage.removeItem(GAME_STATE_KEY);
+          localStorage.removeItem(GAME_STATE_KEY + '_daily_backup');
+
+          // Start fresh with new song
+          dispatch({
+            type: 'RESTORE_STATE',
+            payload: {
+              ...initialState,
+              currentSong: dailySong,
+              currentSongId: currentSong.id,
+            },
+          });
+          return;
+        }
+
+        // If a daily backup exists and is for the current song
         if (dailyBackup) {
           try {
             const backupState = decryptData(dailyBackup);
-            // If backup state exists and is for the current song
             if (backupState.currentSongId === currentSong.id) {
-              console.log('Using daily backup state on init');
+              // Remove the daily backup after restoring
               localStorage.removeItem(GAME_STATE_KEY + '_daily_backup');
+              // Restore the state
               dispatch({
                 type: 'RESTORE_STATE',
                 payload: {
@@ -68,7 +92,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
                   isCouchPlay: false,
                 },
               });
-              return; // Exit early to prevent overwriting with saved state
+              return;
             }
           } catch (error) {
             console.error('Failed to load daily backup state:', error);
@@ -77,22 +101,23 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
         // Only restore saved state if it's not couch play mode
         if (!decryptedState.isCouchPlay) {
+          // Check if we can play today
           const canPlay = canPlayToday(
             decryptedState.lastPlayedDate,
             decryptedState.currentSongId,
             currentSong.id
           );
 
+          // Restore the state, but reset the game if we can't play today or the game has ended
           dispatch({
             type: 'RESTORE_STATE',
             payload: {
               ...decryptedState,
               currentSong: dailySong,
-              gameEnded: !canPlay || decryptedState.gameEnded,
+              gameEnded: !canPlay || decryptedState.gameEnded, // If we can't play today, or the game has ended, reset the game
             },
           });
         }
-        // If it is couch play mode, we ignore it and keep initial state
       } catch (error) {
         console.error('Failed to load saved game state:', error);
       }

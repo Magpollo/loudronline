@@ -244,7 +244,7 @@ export function canPlayToday(
   currentSongId: string | null,
   savedSongId: string
 ): boolean {
-  // If we're missing either date or song ID, only allow play if in couch mode
+  // If we're missing either date or song ID, allow play
   if (!lastPlayedDate || !currentSongId) {
     return true;
   }
@@ -258,4 +258,18 @@ export function canPlayToday(
   const lastPlayed = new Date(lastPlayedDate);
   const today = new Date();
   return lastPlayed.toDateString() !== today.toDateString();
+}
+
+// Add new function to check if state needs reset
+export function shouldResetState(
+  currentSongId: string | null,
+  savedSongId: string
+): boolean {
+  // If there's no saved song ID, no need to reset
+  if (!currentSongId) {
+    return false;
+  }
+
+  // Reset if the song has changed
+  return currentSongId !== savedSongId;
 }
