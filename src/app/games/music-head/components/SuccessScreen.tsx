@@ -5,27 +5,23 @@ import { useGame } from '@/app/games/music-head/context/GameContext';
 import { getRandomSong } from '@/app/games/music-head/utils/spotifyApi';
 import { canPlayToday } from '@/app/games/music-head/utils/gameLogic';
 import { currentSong } from '@/app/games/music-head/utils/currentSong';
-import Link from 'next/link';
-
-
-}
 
 const SuccessScreen: React.FC = () => {
   const { state, dispatch } = useGame();
-  
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
-    useEffect(() => {
-      const playAudio = async () => {
-        if (audioRef.current) {
-          try {
-            await audioRef.current.play();
-          } catch (error) {
-            console.error('Error playing audio:', error);
-          }
+  useEffect(() => {
+    const playAudio = async () => {
+      if (audioRef.current) {
+        try {
+          await audioRef.current.play();
+        } catch (error) {
+          console.error('Error playing audio:', error);
         }
-      };
-      playAudio();
-    }, []);
+      }
+    };
+    playAudio();
+  }, []);
 
   const getScoreColor = (score: number) => {
     if (score <= 2) return '#DA4946';
@@ -74,7 +70,10 @@ const SuccessScreen: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-full bg-white dark:bg-[#1d2023] text-white p-4">
-      <audio ref={audioRef} src={audioSrc} />
+      <audio
+        ref={audioRef}
+        src={state.currentSong?.previewUrl}
+      />
       <div className="my-10 w-full max-w-xs rounded-md dark:bg-[#141818] bg-gray-400 py-5 px-2 flex flex-col justify-center items-center mx-auto">
         <div
           className="w-32 h-32 p-3 mt-3 mb-7 rounded-full flex flex-col items-center justify-center font-langar"
