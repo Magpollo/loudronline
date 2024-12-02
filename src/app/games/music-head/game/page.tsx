@@ -91,7 +91,7 @@ export default function MusicHead() {
         <div className="flex items-center w-full max-w-xs md:max-w-lg relative z-0 space-x-4">
           <button
             onClick={handleAddSecond}
-            className="dark:bg-white dark:text-black bg-black text-white font-bold px-3 py-6 flex-shrink-0 rounded-md relative hover:scale-105 transition-transform duration-300"
+            className="bg-loudr-yellow2 text-black font-bold px-3 py-6 flex-shrink-0 rounded-md relative hover:scale-105 transition-transform duration-300"
             style={{ flexBasis: '30%' }}
             disabled={state.skipsUsed === 2}
           >
