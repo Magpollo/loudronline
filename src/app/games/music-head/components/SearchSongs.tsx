@@ -54,7 +54,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
         <input
           type="text"
           placeholder="Guess here..."
-          className="w-full p-3 dark:text-white dark:bg-[#24272A] bg-white/60 text-black rounded-md"
+          className="w-full p-3 bg-white dark:bg-[#24272A] text-black dark:text-white rounded-md outline-none focus:outline-none focus:border-loudr-yellow2 border-2 border-transparent"
           value={inputValue}
           onChange={handleInputChange}
         />

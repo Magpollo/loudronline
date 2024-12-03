@@ -67,7 +67,7 @@ export default function MusicHead() {
   return (
     <section className="py-10 text-center h-full font-larken overflow-hidden">
       <div className="mt-5 w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
-        <div className="w-full max-w-xs md:max-w-lg mb-4 p-6 rounded-md dark:bg-[#141818] bg-gray-400 flex flex-col justify-center">
+        <div className="w-full max-w-xs md:max-w-lg mb-4 p-6 rounded-md dark:bg-[#141818] bg-[#F3F3F3] flex flex-col justify-center">
           <AudioPlayer
             audioSrc={state.currentSong?.previewUrl || dailySong.previewUrl}
           />
@@ -91,7 +91,11 @@ export default function MusicHead() {
         <div className="flex items-center w-full max-w-xs md:max-w-lg relative z-0 space-x-4">
           <button
             onClick={handleAddSecond}
-            className="bg-loudr-yellow2 text-black font-bold px-3 py-6 flex-shrink-0 rounded-md relative hover:scale-105 transition-transform duration-300"
+            className={`font-bold px-3 py-6 flex-shrink-0 rounded-md relative transition-transform duration-300 ${
+              state.skipsUsed === 2
+                ? 'dark:bg-white/10 dark:text-white bg-black/30 text-white hover:scale-100'
+                : 'bg-loudr-yellow2 text-black hover:scale-105'
+            }`}
             style={{ flexBasis: '30%' }}
             disabled={state.skipsUsed === 2}
           >
