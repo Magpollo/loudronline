@@ -82,13 +82,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc }) => {
       <audio ref={audioRef} />
       <button
         onClick={togglePlay}
-        className="flex-shrink-0 w-10 h-10 bg-transparent border-2 border-white rounded-full flex items-center justify-center"
+        className="flex-shrink-0 w-10 h-10 bg-transparent border-2 border-black dark:border-white rounded-full flex items-center justify-center"
         disabled={!audioLoaded}
       >
         {state.isPlaying ? (
-          <span className="text-white text-xl mb-1">■</span>
+          <span className="text-black dark:text-white text-xl mb-1">■</span>
         ) : (
-          <span className="text-white text-xl">
+          <span className="text-black dark:text-white text-xl">
             <svg
               width="14"
               height="15"
@@ -98,8 +98,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc }) => {
             >
               <path
                 d="M2.92627 1.87109L11.086 7.11662L2.92627 12.3621V1.87109Z"
-                fill="white"
-                stroke="white"
+                fill="currentColor"
+                stroke="currentColor"
                 strokeWidth="1.16567"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -108,9 +108,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioSrc }) => {
           </span>
         )}
       </button>
-      <div className="flex-grow h-2 bg-white/30 rounded-full overflow-hidden">
+      <div className="flex-grow h-2 bg-white dark:bg-white/30 rounded-full overflow-hidden">
         <div
-          className="h-full bg-white transition-all duration-200"
+          className="h-full bg-black dark:bg-white transition-all duration-200"
           style={{
             width: `${visualProgress() * 100 * maxProgress()}%`,
           }}

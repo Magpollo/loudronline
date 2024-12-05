@@ -97,10 +97,10 @@ export default function MusicHead() {
         <div className="flex items-center w-full max-w-xs md:max-w-lg relative z-0 space-x-4">
           <button
             onClick={handleAddSecond}
-            className={`font-bold px-3 py-6 flex-shrink-0 rounded-md relative hover:scale-105 transition-transform duration-300 ${
+            className={`font-bold px-3 py-6 flex-shrink-0 rounded-md relative transition-transform duration-300 ${
               state.skipsUsed === 2
                 ? 'dark:bg-white/10 dark:text-white bg-black/30 text-white hover:scale-100'
-                : 'dark:bg-white dark:text-black bg-black text-white'
+                : 'bg-loudr-yellow2 text-black hover:scale-105'
             }`}
             style={{ flexBasis: '30%' }}
             disabled={state.skipsUsed === 2}

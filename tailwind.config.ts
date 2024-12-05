@@ -20,7 +20,7 @@ const config: Config = {
         langar: 'var(--font-langar)',
       },
       colors: {
-        'loudr-yellow': '#FFC843',
+        'loudr-yellow': '#FFC843', 'loudr-yellow2': '#FF9D12', 'loudr-red': '#95426A',
       },
     },
   },
