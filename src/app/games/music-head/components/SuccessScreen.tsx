@@ -3,10 +3,13 @@
 import React, { useEffect, useRef } from 'react';
 import { useGame } from '@/app/games/music-head/context/GameContext';
 import { getRandomSong } from '@/app/games/music-head/utils/spotifyApi';
-import { canPlayToday } from '@/app/games/music-head/utils/gameLogic';
+import { canPlayToday, Song } from '@/app/games/music-head/utils/gameLogic';
 import { currentSong } from '@/app/games/music-head/utils/currentSong';
 
-const SuccessScreen: React.FC = () => {
+const SuccessScreen: React.FC<{
+  selectedSong: Song | null;
+  setSelectedSong: (song: Song | null) => void;
+}> = ({ selectedSong, setSelectedSong }) => {
   const { state, dispatch } = useGame();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -56,6 +59,7 @@ const SuccessScreen: React.FC = () => {
       try {
         const nextSong = await getRandomSong();
         dispatch({ type: 'NEXT_SONG', payload: nextSong });
+        setSelectedSong(null);
       } catch (error) {
         console.error('Failed to get next song:', error);
       }
@@ -64,6 +68,7 @@ const SuccessScreen: React.FC = () => {
         canPlayToday(state.lastPlayedDate, state.currentSongId, currentSong.id)
       ) {
         dispatch({ type: 'RESET_GAME' });
+        setSelectedSong(null);
       }
     }
   };
@@ -92,9 +97,22 @@ const SuccessScreen: React.FC = () => {
             POINTS
           </span>
         </div>
-        <h2 className="text-lgfont-semibold mb-8 font-larken text-center">
+        <h2 className="text-lgfont-semibold mb-3 font-larken text-center">
           {getMessage(state.score)}
         </h2>
+        {selectedSong && (
+          <div className="mt-4 mb-8 bg-loudr-yellow rounded-md p-4 flex items-center">
+            <img
+              src={selectedSong.albumCover}
+              alt={`${selectedSong.title} album cover`}
+              className="w-16 h-16 mr-4 rounded-md"
+            />
+            <div>
+              <p className="font-semibold text-black">{selectedSong.title}</p>
+              <p className="text-sm text-gray-700">{selectedSong.artist}</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {state.isCouchPlay ? (

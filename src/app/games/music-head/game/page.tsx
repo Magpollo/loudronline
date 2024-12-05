@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import SearchSongs from '@/app/games/music-head/components/SearchSongs';
 import AudioPlayer from '@/app/games/music-head/components/AudioPlayer';
 import SuccessScreen from '@/app/games/music-head/components/SuccessScreen';
-import { dailySong } from '@/app/games/music-head/context/GameContext';
+import { Song } from '@/app/games/music-head/utils/gameLogic';
 
 export default function MusicHead() {
   const { state, dispatch } = useGame();
@@ -13,6 +13,7 @@ export default function MusicHead() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showTryAgain, setShowTryAgain] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -56,7 +57,12 @@ export default function MusicHead() {
   };
 
   if (state.gameEnded) {
-    return <SuccessScreen />;
+    return (
+      <SuccessScreen
+        selectedSong={selectedSong}
+        setSelectedSong={setSelectedSong}
+      />
+    );
   }
 
   // Ensure the component is mounted before rendering attempts left
@@ -68,12 +74,12 @@ export default function MusicHead() {
     <section className="py-10 text-center h-full font-larken overflow-hidden">
       <div className="mt-5 w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
         <div className="w-full max-w-xs md:max-w-lg mb-4 p-6 rounded-md dark:bg-[#141818] bg-gray-400 flex flex-col justify-center">
-          <AudioPlayer
-            audioSrc={state.currentSong?.previewUrl || dailySong.previewUrl}
-          />
+          <AudioPlayer audioSrc={state.currentSong?.previewUrl || ''} />
           <SearchSongs
             guess={guess}
             setGuess={setGuess}
+            setSelectedSong={setSelectedSong}
+            selectedSong={selectedSong}
           />
           <h3 className="md:text-xl font-semibold mt-4 font-plus-jakarta">
             {showTryAgain ? (
@@ -91,14 +97,19 @@ export default function MusicHead() {
         <div className="flex items-center w-full max-w-xs md:max-w-lg relative z-0 space-x-4">
           <button
             onClick={handleAddSecond}
-            className="dark:bg-white dark:text-black bg-black text-white font-bold px-3 py-6 flex-shrink-0 rounded-md relative hover:scale-105 transition-transform duration-300"
+            className={`font-bold px-3 py-6 flex-shrink-0 rounded-md relative hover:scale-105 transition-transform duration-300 ${
+              state.skipsUsed === 2
+                ? 'dark:bg-white/10 dark:text-white bg-black/30 text-white hover:scale-100'
+                : 'dark:bg-white dark:text-black bg-black text-white'
+            }`}
             style={{ flexBasis: '30%' }}
             disabled={state.skipsUsed === 2}
           >
             +1 SEC
             {showTooltip && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-[#FF9D12] text-gray-900 px-2 py-1 rounded shadow z-10">
-                {2 - state.skipsUsed} skip{state.skipsUsed !== 1 ? 's' : ''} left
+              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#FF9D12] text-gray-900 px-4 py-2 rounded-lg shadow-lg z-50 whitespace-nowrap">
+                {2 - state.skipsUsed} skip{state.skipsUsed !== 1 ? 's' : ''}{' '}
+                left
               </div>
             )}
           </button>
@@ -115,7 +126,6 @@ export default function MusicHead() {
             SUBMIT GUESS
           </button>
         </div>
-
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
-import { dailySong } from '../context/GameContext';
+import { getTodaysSong } from '../utils/spotifyApi';
 import { getRandomSong } from '../utils/spotifyApi';
 
 export default function SwitchModes({
@@ -12,7 +12,7 @@ export default function SwitchModes({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { state, dispatch } = useGame();
-  const dailyModeSong = useMemo(() => dailySong, []);
+  const dailyModeSong = useMemo(async () => await getTodaysSong(), []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -29,9 +29,10 @@ export default function SwitchModes({
 
   const handleModeChange = async (mode: 'daily' | 'couch') => {
     if (mode === 'daily' && state.isCouchPlay) {
+      const song = await dailyModeSong;
       dispatch({
         type: 'SWITCH_TO_DAILY_MODE',
-        payload: dailySong,
+        payload: song,
       });
     } else if (mode === 'couch' && !state.isCouchPlay) {
       try {

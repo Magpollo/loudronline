@@ -14,11 +14,14 @@ import {
   GameAction,
   canPlayToday,
   shouldResetState,
-} from '../utils/gameLogic';
-import { encryptData, decryptData } from '../utils/encryption';
-import { currentSong } from '../utils/currentSong';
-import { Song } from '../utils/gameLogic';
-
+  Song,
+} from '@/app/games/music-head/utils/gameLogic';
+import {
+  encryptData,
+  decryptData,
+} from '@/app/games/music-head/utils/encryption';
+import { currentSong } from '@/app/games/music-head/utils/currentSong';
+import { getTodaysSong } from '@/app/games/music-head/utils/spotifyApi';
 export const GAME_STATE_KEY = 'musichead_game_state'; // Key for saved game state
 
 interface GameContextType {
@@ -26,100 +29,111 @@ interface GameContextType {
   dispatch: React.Dispatch<GameAction>;
 }
 
-// Formatted daily song object
-export const dailySong: Song = {
-  id: currentSong.id,
-  title: currentSong.title,
-  artist: currentSong.artist,
-  previewUrl: `/songs/${currentSong.filename}?v=${currentSong.fileVersion}`,
-};
-
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, {
     ...initialState,
-    currentSong: dailySong,
   });
   const [mounted, setMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Initialization effect
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    initializeGame()
+      .catch((error) => {
+        console.error('Failed to initialize game:', error);
+      })
+      .finally(() => {
+        setMounted(true);
+        setIsLoading(false);
+      });
 
-    // Set mounted to true after the first render
-    setMounted(true);
+    async function initializeGame() {
+      if (typeof window === 'undefined') return;
 
-    // Get saved state and daily backup
-    const savedState = localStorage.getItem(GAME_STATE_KEY);
-    const dailyBackup = localStorage.getItem(GAME_STATE_KEY + '_daily_backup');
+      const dailySong = await getTodaysSong();
 
-    if (savedState) {
-      try {
-        const decryptedState = decryptData(savedState);
+      dispatch({
+        type: 'RESTORE_STATE',
+        payload: {
+          ...initialState,
+          currentSong: dailySong,
+          currentSongId: dailySong.id,
+        },
+      });
+      // Get saved state and daily backup
+      const savedState = localStorage.getItem(GAME_STATE_KEY);
+      const dailyBackup = localStorage.getItem(
+        GAME_STATE_KEY + '_daily_backup'
+      );
 
-        // Check if we need to reset state due to song change
-        if (shouldResetState(decryptedState.currentSongId, currentSong.id)) {
-          // Clear all stored states
-          localStorage.removeItem(GAME_STATE_KEY);
-          localStorage.removeItem(GAME_STATE_KEY + '_daily_backup');
+      if (savedState) {
+        try {
+          const decryptedState = decryptData(savedState);
 
-          // Start fresh with new song
-          dispatch({
-            type: 'RESTORE_STATE',
-            payload: {
-              ...initialState,
-              currentSong: dailySong,
-              currentSongId: currentSong.id,
-            },
-          });
-          return;
-        }
+          // Check if we need to reset state due to song change
+          if (shouldResetState(decryptedState.currentSongId, dailySong.id)) {
+            // Clear all stored states
+            localStorage.removeItem(GAME_STATE_KEY);
+            localStorage.removeItem(GAME_STATE_KEY + '_daily_backup');
 
-        // If a daily backup exists and is for the current song
-        if (dailyBackup) {
-          try {
-            const backupState = decryptData(dailyBackup);
-            if (backupState.currentSongId === currentSong.id) {
-              // Remove the daily backup after restoring
-              localStorage.removeItem(GAME_STATE_KEY + '_daily_backup');
-              // Restore the state
-              dispatch({
-                type: 'RESTORE_STATE',
-                payload: {
-                  ...backupState,
-                  currentSong: dailySong,
-                  isCouchPlay: false,
-                },
-              });
-              return;
-            }
-          } catch (error) {
-            console.error('Failed to load daily backup state:', error);
+            // Start fresh with new song
+            dispatch({
+              type: 'RESTORE_STATE',
+              payload: {
+                ...initialState,
+                currentSong: dailySong,
+                currentSongId: dailySong.id,
+              },
+            });
+            return;
           }
-        }
 
-        // Only restore saved state if it's not couch play mode
-        if (!decryptedState.isCouchPlay) {
-          // Check if we can play today
-          const canPlay = canPlayToday(
-            decryptedState.lastPlayedDate,
-            decryptedState.currentSongId,
-            currentSong.id
-          );
+          if (dailyBackup) {
+            try {
+              const backupState = decryptData(dailyBackup);
+              if (backupState.currentSongId === dailySong.id) {
+                // Remove daily backup after restoring
+                localStorage.removeItem(GAME_STATE_KEY + '_daily_backup');
 
-          // Restore the state, but reset the game if we can't play today or the game has ended
-          dispatch({
-            type: 'RESTORE_STATE',
-            payload: {
-              ...decryptedState,
-              currentSong: dailySong,
-              gameEnded: !canPlay || decryptedState.gameEnded, // If we can't play today, or the game has ended, reset the game
-            },
-          });
+                // Restore the state
+                dispatch({
+                  type: 'RESTORE_STATE',
+                  payload: {
+                    ...backupState,
+                    currentSong: dailySong,
+                    isCouchPlay: false,
+                  },
+                });
+                return;
+              }
+            } catch (error) {
+              console.error('Failed to load daily backup state:', error);
+            }
+          }
+
+          // Only restore saved state if it's not couch play mode
+          if (!decryptedState.isCouchPlay) {
+            const canPlay = canPlayToday(
+              decryptedState.lastPlayedDate,
+              decryptedState.currentSongId,
+              dailySong.id
+            );
+
+            // Restore the state, but reset the game if we can't play today or the game has ended
+            dispatch({
+              type: 'RESTORE_STATE',
+              payload: {
+                ...decryptedState,
+                currentSong: dailySong,
+                gameEnded: !canPlay || decryptedState.gameEnded,
+              },
+            });
+          }
+        } catch (error) {
+          console.error('Failed to load saved game state:', error);
         }
-      } catch (error) {
-        console.error('Failed to load saved game state:', error);
       }
     }
   }, []);
@@ -140,6 +154,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
     localStorage.setItem(GAME_STATE_KEY, encryptData(stateToSave));
   }, [state, mounted]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-loudr-yellow border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

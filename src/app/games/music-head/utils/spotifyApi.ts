@@ -111,3 +111,10 @@ export const getRandomSong = async (): Promise<Song> => {
   const tracks = data.tracks;
   return tracks[Math.floor(Math.random() * tracks.length)];
 };
+
+// Add this new function export
+export const getTodaysSong = async (): Promise<Song> => {
+  const response = await fetch('/api/daily-song');
+  const data = await response.json();
+  return data;
+};

@@ -48,8 +48,8 @@ export async function GET(request: Request) {
 
     const tracks = data.tracks.items.map((track: any) => ({
       id: track.id,
-      name: track.name,
-      artists: track.artists.map((artist: any) => artist.name),
+      title: track.name,
+      artist: track.artists.map((artist: any) => artist.name).join(', '),
       albumName: track.album.name,
       albumCover: track.album.images[0]?.url,
     }));

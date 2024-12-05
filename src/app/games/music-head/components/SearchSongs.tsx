@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { debounce } from 'lodash';
-
+import { Song } from '@/app/games/music-head/utils/gameLogic';
 interface SearchSongsProps {
   guess: string;
   setGuess: (guess: string) => void;
+  setSelectedSong: (song: Song | null) => void;
+  selectedSong: Song | null;
 }
 
-interface Song {
-  id: string;
-  name: string;
-  artists: string[];
-  albumCover: string;
-}
-
-export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
+export default function SearchSongs({
+  guess,
+  setGuess,
+  setSelectedSong,
+  selectedSong,
+}: SearchSongsProps) {
   const [suggestions, setSuggestions] = useState<Song[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
 
   const searchSongs = async (query: string) => {
     const response = await fetch(
@@ -42,7 +41,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
   };
 
   const handleSuggestionClick = (song: Song) => {
-    setGuess(`${song.name} - ${song.artists.join(', ')}`);
+    setGuess(`${song.title} - ${song.artist}`);
     setInputValue('');
     setSuggestions([]);
     setSelectedSong(song);
@@ -54,7 +53,7 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
         <input
           type="text"
           placeholder="Guess here..."
-          className="w-full p-3 dark:text-white dark:bg-[#24272A] bg-white/60 text-black rounded-md"
+          className="w-full border-loudr-yellow p-3 dark:text-white dark:bg-[#24272A] bg-white/60 text-black rounded-md"
           value={inputValue}
           onChange={handleInputChange}
         />
@@ -66,24 +65,22 @@ export default function SearchSongs({ guess, setGuess }: SearchSongsProps) {
                 className="p-2 hover:bg-white hover:text-black cursor-pointer text-white"
                 onClick={() => handleSuggestionClick(song)}
               >
-                {song.name} - {song.artists.join(', ')}
+                {song.title} - {song.artist}
               </li>
             ))}
           </ul>
         )}
       </div>
       {selectedSong && (
-        <div className="mt-4 bg-loudr-yellow rounded-md p-4 flex items-center">
+        <div className="mt-4 bg-[#B0A99E] rounded-md p-4 flex items-center">
           <img
             src={selectedSong.albumCover}
-            alt={`${selectedSong.name} album cover`}
+            alt={`${selectedSong.title} album cover`}
             className="w-16 h-16 mr-4 rounded-md"
           />
           <div>
-            <p className="font-semibold text-black">{selectedSong.name}</p>
-            <p className="text-sm text-gray-700">
-              {selectedSong.artists.join(', ')}
-            </p>
+            <p className="font-semibold text-black">{selectedSong.title}</p>
+            <p className="text-sm text-gray-700">{selectedSong.artist}</p>
           </div>
         </div>
       )}

@@ -9,6 +9,7 @@ export interface Song {
   title: string;
   artist: string;
   previewUrl: string;
+  albumCover?: string;
 }
 
 export interface GameState {
@@ -148,6 +149,8 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         gameEnded: state.gameEnded,
         lastPlayedDate: state.lastPlayedDate,
         currentSongId: state.currentSongId,
+        playbackDuration: state.playbackDuration,
+        currentPlaybackTime: state.currentPlaybackTime,
       };
       console.log('saving backup state');
       console.log(stateToSave);
