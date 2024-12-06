@@ -59,6 +59,8 @@ export async function getPlaylistTracks(): Promise<Song[]> {
     const accessToken = await getSpotifyAccessToken();
     const playlistId = process.env.SPOTIFY_PLAYLIST_ID;
 
+    console.log('Fetching playlist tracks with ID:', playlistId);
+
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks?fields=items(track(id,name,artists,preview_url))`,
       {
@@ -80,26 +82,39 @@ export async function getPlaylistTracks(): Promise<Song[]> {
 
     const data = await response.json();
 
+    console.log('Raw playlist data:', JSON.stringify(data));
+    console.log('Number of items:', data?.items?.length || 0);
+
     if (!data || !data.items) {
       throw new Error('Invalid response format from Spotify API');
     }
 
-    const tracks = data.items
-      .filter((item: any) => item?.track?.preview_url)
-      .map((item: any) => ({
-        id: item.track.id,
-        title: item.track.name,
-        artist: item.track.artists.map((artist: any) => artist.name).join(', '),
-        previewUrl: item.track.preview_url,
-      }));
+    console.log('Total tracks before filtering:', data.items.length);
+
+    const tracksWithPreviews = data.items.filter(
+      (item: any) => item?.track?.preview_url
+    );
+    console.log('Tracks with preview URLs:', tracksWithPreviews.length);
+
+    const tracks = tracksWithPreviews.map((item: any) => ({
+      id: item.track.id,
+      title: item.track.name,
+      artist: item.track.artists.map((artist: any) => artist.name).join(', '),
+      previewUrl: item.track.preview_url,
+    }));
 
     if (tracks.length === 0) {
-      throw new Error('No playable tracks found in playlist');
+      throw new Error(
+        `No playable tracks found in playlist (ID: ${playlistId})`
+      );
     }
 
     return tracks;
   } catch (error) {
     console.error('Error in getPlaylistTracks:', error);
+    if (error instanceof Error) {
+      throw new Error(`Playlist tracks error: ${error.message}`);
+    }
     throw error;
   }
 }
