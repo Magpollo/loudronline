@@ -73,7 +73,7 @@ export default function MusicHead() {
   return (
     <section className="py-10 text-center h-full font-larken overflow-hidden">
       <div className="mt-5 w-full h-full max-w-3xl mx-auto flex flex-col items-center justify-around">
-        <div className="w-full max-w-xs md:max-w-lg mb-4 p-6 rounded-md dark:bg-[#141818] bg-gray-400 flex flex-col justify-center">
+        <div className="w-full max-w-xs md:max-w-lg mb-4 p-6 rounded-md dark:bg-[#141818] bg-[#F3F3F3] flex flex-col justify-center">
           <AudioPlayer audioSrc={state.currentSong?.previewUrl || ''} />
           <SearchSongs
             guess={guess}
@@ -87,7 +87,13 @@ export default function MusicHead() {
                 Try Again!
               </span>
             ) : (
-              <span className="text-[#FF9D12] px-2 py-1 rounded-sm bg-[#FF9D12]/20">
+              <span
+                className={`${
+                  3 - state.incorrectGuesses === 1
+                    ? 'text-[#DA4946] bg-[#DA4946]/20'
+                    : 'text-[#FF9D12] bg-[#FF9D12]/20'
+                } px-2 py-1 rounded-sm`}
+              >
                 Attempts Left: {3 - state.incorrectGuesses}/3
               </span>
             )}
@@ -97,7 +103,7 @@ export default function MusicHead() {
         <div className="flex items-center w-full max-w-xs md:max-w-lg relative z-0 space-x-4">
           <button
             onClick={handleAddSecond}
-            className={`font-bold px-3 py-6 flex-shrink-0 rounded-md relative transition-transform duration-300 ${
+            className={`relative font-bold px-3 py-6 flex-shrink-0 rounded-md transition-transform duration-300 ${
               state.skipsUsed === 2
                 ? 'dark:bg-white/10 dark:text-white bg-black/30 text-white hover:scale-100'
                 : 'bg-loudr-yellow2 text-black hover:scale-105'
@@ -107,7 +113,7 @@ export default function MusicHead() {
           >
             +1 SEC
             {showTooltip && (
-              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#FF9D12] text-gray-900 px-4 py-2 rounded-lg shadow-lg z-50 whitespace-nowrap">
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-0 mt-2 bg-[#FF9D12] text-gray-900 px-4 py-2 rounded-lg shadow-lg z-[5000] whitespace-nowrap">
                 {2 - state.skipsUsed} skip{state.skipsUsed !== 1 ? 's' : ''}{' '}
                 left
               </div>

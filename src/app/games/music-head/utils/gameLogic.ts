@@ -224,9 +224,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         currentSongId: action.payload.id,
       };
     case 'RESTORE_STATE':
+      const skipsUsed = action.payload.skipsUsed || 0;
       return {
         ...state,
         ...action.payload,
+        playbackDuration: 1 + skipsUsed,
       };
     default:
       return state;

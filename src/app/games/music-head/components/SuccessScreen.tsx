@@ -36,6 +36,9 @@ const SuccessScreen: React.FC<{
 
   const getMessage = (score: number) => {
     if (score === 0) return 'Wetin happen? Did someone hit the mute button?';
+    if (score <= 2) return "Maybe singing in the shower isn't enough practice.";
+    if (score <= 8)
+      return "You're hitting the right notes... most of the time.";
     if (score === 10) return "Perfect score! You're a music genius!";
     return 'Good work, Sherlock!';
   };
@@ -101,7 +104,7 @@ const SuccessScreen: React.FC<{
           {getMessage(state.score)}
         </h2>
         {selectedSong && (
-          <div className="mt-4 mb-8 bg-loudr-yellow rounded-md p-4 flex items-center">
+          <div className="w-full mx-2 mt-4 mb-8 bg-[#B0A99E] rounded-md p-4 flex items-center">
             <img
               src={selectedSong.albumCover}
               alt={`${selectedSong.title} album cover`}
