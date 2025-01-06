@@ -4,7 +4,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useGame } from '@/app/games/music-head/context/GameContext';
 import { getRandomSong } from '@/app/games/music-head/utils/spotifyApi';
-import { canPlayToday, Song } from '@/app/games/music-head/utils/gameLogic';
+import { canPlayToday, Song } from '@/app/games/music-head/context/gameLogic';
 import { currentSong } from '@/app/games/music-head/utils/currentSong';
 
 const SuccessScreen: React.FC<{

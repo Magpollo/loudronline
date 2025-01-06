@@ -15,12 +15,11 @@ import {
   canPlayToday,
   shouldResetState,
   Song,
-} from '@/app/games/music-head/utils/gameLogic';
+} from '@/app/games/music-head/context/gameLogic';
 import {
   encryptData,
   decryptData,
 } from '@/app/games/music-head/utils/encryption';
-import { currentSong } from '@/app/games/music-head/utils/currentSong';
 import { getTodaysSong } from '@/app/games/music-head/utils/spotifyApi';
 export const GAME_STATE_KEY = 'musichead_game_state'; // Key for saved game state
 
@@ -36,7 +35,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     ...initialState,
   });
   const [mounted, setMounted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   // Initialization effect
   useEffect(() => {
@@ -46,7 +44,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       })
       .finally(() => {
         setMounted(true);
-        setIsLoading(false);
       });
 
     async function initializeGame() {
@@ -154,14 +151,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
     localStorage.setItem(GAME_STATE_KEY, encryptData(stateToSave));
   }, [state, mounted]);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-loudr-yellow border-t-transparent" />
-      </div>
-    );
-  }
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

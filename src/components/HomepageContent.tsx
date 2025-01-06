@@ -48,6 +48,7 @@ export default function HomeContent({
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, {
+            // clone the child element and add the ref
             ref: setRef,
           } as React.RefAttributes<HTMLDivElement>);
         }

@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 export default function FooterWrapper() {
   const pathname = usePathname();
 
-  // Add paths where you don't want to show the footer
+  //paths where you don't want to show the footer
   const hideFooterPaths = [
     '/games/music-head/game',
     '/games',

@@ -1,4 +1,6 @@
-import { Song } from './gameLogic';
+import { Song } from '@/app/games/music-head/context/gameLogic';
+import { getDailySong as getLocalTodaysSong } from './currentSong';
+import { songs } from './songs';
 
 interface SpotifyTrack {
   id: string;
@@ -15,9 +17,21 @@ interface PlaylistResponse {
   };
 }
 
+interface TokenCache {
+  accessToken: string;
+  expiresAt: number;
+}
+
+let tokenCache: TokenCache | null = null;
+
 async function getSpotifyAccessToken(): Promise<string> {
   if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
     throw new Error('Missing Spotify credentials in environment variables');
+  }
+
+  // Check if we have a valid cached token
+  if (tokenCache && tokenCache.expiresAt > Date.now()) {
+    return tokenCache.accessToken;
   }
 
   try {
@@ -43,6 +57,13 @@ async function getSpotifyAccessToken(): Promise<string> {
       throw new Error('No access token in response');
     }
 
+    // Cache the token with expiration
+    tokenCache = {
+      accessToken: data.access_token,
+      // Set expiration 5 minutes before actual expiry to be safe
+      expiresAt: Date.now() + (data.expires_in - 300) * 1000,
+    };
+
     return data.access_token;
   } catch (error) {
     console.error('Error getting Spotify token:', error);
@@ -51,85 +72,99 @@ async function getSpotifyAccessToken(): Promise<string> {
 }
 
 export async function getPlaylistTracks(): Promise<Song[]> {
-  if (!process.env.SPOTIFY_PLAYLIST_ID) {
-    throw new Error('Missing SPOTIFY_PLAYLIST_ID in environment variables');
-  }
-
   try {
+    // Try Spotify API first
+    if (!process.env.SPOTIFY_PLAYLIST_ID) {
+      throw new Error('Missing SPOTIFY_PLAYLIST_ID in environment variables');
+    }
+
     const accessToken = await getSpotifyAccessToken();
     const playlistId = process.env.SPOTIFY_PLAYLIST_ID;
 
-    console.log('Fetching playlist tracks with ID:', playlistId);
-
     const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistId}/tracks?fields=items(track(id,name,artists,preview_url))`,
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks?fields=items(track(id,name,artists,preview_url))&market=US`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        cache: 'no-store',
       }
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Spotify API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData,
-      });
+      if (response.status === 401) {
+        tokenCache = null;
+        return getPlaylistTracks();
+      }
       throw new Error(`Spotify API error: ${response.status}`);
     }
 
     const data = await response.json();
 
-    console.log('Raw playlist data:', JSON.stringify(data));
-    console.log('Number of items:', data?.items?.length || 0);
-
     if (!data || !data.items) {
       throw new Error('Invalid response format from Spotify API');
     }
 
-    console.log('Total tracks before filtering:', data.items.length);
-
-    const tracksWithPreviews = data.items.filter(
-      (item: any) => item?.track?.preview_url
-    );
-    console.log('Tracks with preview URLs:', tracksWithPreviews.length);
-
-    const tracks = tracksWithPreviews.map((item: any) => ({
-      id: item.track.id,
-      title: item.track.name,
-      artist: item.track.artists.map((artist: any) => artist.name).join(', '),
-      previewUrl: item.track.preview_url,
-    }));
+    const tracks = data.items
+      .filter((item: any) => item?.track?.preview_url)
+      .map((item: any) => ({
+        id: item.track.id,
+        title: item.track.name,
+        artist: item.track.artists.map((artist: any) => artist.name).join(', '),
+        previewUrl: item.track.preview_url,
+      }));
 
     if (tracks.length === 0) {
-      throw new Error(
-        `No playable tracks found in playlist (ID: ${playlistId})`
-      );
+      throw new Error('No playable tracks found in playlist');
     }
 
     return tracks;
   } catch (error) {
-    console.error('Error in getPlaylistTracks:', error);
-    if (error instanceof Error) {
-      throw new Error(`Playlist tracks error: ${error.message}`);
-    }
-    throw error;
+    console.warn('Falling back to local tracks:', error);
+    // Fallback to local songs
+    return songs.map((song) => ({
+      id: song.id,
+      title: song.title,
+      artist: song.artist,
+      previewUrl: `/songs/${song.filename}`,
+    }));
   }
 }
 
 // Get next random song for couch play
 export const getRandomSong = async (): Promise<Song> => {
-  const response = await fetch('/api/playlist-tracks');
-  const data = await response.json();
-  const tracks = data.tracks;
-  return tracks[Math.floor(Math.random() * tracks.length)];
+  try {
+    const response = await fetch('/api/playlist-tracks');
+    if (!response.ok) throw new Error('Failed to fetch playlist tracks');
+    const data = await response.json();
+    const tracks = data.tracks;
+    return tracks[Math.floor(Math.random() * tracks.length)];
+  } catch (error) {
+    console.warn('Falling back to local random song:', error);
+    const localSong = songs[Math.floor(Math.random() * songs.length)];
+    return {
+      id: localSong.id,
+      title: localSong.title,
+      artist: localSong.artist,
+      previewUrl: `/songs/${localSong.filename}`,
+    };
+  }
 };
 
-// Add this new function export
+// Get today's song
 export const getTodaysSong = async (): Promise<Song> => {
-  const response = await fetch('/api/daily-song');
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch('/api/daily-song');
+    if (!response.ok) throw new Error('Failed to fetch daily song');
+    return await response.json();
+  } catch (error) {
+    console.warn('Falling back to local daily song:', error);
+    const localSong = getLocalTodaysSong();
+    return {
+      id: localSong.id,
+      title: localSong.title,
+      artist: localSong.artist,
+      previewUrl: `/songs/${localSong.filename}`,
+    };
+  }
 };

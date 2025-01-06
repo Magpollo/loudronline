@@ -31,7 +31,7 @@ export async function getData(url: string): Promise<any[]> {
       Authorization: `bearer ${process.env.STRAPI_CLIENT_SECRET}`,
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 300 }, // Revalidate every 5 minutes
+    next: { revalidate: 300 },
   });
   if (!res.ok) {
     throw new Error(`Error fetching data from ${urlWithHost}, ${res.status}`);
@@ -48,15 +48,8 @@ export function formatYoutubeUrl(url: string): string {
 
 // chnage url if in development mode or production mode
 export function getStrapiUrl(): string {
-  // return process.env.NODE_ENV === 'development'
-  //   ? `http://localhost:1337`
-  //   : process.env.STRAPI_URL_BASE ||
-  //       'https://loudronline-backend-production.up.railway.app';
   // use prod env for now
-  return (
-    process.env.STRAPI_URL_BASE ||
-    'https://loudronline-backend-production.up.railway.app'
-  );
+  return process.env.STRAPI_URL_BASE || '';
 }
 
 export function getStrapiMedia(media: any) {

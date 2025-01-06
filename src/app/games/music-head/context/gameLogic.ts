@@ -26,19 +26,20 @@ export interface GameState {
   currentSongId: string | null;
 }
 
-export type GameAction =
-  | { type: 'LOAD_SONG'; payload: Song }
-  | { type: 'MAKE_GUESS'; payload: { guess: string; isCorrect: boolean } }
-  | { type: 'SKIP' }
-  | { type: 'PLAY' }
-  | { type: 'PAUSE' }
-  | { type: 'UPDATE_PLAYBACK_TIME'; payload: number }
-  | { type: 'END_GAME' }
-  | { type: 'RESET_GAME' }
-  | { type: 'NEXT_SONG'; payload: Song }
-  | { type: 'SWITCH_TO_COUCH_PLAY'; payload: Song }
-  | { type: 'SWITCH_TO_DAILY_MODE'; payload: Song }
-  | { type: 'RESTORE_STATE'; payload: Partial<GameState> };
+export type GameAction = // action types for the game reducer using a discriminated union
+
+    | { type: 'LOAD_SONG'; payload: Song }
+    | { type: 'MAKE_GUESS'; payload: { guess: string; isCorrect: boolean } }
+    | { type: 'SKIP' }
+    | { type: 'PLAY' }
+    | { type: 'PAUSE' }
+    | { type: 'UPDATE_PLAYBACK_TIME'; payload: number }
+    | { type: 'END_GAME' }
+    | { type: 'RESET_GAME' }
+    | { type: 'NEXT_SONG'; payload: Song }
+    | { type: 'SWITCH_TO_COUCH_PLAY'; payload: Song }
+    | { type: 'SWITCH_TO_DAILY_MODE'; payload: Song }
+    | { type: 'RESTORE_STATE'; payload: Partial<GameState> };
 
 export const initialState: GameState = {
   currentSong: null,

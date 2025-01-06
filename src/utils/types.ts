@@ -7,7 +7,7 @@ interface LoudrEvent {
     postContent?: string;
     date: string;
     location: string;
-    cover: any;
+    cover: string;
     url: string;
   };
 }

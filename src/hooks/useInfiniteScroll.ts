@@ -18,6 +18,7 @@ export function useInfiniteScroll<T>({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const loadMoreItems = useCallback(async () => {
+    // useCallback to prevent re-renders
     if (loading || !hasMore) return;
     setLoading(true);
     try {
@@ -67,7 +68,7 @@ export function useInfiniteScroll<T>({
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [loadMoreItems]);
+  }, [loadMoreItems]); // useEffect to add the event listener
 
   return {
     items,
