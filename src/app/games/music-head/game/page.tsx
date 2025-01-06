@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import SearchSongs from '@/app/games/music-head/components/SearchSongs';
 import AudioPlayer from '@/app/games/music-head/components/AudioPlayer';
 import SuccessScreen from '@/app/games/music-head/components/SuccessScreen';
-import { Song } from '@/app/games/music-head/utils/gameLogic';
+import { Song } from '@/app/games/music-head/context/gameLogic';
 
 export default function MusicHead() {
   const { state, dispatch } = useGame();
